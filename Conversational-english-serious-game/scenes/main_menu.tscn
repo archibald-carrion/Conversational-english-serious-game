@@ -1,24 +1,105 @@
-[gd_scene load_steps=2 format=3 uid="uid://p3jkt0wtqkwr"]
+[gd_scene load_steps=5 format=3 uid="uid://p3jkt0wtqkwr"]
 
 [ext_resource type="Script" path="res://scenes/main_menu.gd" id="1_bb0db"]
+[ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="2_156g2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00dx4"]
+bg_color = Color(0, 0.454902, 0.756863, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_size = 4
+
+[sub_resource type="Theme" id="Theme_ica41"]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 32
+Button/styles/normal = SubResource("StyleBoxFlat_00dx4")
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/colors/font_outline_color = Color(0, 0.454902, 0.756863, 1)
+Label/constants/outline_size = 10
+Label/font_sizes/font_size = 64
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_bb0db")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
 layout_mode = 2
+texture = ExtResource("2_156g2")
+flip_h = true
 
-[node name="play" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -33.0
+offset_right = 20.5
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_ica41")
+alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+text = "Building personal
+interaction at the company
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="play" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "play"
 
-[node name="exit" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="exit" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "quit"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/MarginContainer/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/MarginContainer2/exit" to="." method="_on_exit_pressed"]
