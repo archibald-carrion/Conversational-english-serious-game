@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwi7nig2icwo2"]
+[gd_scene load_steps=4 format=3 uid="uid://dwi7nig2icwo2"]
 
 [ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="1_2ie7x"]
+[ext_resource type="Script" path="res://scenes/first_level.gd" id="1_v3018"]
+[ext_resource type="Texture2D" uid="uid://ctc42tjv3nhid" path="res://assets/sprites/john.png" id="3_cl3pf"]
 
 [node name="FirstLevel" type="Node2D"]
+script = ExtResource("1_v3018")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -22,4 +25,21 @@ grow_vertical = 2
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("1_2ie7x")
+flip_h = true
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer2"]
+anchors_preset = -1
+anchor_left = 0.135
+anchor_top = 0.123
+anchor_right = 0.227
+anchor_bottom = 1.111
+offset_right = 0.47998
+offset_bottom = 0.0719604
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_cl3pf")
 flip_h = true
