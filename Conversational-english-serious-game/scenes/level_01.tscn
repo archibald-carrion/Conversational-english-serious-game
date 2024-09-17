@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://dwi7nig2icwo2"]
 
-[ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="1_2ie7x"]
-[ext_resource type="Script" path="res://scripts/first_level.gd" id="1_v3018"]
-[ext_resource type="Texture2D" uid="uid://ctc42tjv3nhid" path="res://assets/sprites/john.png" id="3_cl3pf"]
+[ext_resource type="Script" path="res://scripts/first_level.gd" id="1_m467n"]
+[ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="2_no6y4"]
+[ext_resource type="Texture2D" uid="uid://ctc42tjv3nhid" path="res://assets/sprites/john.png" id="3_kgi6t"]
 
 [node name="FirstLevel" type="Node2D"]
-script = ExtResource("1_v3018")
+script = ExtResource("1_m467n")
 
 [node name="Background" type="CanvasLayer" parent="."]
 
@@ -24,7 +24,7 @@ grow_vertical = 2
 
 [node name="texture_Background" type="TextureRect" parent="Background/HBoxContainer_Background"]
 layout_mode = 2
-texture = ExtResource("1_2ie7x")
+texture = ExtResource("2_no6y4")
 flip_h = true
 
 [node name="John" type="CanvasLayer" parent="."]
@@ -41,7 +41,7 @@ offset_bottom = 0.0719604
 [node name="texture_John" type="TextureRect" parent="John/HBoxContainer_John"]
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("3_cl3pf")
+texture = ExtResource("3_kgi6t")
 flip_h = true
 
 [node name="answers" type="CanvasLayer" parent="."]
