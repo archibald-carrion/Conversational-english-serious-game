@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwi7nig2icwo2"]
+[gd_scene load_steps=5 format=3 uid="uid://dwi7nig2icwo2"]
 
 [ext_resource type="Script" path="res://scripts/first_level.gd" id="1_m467n"]
 [ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="2_no6y4"]
 [ext_resource type="Texture2D" uid="uid://ctc42tjv3nhid" path="res://assets/sprites/john.png" id="3_kgi6t"]
+[ext_resource type="Theme" uid="uid://beqbc2rrm4rwi" path="res://themes/theme_01.theme" id="4_58lit"]
 
 [node name="FirstLevel" type="Node2D"]
 script = ExtResource("1_m467n")
@@ -64,6 +65,7 @@ size_flags_horizontal = 8
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
+theme = ExtResource("4_58lit")
 
 [node name="MarginContainer2" type="MarginContainer" parent="answers/HBoxContainer/answers"]
 custom_minimum_size = Vector2(0, 50)
@@ -71,11 +73,15 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="answers/HBoxContainer/answers/MarginContainer2"]
 layout_mode = 2
-text = "Choose a correct answer:"
+theme_override_font_sizes/font_size = 32
+text = "Choose a 
+correct answer"
 
 [node name="MarginContainer" type="MarginContainer" parent="answers/HBoxContainer/answers"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer"]
 layout_mode = 2
@@ -84,6 +90,8 @@ text = "answer 01"
 [node name="MarginContainer3" type="MarginContainer" parent="answers/HBoxContainer/answers"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer3"]
 layout_mode = 2
@@ -92,7 +100,44 @@ text = "answer 02"
 [node name="MarginContainer4" type="MarginContainer" parent="answers/HBoxContainer/answers"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer4"]
 layout_mode = 2
 text = "answer 03"
+
+[node name="left_side_buttons" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="left_side_buttons"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -24.0
+offset_right = 170.0
+offset_bottom = 30.0
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="left_side_buttons/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_58lit")
+
+[node name="margin_goto_main_menu_button" type="MarginContainer" parent="left_side_buttons/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_constants/margin_bottom = 250
+
+[node name="Button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button"]
+layout_mode = 2
+text = "Go to main menu"
+
+[node name="magin_replay_button" type="MarginContainer" parent="left_side_buttons/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_constants/margin_top = 250
+
+[node name="Button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button"]
+layout_mode = 2
+text = "replay audio"
