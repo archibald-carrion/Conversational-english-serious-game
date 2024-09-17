@@ -7,9 +7,9 @@
 [node name="FirstLevel" type="Node2D"]
 script = ExtResource("1_v3018")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="."]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+[node name="HBoxContainer_Background" type="HBoxContainer" parent="Background"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -22,14 +22,14 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer"]
+[node name="texture_Background" type="TextureRect" parent="Background/HBoxContainer_Background"]
 layout_mode = 2
 texture = ExtResource("1_2ie7x")
 flip_h = true
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+[node name="John" type="CanvasLayer" parent="."]
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer2"]
+[node name="HBoxContainer_John" type="HBoxContainer" parent="John"]
 anchors_preset = -1
 anchor_left = 0.135
 anchor_top = 0.123
@@ -38,8 +38,61 @@ anchor_bottom = 1.111
 offset_right = 0.47998
 offset_bottom = 0.0719604
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer2/HBoxContainer2"]
+[node name="texture_John" type="TextureRect" parent="John/HBoxContainer_John"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("3_cl3pf")
 flip_h = true
+
+[node name="answers" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="answers"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_right = -32.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+
+[node name="answers" type="VBoxContainer" parent="answers/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="answers/HBoxContainer/answers"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="answers/HBoxContainer/answers/MarginContainer2"]
+layout_mode = 2
+text = "Choose a correct answer:"
+
+[node name="MarginContainer" type="MarginContainer" parent="answers/HBoxContainer/answers"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer"]
+layout_mode = 2
+text = "answer 01"
+
+[node name="MarginContainer3" type="MarginContainer" parent="answers/HBoxContainer/answers"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer3"]
+layout_mode = 2
+text = "answer 02"
+
+[node name="MarginContainer4" type="MarginContainer" parent="answers/HBoxContainer/answers"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer4"]
+layout_mode = 2
+text = "answer 03"
