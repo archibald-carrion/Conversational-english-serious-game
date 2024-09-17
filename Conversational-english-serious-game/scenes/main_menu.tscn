@@ -1,29 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://p3jkt0wtqkwr"]
+[gd_scene load_steps=4 format=3 uid="uid://p3jkt0wtqkwr"]
 
-[ext_resource type="Script" path="res://scenes/main_menu.gd" id="1_bb0db"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_bb0db"]
 [ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="2_156g2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00dx4"]
-bg_color = Color(0, 0.454902, 0.756863, 1)
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
-shadow_size = 4
-
-[sub_resource type="Theme" id="Theme_ica41"]
-Button/colors/font_color = Color(1, 1, 1, 1)
-Button/font_sizes/font_size = 32
-Button/styles/normal = SubResource("StyleBoxFlat_00dx4")
-Label/colors/font_color = Color(0, 0, 0, 1)
-Label/colors/font_outline_color = Color(0, 0.454902, 0.756863, 1)
-Label/constants/outline_size = 10
-Label/font_sizes/font_size = 64
+[ext_resource type="Theme" uid="uid://beqbc2rrm4rwi" path="res://themes/theme_01.theme" id="3_5ydo8"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_bb0db")
@@ -62,7 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = SubResource("Theme_ica41")
+theme = ExtResource("3_5ydo8")
 alignment = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
