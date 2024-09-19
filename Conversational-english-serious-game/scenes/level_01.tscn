@@ -141,3 +141,5 @@ theme_override_constants/margin_top = 250
 [node name="Button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button"]
 layout_mode = 2
 text = "replay audio"
+
+[connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
