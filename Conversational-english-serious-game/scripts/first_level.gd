@@ -26,9 +26,39 @@ func _ready():
 
 func show_question():
 	var current_question = questions[question_number]
-	print(current_question["question"])
+	var question_text = str(current_question["question"])
+	var max_line_length = 25  # Set the maximum length for each line
+
+	var formatted_text = ""
+	var current_line = ""
+	var words = question_text.split(" ")  # Split the text into words
+
+	# Loop through each word and add them to the current line
+	for word in words:
+		# Check if adding the next word would exceed the max line length
+		if current_line.length() + word.length() + 1 <= max_line_length:
+			# Add the word to the current line
+			if current_line == "":
+				current_line = word
+			else:
+				current_line += " " + word
+		else:
+			# Add the current line to the formatted text and start a new line
+			formatted_text += current_line + "\n"
+			current_line = word  # Start the new line with the current word
+
+	# Add any remaining text in the current line to formatted_text
+	if current_line != "":
+		formatted_text += current_line
+
+	# Display the formatted text
+	get_node("John/HBoxContainer_John/TextureRect/MarginContainer/Label").text = formatted_text
+	print(formatted_text)
+
 	current_correct_answer = current_question["correct_answer"]
 	print(current_correct_answer)
+
+
 	
 	# read dirrection to the audio
 	
