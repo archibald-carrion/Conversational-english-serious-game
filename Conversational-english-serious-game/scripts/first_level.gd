@@ -53,7 +53,11 @@ func show_question():
 
 	# Display the formatted text
 	get_node("John/HBoxContainer_John/TextureRect/MarginContainer/Label").text = formatted_text
-	print(formatted_text)
+	# print(formatted_text)
+	
+	get_node("answers/HBoxContainer/answers/MarginContainer/Button").text = current_question["answers"][0]
+	get_node("answers/HBoxContainer/answers/MarginContainer3/Button").text = current_question["answers"][1]
+	get_node("answers/HBoxContainer/answers/MarginContainer4/Button").text = current_question["answers"][2]
 
 	current_correct_answer = current_question["correct_answer"]
 	print(current_correct_answer)
