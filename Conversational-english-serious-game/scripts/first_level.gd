@@ -21,11 +21,12 @@ var questions = [
 var question_number = 0
 var current_correct_answer = 0
 var question_answered = false
+var current_correct_button = 0
 
 func _ready():
 	get_node("congratulations").visible = false
-	get_node("congratulations/HBoxContainer_Background").set_process(false)
-	get_node("congratulations/HBoxContainer_Background/texture_Background").set_process(false)
+	get_node("congratulations").set_process(false)
+	#get_node("congratulations/HBoxContainer_Background/texture_Background").set_process(false)
 	show_question()
 
 func show_question():
@@ -59,12 +60,12 @@ func show_question():
 	get_node("John/HBoxContainer_John/TextureRect/MarginContainer/Label").text = formatted_text
 	# print(formatted_text)
 	
-	get_node("answers/HBoxContainer/answers/MarginContainer/Button").text = current_question["answers"][0]
-	get_node("answers/HBoxContainer/answers/MarginContainer3/Button").text = current_question["answers"][1]
-	get_node("answers/HBoxContainer/answers/MarginContainer4/Button").text = current_question["answers"][2]
+	get_node("answers/HBoxContainer/answers/MarginContainer/answer_0").text = current_question["answers"][0]
+	get_node("answers/HBoxContainer/answers/MarginContainer3/answer_1").text = current_question["answers"][1]
+	get_node("answers/HBoxContainer/answers/MarginContainer4/answer_2").text = current_question["answers"][2]
 
-	current_correct_answer = current_question["correct_answer"]
-	print(current_correct_answer)
+	current_correct_button = current_question["correct_answer"]
+
 
 
 	
@@ -90,3 +91,25 @@ func show_question():
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	pass # Replace with function body.
+
+
+func _on_answer_0_pressed():
+	if current_correct_button == 0:
+		get_node("congratulations").visible = true
+		get_node("congratulations").set_process(true)
+		
+		
+
+
+func _on_answer_1_pressed():
+	if current_correct_button == 1:
+		get_node("congratulations").visible = true
+		get_node("congratulations").set_process(true)
+
+
+
+
+func _on_answer_2_pressed():
+	if current_correct_button == 2:
+		get_node("congratulations").visible = true
+		get_node("congratulations").set_process(true)

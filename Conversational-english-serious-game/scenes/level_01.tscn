@@ -112,7 +112,7 @@ layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer"]
+[node name="answer_0" type="Button" parent="answers/HBoxContainer/answers/MarginContainer"]
 layout_mode = 2
 text = "answer 01"
 
@@ -122,7 +122,7 @@ layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer3"]
+[node name="answer_1" type="Button" parent="answers/HBoxContainer/answers/MarginContainer3"]
 layout_mode = 2
 text = "answer 02"
 
@@ -132,7 +132,7 @@ layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="Button" type="Button" parent="answers/HBoxContainer/answers/MarginContainer4"]
+[node name="answer_2" type="Button" parent="answers/HBoxContainer/answers/MarginContainer4"]
 layout_mode = 2
 text = "answer 03"
 
@@ -220,4 +220,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "Continue to next question"
 
+[connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer/answer_0" to="." method="_on_answer_0_pressed"]
+[connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer3/answer_1" to="." method="_on_answer_1_pressed"]
+[connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer4/answer_2" to="." method="_on_answer_2_pressed"]
 [connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
