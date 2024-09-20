@@ -20,8 +20,12 @@ var questions = [
 
 var question_number = 0
 var current_correct_answer = 0
+var question_answered = false
 
 func _ready():
+	get_node("congratulations").visible = false
+	get_node("congratulations/HBoxContainer_Background").set_process(false)
+	get_node("congratulations/HBoxContainer_Background/texture_Background").set_process(false)
 	show_question()
 
 func show_question():
@@ -82,6 +86,7 @@ func show_question():
 
 
 
+# GOTO MAIN MENU
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	pass # Replace with function body.

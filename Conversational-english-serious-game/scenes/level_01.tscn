@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwi7nig2icwo2"]
+[gd_scene load_steps=7 format=3 uid="uid://dwi7nig2icwo2"]
 
 [ext_resource type="Script" path="res://scripts/first_level.gd" id="1_m467n"]
 [ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="2_no6y4"]
 [ext_resource type="Texture2D" uid="uid://ctc42tjv3nhid" path="res://assets/sprites/john.png" id="3_kgi6t"]
 [ext_resource type="Theme" uid="uid://beqbc2rrm4rwi" path="res://themes/theme_01.theme" id="4_58lit"]
 [ext_resource type="Texture2D" uid="uid://dgxca271k65vn" path="res://assets/sprites/text_bubble.png" id="4_ld7eh"]
+[ext_resource type="Texture2D" uid="uid://bnlb78r7bq2qo" path="res://assets/sprites/congratulation_screen.png" id="6_gj64i"]
 
 [node name="FirstLevel" type="Node2D"]
 script = ExtResource("1_m467n")
@@ -169,5 +170,54 @@ theme_override_constants/margin_top = 250
 [node name="Button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button"]
 layout_mode = 2
 text = "replay audio"
+
+[node name="congratulations" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer_Background" type="HBoxContainer" parent="congratulations"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="texture_Background" type="TextureRect" parent="congratulations/HBoxContainer_Background"]
+layout_mode = 2
+texture = ExtResource("6_gj64i")
+flip_h = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="congratulations"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_58lit")
+
+[node name="Label" type="Label" parent="congratulations/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "Congratulation!"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="congratulations/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="Button" type="Button" parent="congratulations/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Continue to next question"
 
 [connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
