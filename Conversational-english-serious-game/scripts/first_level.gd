@@ -113,3 +113,10 @@ func _on_answer_2_pressed():
 	if current_correct_button == 2:
 		get_node("congratulations").visible = true
 		get_node("congratulations").set_process(true)
+
+
+func _on_next_question_pressed():
+	question_number = question_number+1
+	get_node("congratulations").visible = false
+	get_node("congratulations").set_process(false)
+	show_question()
