@@ -26,7 +26,6 @@ var current_correct_button = 0
 func _ready():
 	get_node("congratulations").visible = false
 	get_node("congratulations").set_process(false)
-	#get_node("congratulations/HBoxContainer_Background/texture_Background").set_process(false)
 	show_question()
 
 func show_question():
@@ -58,65 +57,39 @@ func show_question():
 
 	# Display the formatted text
 	get_node("John/HBoxContainer_John/TextureRect/MarginContainer/Label").text = formatted_text
-	# print(formatted_text)
-	
+
+	# Update answer buttons with the current question's answers
 	get_node("answers/HBoxContainer/answers/MarginContainer/answer_0").text = current_question["answers"][0]
 	get_node("answers/HBoxContainer/answers/MarginContainer3/answer_1").text = current_question["answers"][1]
 	get_node("answers/HBoxContainer/answers/MarginContainer4/answer_2").text = current_question["answers"][2]
 
 	current_correct_button = current_question["correct_answer"]
 
-
-
-	
-	# read dirrection to the audio
-	
-	# update the content of each answer button
-	
-	# update the content of the "bubble"
-	
-	# play the audio
-	
-# on click replay, replay audio
-
-# on click of button one, check if correct button, in this case deisplay good message, else bad message
-
-# on click of button two, check if correct button, in this case deisplay good message, else bad message
-
-# on click of button three, check if correct button, in this case deisplay good message, else bad message
-
-
-
-# GOTO MAIN MENU
 func _on_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
-	pass # Replace with function body.
-
 
 func _on_answer_0_pressed():
 	if current_correct_button == 0:
 		get_node("congratulations").visible = true
 		get_node("congratulations").set_process(true)
-		
-		
-
 
 func _on_answer_1_pressed():
 	if current_correct_button == 1:
 		get_node("congratulations").visible = true
 		get_node("congratulations").set_process(true)
 
-
-
-
 func _on_answer_2_pressed():
 	if current_correct_button == 2:
 		get_node("congratulations").visible = true
 		get_node("congratulations").set_process(true)
 
-
 func _on_next_question_pressed():
-	question_number = question_number+1
-	get_node("congratulations").visible = false
-	get_node("congratulations").set_process(false)
-	show_question()
+	# Increment question_number only if there are more questions
+	if question_number + 1 < questions.size():
+		question_number += 1
+		get_node("congratulations").visible = false
+		get_node("congratulations").set_process(false)
+		show_question()
+	else:
+		# Handle the case when no more questions are available
+		print("No more questions available.")
