@@ -79,6 +79,9 @@ func _on_answer_pressed(button_index):
 	if button_index == current_correct_button:
 		get_node("congratulations").visible = true
 		get_node("congratulations").set_process(true)
+		get_node("congratulations/VBoxContainer/MarginContainer/next_level").visible = false
+		get_node("congratulations/VBoxContainer/MarginContainer/next_level").set_process(false)
+		
 		update_score()  # Update the score based on the attempts
 
 func update_score():
@@ -106,6 +109,11 @@ func _on_next_question_pressed():
 		get_node("congratulations").set_process(false)
 		show_question()
 	else:
+		get_node("congratulations/VBoxContainer/MarginContainer/next_level").visible = true
+		get_node("congratulations/VBoxContainer/MarginContainer/next_level").set_process(true)
+		
+		get_node("congratulations/VBoxContainer/MarginContainer/next_question").visible = false
+		get_node("congratulations/VBoxContainer/MarginContainer/next_question").set_process(false)
 		# Handle the case when no more questions are available
 		print("No more questions available.")
 		display_final_score()  # Show the final score when all questions are answered
@@ -114,8 +122,18 @@ func display_final_score():
 	# Ensure final score is precisely 100 if no points were lost
 	if score > max_score - score_per_question / 2:
 		score = max_score
+		
+	var label = get_node("congratulations/VBoxContainer/congratulation_label")
+	label.text = "Congratulations! \nYou've completed the level.\nYour score is: " + str(score) + "/100"
+
+	# Set the font size (replace 24 with your desired size)
+	label.add_theme_font_size_override("font_size", 70)
+	
 	
 	Global.level_scores.append(score)  # Access the global level scores
 	print("Final Score: ", score)
+	
+	#for score in Global.level_scores:
+		#print("Score: ", score)
 	
 	# Additional logic can be added here to display the score on the screen, if desired.

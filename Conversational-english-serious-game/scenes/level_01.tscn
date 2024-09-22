@@ -203,7 +203,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 theme = ExtResource("4_58lit")
 
-[node name="Label" type="Label" parent="congratulations/VBoxContainer"]
+[node name="congratulation_label" type="Label" parent="congratulations/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -218,10 +218,16 @@ theme_override_constants/margin_top = 100
 [node name="next_question" type="Button" parent="congratulations/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "Continue to next question"
+text = "Let's continue!"
+
+[node name="next_level" type="Button" parent="congratulations/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Go to next level!"
 
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer/answer_0" to="." method="_on_answer_0_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer3/answer_1" to="." method="_on_answer_1_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer4/answer_2" to="." method="_on_answer_2_pressed"]
 [connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_question" to="." method="_on_next_question_pressed"]
+[connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_level" to="." method="_on_next_question_pressed"]
