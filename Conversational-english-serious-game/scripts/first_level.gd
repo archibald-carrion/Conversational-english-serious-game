@@ -31,6 +31,8 @@ var score_per_question = max_score / questions.size()  # Divide the total score 
 func _ready():
 	get_node("congratulations").visible = false
 	get_node("congratulations").set_process(false)
+	get_node("not_congratulation").visible = false
+	get_node("not_congratulation").set_process(false)
 	show_question()
 
 func show_question():
@@ -83,6 +85,9 @@ func _on_answer_pressed(button_index):
 		get_node("congratulations/VBoxContainer/MarginContainer/next_level").set_process(false)
 		
 		update_score()  # Update the score based on the attempts
+	else:
+		get_node("not_congratulation").visible = true
+		get_node("not_congratulation").set_process(true)
 
 func update_score():
 	# Deduct points based on the number of attempts
@@ -100,6 +105,8 @@ func _on_answer_1_pressed():
 
 func _on_answer_2_pressed():
 	_on_answer_pressed(2)
+	
+
 
 func _on_next_question_pressed():
 	# Increment question_number only if there are more questions
@@ -137,3 +144,13 @@ func display_final_score():
 		#print("Score: ", score)
 	
 	# Additional logic can be added here to display the score on the screen, if desired.
+
+
+func _on_try_again_pressed():
+	get_node("not_congratulation").visible = false
+	get_node("not_congratulation").set_process(false)
+
+
+func _on_next_level_pressed():
+	# goto next scene
+	pass # Replace with function body.

@@ -225,9 +225,60 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "Go to next level!"
 
+[node name="not_congratulation" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer_Background2" type="HBoxContainer" parent="not_congratulation"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -944.0
+offset_top = -720.0
+offset_right = 944.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="texture_Background" type="TextureRect" parent="not_congratulation/HBoxContainer_Background2"]
+modulate = Color(0.196078, 0.196078, 0.196078, 1)
+layout_mode = 2
+texture = ExtResource("2_no6y4")
+flip_h = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="not_congratulation"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_58lit")
+
+[node name="wrong_answer_label" type="Label" parent="not_congratulation/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "Wrong answer"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="not_congratulation/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="try_again" type="Button" parent="not_congratulation/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "try again"
+
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer/answer_0" to="." method="_on_answer_0_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer3/answer_1" to="." method="_on_answer_1_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer4/answer_2" to="." method="_on_answer_2_pressed"]
 [connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_question" to="." method="_on_next_question_pressed"]
-[connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_level" to="." method="_on_next_question_pressed"]
+[connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_level" to="." method="_on_next_level_pressed"]
+[connection signal="pressed" from="not_congratulation/VBoxContainer/MarginContainer/try_again" to="." method="_on_try_again_pressed"]
