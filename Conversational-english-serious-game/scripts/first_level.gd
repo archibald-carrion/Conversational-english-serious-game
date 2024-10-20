@@ -2,21 +2,97 @@ extends Node2D
 
 var questions = [
 	{
-		"question": "What is the capital of France?",
-		"answers": ["Paris", "London", "Berlin"],
-		"correct_answer": 0  # Index of the correct answer in the answers array
+		"question": "Where do you work, \n and what kind of company is it?",
+		"answers": [
+			"McDonald's is a well-known company that \n serves fast food and operates globally.",
+			"The company is in charge of organizing \n annual events for local communities.",
+			"I work at a software company that \n develops mobile applications."
+		],
+		"correct_answer": 2
 	},
 	{
-		"question": "What is 2 + 2?",
-		"answers": ["3", "4", "5"],
+		"question": "What kind of projects do you work on in your current job?",
+		"answers": [
+			"I teach Chemistry at a private university in Guanacaste.",
+			"I work on designing new marketing campaigns for our clients.",
+			"I enjoy experimenting with new recipes in my free time."
+		],
 		"correct_answer": 1
 	},
 	{
-		"question": "What color is the sky?",
-		"answers": ["Green", "Blue", "Red"],
+		"question": "How long have you worked in this field, and what do you enjoy the most?",
+		"answers": [
+			"I once traveled to three countries in one summer, which was an unforgettable experience.",
+			"I enjoy painting landscapes during my free time, especially in the fall.",
+			"I’ve spent 7 years in this field, and I find fulfillment in working with my colleagues."
+		],
+		"correct_answer": 2
+	},
+	{
+		"question": "Why did you decide to work in this industry?",
+		"answers": [
+			"I pursued a degree in literature because I enjoy storytelling and exploration of ideas.",
+			"I decided to take cooking classes as a way to explore diverse culinary experiences.",
+			"I chose to enter this field due to my enthusiasm for technology and innovation."
+		],
+		"correct_answer": 2
+	},
+	{
+		"question": "Where did you start working when you began your career?",
+		"answers": [
+			"I was 22 when I decided to volunteer at a local charity to gain experience.",
+			"I began my career at a small startup focused on innovative solutions.",
+			"I started my career as a musician because I wanted to bring joy to others with my songs."
+		],
+		"correct_answer": 1
+	},
+	{
+		"question": "What responsibilities do you have in your current job?",
+		"answers": [
+			"I enjoy attending conferences to learn about industry trends.",
+			"The company has a strong focus on community outreach and social responsibility.",
+			"My role involves leading a team and supervising project development."
+		],
+		"correct_answer": 2
+	},
+	{
+		"question": "How do you balance your work with personal life?",
+		"answers": [
+			"I do so by setting clear boundaries and prioritizing family time.",
+			"I prefer watching movies at home to going out.",
+			"I appreciate the support of my friends and family in managing my time."
+		],
+		"correct_answer": 0
+	},
+	{
+		"question": "What skills do you use most often at work, and how do they help you succeed?",
+		"answers": [
+			"I use my cooking skills to make delicious meals for my family, bringing us together.",
+			"I consider myself a creative person, capable of expressing my emotions through art.",
+			"I often rely on communication and problem-solving skills, which enhance collaboration."
+		],
+		"correct_answer": 2
+	},
+	{
+		"question": "Where do you see yourself working in five years, and what position would you like to hold?",
+		"answers": [
+			"I see myself studying at a prestigious university, focusing on my academic interests.",
+			"I see myself traveling to different countries, exploring new cultures and experiences.",
+			"I envision being part of a dynamic team in the future, possibly in a leadership role."
+		],
+		"correct_answer": 2
+	},
+	{
+		"question": "Why do you think working in teams is important for your job?",
+		"answers": [
+			"I think problem-solving skills are necessary in team-building activities in the workplace.",
+			"I believe collaboration is essential in my role, as it fosters creativity and helps achieve common goals.",
+			"Employers should encourage their employees to work in teams to strengthen relationships among colleagues."
+		],
 		"correct_answer": 1
 	}
-]
+];
+
 
 var question_number = 0
 var current_correct_answer = 0
@@ -154,3 +230,4 @@ func _on_try_again_pressed():
 func _on_next_level_pressed():
 	# goto next scene
 	pass # Replace with function body.
+	
