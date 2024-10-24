@@ -258,3 +258,8 @@ func _on_play_audio_again_button_pressed():
 	# Replay the audio when the button is clicked
 	if current_audio_file != "":
 		play_question_audio(current_audio_file)  # Play the stored audio file
+
+
+func _on_goback_main_menu_button_pressed():
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
