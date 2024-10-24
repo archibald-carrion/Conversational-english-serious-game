@@ -154,15 +154,24 @@ func show_question():
 	get_node("John/HBoxContainer_John/TextureRect/MarginContainer/Label").text = formatted_text
 
 	# Update answer buttons with the current question's answers
-	get_node("answers/HBoxContainer/answers/MarginContainer/answer_0").text = current_question["answers"][0]
-	get_node("answers/HBoxContainer/answers/MarginContainer3/answer_1").text = current_question["answers"][1]
-	get_node("answers/HBoxContainer/answers/MarginContainer4/answer_2").text = current_question["answers"][2]
+	var answer_button_0 = get_node("answers/HBoxContainer/answers/MarginContainer/answer_0")
+	var answer_button_1 = get_node("answers/HBoxContainer/answers/MarginContainer3/answer_1")
+	var answer_button_2 = get_node("answers/HBoxContainer/answers/MarginContainer4/answer_2")
+	
+	# Apply smaller font size to the answer buttons
+	answer_button_0.add_theme_font_size_override("font_size", 18)
+	answer_button_1.add_theme_font_size_override("font_size", 18)
+	answer_button_2.add_theme_font_size_override("font_size", 18)
+
+	# Set text for the answer buttons
+	answer_button_0.text = current_question["answers"][0]
+	answer_button_1.text = current_question["answers"][1]
+	answer_button_2.text = current_question["answers"][2]
 
 	current_correct_button = current_question["correct_answer"]
 	attempts = 0  # Reset attempts for each new question
 	current_audio_file = current_question["audio_file"]
 	play_question_audio(current_audio_file)  # Play the question's audio
-
 
 
 	
