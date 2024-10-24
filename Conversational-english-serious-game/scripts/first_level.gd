@@ -8,7 +8,8 @@ var questions = [
 			"The company is in charge of organizing \n annual events for local communities.",
 			"I work at a software company that \n develops mobile applications."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/1.mp3"
 	},
 	{
 		"question": "What kind of projects do you work on in your current job?",
@@ -17,7 +18,8 @@ var questions = [
 			"I work on designing new marketing campaigns for our clients.",
 			"I enjoy experimenting with new recipes in my free time."
 		],
-		"correct_answer": 1
+		"correct_answer": 1,
+		"audio_file" : "res://assets/audio/diff_01/2.mp3"
 	},
 	{
 		"question": "How long have you worked in this field, and what do you enjoy the most?",
@@ -26,7 +28,8 @@ var questions = [
 			"I enjoy painting landscapes during my free time, especially in the fall.",
 			"I’ve spent 7 years in this field, and I find fulfillment in working with my colleagues."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/3.mp3"
 	},
 	{
 		"question": "Why did you decide to work in this industry?",
@@ -35,7 +38,8 @@ var questions = [
 			"I decided to take cooking classes as a way to explore diverse culinary experiences.",
 			"I chose to enter this field due to my enthusiasm for technology and innovation."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/4.mp3"
 	},
 	{
 		"question": "Where did you start working when you began your career?",
@@ -44,7 +48,8 @@ var questions = [
 			"I began my career at a small startup focused on innovative solutions.",
 			"I started my career as a musician because I wanted to bring joy to others with my songs."
 		],
-		"correct_answer": 1
+		"correct_answer": 1,
+		"audio_file" : "res://assets/audio/diff_01/5.mp3"
 	},
 	{
 		"question": "What responsibilities do you have in your current job?",
@@ -53,7 +58,8 @@ var questions = [
 			"The company has a strong focus on community outreach and social responsibility.",
 			"My role involves leading a team and supervising project development."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/6.mp3"
 	},
 	{
 		"question": "How do you balance your work with personal life?",
@@ -62,7 +68,8 @@ var questions = [
 			"I prefer watching movies at home to going out.",
 			"I appreciate the support of my friends and family in managing my time."
 		],
-		"correct_answer": 0
+		"correct_answer": 0,
+		"audio_file" : "res://assets/audio/diff_01/7.mp3"
 	},
 	{
 		"question": "What skills do you use most often at work, and how do they help you succeed?",
@@ -71,7 +78,8 @@ var questions = [
 			"I consider myself a creative person, capable of expressing my emotions through art.",
 			"I often rely on communication and problem-solving skills, which enhance collaboration."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/8.mp3"
 	},
 	{
 		"question": "Where do you see yourself working in five years, and what position would you like to hold?",
@@ -80,7 +88,8 @@ var questions = [
 			"I see myself traveling to different countries, exploring new cultures and experiences.",
 			"I envision being part of a dynamic team in the future, possibly in a leadership role."
 		],
-		"correct_answer": 2
+		"correct_answer": 2,
+		"audio_file" : "res://assets/audio/diff_01/9.mp3"
 	},
 	{
 		"question": "Why do you think working in teams is important for your job?",
@@ -89,7 +98,8 @@ var questions = [
 			"I believe collaboration is essential in my role, as it fosters creativity and helps achieve common goals.",
 			"Employers should encourage their employees to work in teams to strengthen relationships among colleagues."
 		],
-		"correct_answer": 1
+		"correct_answer": 1,
+		"audio_file" : "res://assets/audio/diff_01/10.mp3"
 	}
 ];
 
@@ -103,6 +113,8 @@ var score = 0
 var max_score = 100  # The maximum score achievable if all answers are correct on the first try
 var attempts = 0
 var score_per_question = max_score / questions.size()  # Divide the total score evenly among all questions
+
+var current_audio_file = ""  # Variable to store the current audio file
 
 func _ready():
 	get_node("congratulations").visible = false
@@ -148,9 +160,11 @@ func show_question():
 
 	current_correct_button = current_question["correct_answer"]
 	attempts = 0  # Reset attempts for each new question
+	current_audio_file = current_question["audio_file"]
+	play_question_audio(current_audio_file)  # Play the question's audio
 
-func _on_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+
 	
 func _on_answer_pressed(button_index):
 	attempts += 1
@@ -231,3 +245,16 @@ func _on_next_level_pressed():
 	# goto next scene
 	pass # Replace with function body.
 	
+func play_question_audio(audio_file):
+	var audio_player = get_node("AudioStreamPlayer")
+	var stream = load(audio_file)  # Use load instead of preload
+	audio_player.stream = stream
+	audio_player.play()
+	
+	
+	
+
+func _on_play_audio_again_button_pressed():
+	# Replay the audio when the button is clicked
+	if current_audio_file != "":
+		play_question_audio(current_audio_file)  # Play the stored audio file

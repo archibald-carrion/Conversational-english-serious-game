@@ -167,7 +167,7 @@ custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 theme_override_constants/margin_top = 250
 
-[node name="Button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button"]
+[node name="play_audio_again_button" type="Button" parent="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button"]
 layout_mode = 2
 text = "replay audio"
 
@@ -275,10 +275,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "try again"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer/answer_0" to="." method="_on_answer_0_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer3/answer_1" to="." method="_on_answer_1_pressed"]
 [connection signal="pressed" from="answers/HBoxContainer/answers/MarginContainer4/answer_2" to="." method="_on_answer_2_pressed"]
 [connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/margin_goto_main_menu_button/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="left_side_buttons/HBoxContainer/VBoxContainer/magin_replay_button/play_audio_again_button" to="." method="_on_play_audio_again_button_pressed"]
 [connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_question" to="." method="_on_next_question_pressed"]
 [connection signal="pressed" from="congratulations/VBoxContainer/MarginContainer/next_level" to="." method="_on_next_level_pressed"]
 [connection signal="pressed" from="not_congratulation/VBoxContainer/MarginContainer/try_again" to="." method="_on_try_again_pressed"]
