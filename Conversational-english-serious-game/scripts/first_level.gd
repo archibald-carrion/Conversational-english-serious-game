@@ -32,71 +32,71 @@ var questions = [
 		"audio_file" : "res://assets/audio/diff_01/3.mp3"
 	},
 	{
-		"question": "Why did you decide to work in this industry?",
+		"question": "Why did you decide to\nwork in this industry?",
 		"answers": [
-			"I pursued a degree in literature because I enjoy storytelling and exploration of ideas.",
-			"I decided to take cooking classes as a way to explore diverse culinary experiences.",
-			"I chose to enter this field due to my enthusiasm for technology and innovation."
+			"I pursued a degree in literature because\nI enjoy storytelling and exploration of ideas.",
+			"I decided to take cooking classes as a way\nto explore diverse culinary experiences.",
+			"I chose to enter this field due to my\nenthusiasm for technology and innovation."
 		],
 		"correct_answer": 2,
 		"audio_file" : "res://assets/audio/diff_01/4.mp3"
 	},
 	{
-		"question": "Where did you start working when you began your career?",
+		"question": "Where did you start working\nwhen you began your career?",
 		"answers": [
-			"I was 22 when I decided to volunteer at a local charity to gain experience.",
-			"I began my career at a small startup focused on innovative solutions.",
-			"I started my career as a musician because I wanted to bring joy to others with my songs."
+			"I was 22 when I decided to volunteer\nat a local charity to gain experience.",
+			"I began my career at a small startup\nfocused on innovative solutions.",
+			"I started my career as a musician because\nI wanted to bring joy to others with my songs."
 		],
 		"correct_answer": 1,
 		"audio_file" : "res://assets/audio/diff_01/5.mp3"
 	},
 	{
-		"question": "What responsibilities do you have in your current job?",
+		"question": "What responsibilities do\nyou have in your current job?",
 		"answers": [
-			"I enjoy attending conferences to learn about industry trends.",
-			"The company has a strong focus on community outreach and social responsibility.",
-			"My role involves leading a team and supervising project development."
+			"I enjoy attending conferences to\nlearn about industry trends.",
+			"The company has a strong focus on\ncommunity outreach and social responsibility.",
+			"My role involves leading a team\nand supervising project development."
 		],
 		"correct_answer": 2,
 		"audio_file" : "res://assets/audio/diff_01/6.mp3"
 	},
 	{
-		"question": "How do you balance your work with personal life?",
+		"question": "How do you balance\nyour work with personal life?",
 		"answers": [
-			"I do so by setting clear boundaries and prioritizing family time.",
-			"I prefer watching movies at home to going out.",
-			"I appreciate the support of my friends and family in managing my time."
+			"I do so by setting clear boundaries\nand prioritizing family time.",
+			"I prefer watching movies at\nhome to going out.",
+			"I appreciate the support of\nmy friends and family in managing my time."
 		],
 		"correct_answer": 0,
 		"audio_file" : "res://assets/audio/diff_01/7.mp3"
 	},
 	{
-		"question": "What skills do you use most often at work, and how do they help you succeed?",
+		"question": "What skills do you use most\noften at work, and how do\nthey help you succeed?",
 		"answers": [
-			"I use my cooking skills to make delicious meals for my family, bringing us together.",
-			"I consider myself a creative person, capable of expressing my emotions through art.",
-			"I often rely on communication and problem-solving skills, which enhance collaboration."
+			"I use my cooking skills to make delicious\nmeals for my family, bringing us together.",
+			"I consider myself a creative person,\ncapable of expressing my emotions through art.",
+			"I often rely on communication and problem-solving\nskills, which enhance collaboration."
 		],
 		"correct_answer": 2,
 		"audio_file" : "res://assets/audio/diff_01/8.mp3"
 	},
 	{
-		"question": "Where do you see yourself working in five years, and what position would you like to hold?",
+		"question": "Where do you see yourself\nworking in five years,\nand what position\nwould you like to hold?",
 		"answers": [
-			"I see myself studying at a prestigious university, focusing on my academic interests.",
-			"I see myself traveling to different countries, exploring new cultures and experiences.",
-			"I envision being part of a dynamic team in the future, possibly in a leadership role."
+			"I see myself studying at a\nprestigious university, focusing on\nmy academic interests.",
+			"I see myself traveling to\ndifferent countries, exploring new\ncultures and experiences.",
+			"I envision being part of a\ndynamic team in the future,\npossibly in a leadership role."
 		],
 		"correct_answer": 2,
 		"audio_file" : "res://assets/audio/diff_01/9.mp3"
 	},
 	{
-		"question": "Why do you think working in teams is important for your job?",
+		"question": "Why do you think working in\nteams is important for your job?",
 		"answers": [
-			"I think problem-solving skills are necessary in team-building activities in the workplace.",
-			"I believe collaboration is essential in my role, as it fosters creativity and helps achieve common goals.",
-			"Employers should encourage their employees to work in teams to strengthen relationships among colleagues."
+			"I think problem-solving skills\nare necessary in team-building activities\nin the workplace.",
+			"I believe collaboration is essential\nin my role, as it fosters creativity and\nhelps achieve common goals.",
+			"Employers should encourage their employees\nto work in teams to strengthen relationships\namong colleagues."
 		],
 		"correct_answer": 1,
 		"audio_file" : "res://assets/audio/diff_01/10.mp3"
