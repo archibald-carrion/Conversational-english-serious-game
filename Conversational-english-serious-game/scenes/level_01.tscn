@@ -225,7 +225,7 @@ text = "Let's continue!"
 [node name="next_level" type="Button" parent="congratulations/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "Go to next level!"
+text = "Go back to main menu"
 
 [node name="not_congratulation" type="CanvasLayer" parent="."]
 

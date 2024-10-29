@@ -256,7 +256,7 @@ func _on_try_again_pressed():
 
 
 func _on_next_level_pressed():
-	# goto next scene
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	pass # Replace with function body.
 	
 func play_question_audio(audio_file):
