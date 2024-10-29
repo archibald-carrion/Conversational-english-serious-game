@@ -66,7 +66,19 @@ theme_override_constants/margin_bottom = 50
 [node name="play" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
-text = "play"
+text = "select level"
+
+[node name="MarginContainer4" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="create_level" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer4"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "create new level"
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
