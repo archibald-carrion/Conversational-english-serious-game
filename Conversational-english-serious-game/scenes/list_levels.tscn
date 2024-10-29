@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqn5hel7ddhfs"]
+[gd_scene load_steps=4 format=3 uid="uid://bqn5hel7ddhfs"]
 
+[ext_resource type="Script" path="res://scenes/read_levels.gd" id="1_isbcx"]
 [ext_resource type="Texture2D" uid="uid://do88killt2mb7" path="res://assets/sprites/background.png" id="1_w31hh"]
 [ext_resource type="Theme" uid="uid://beqbc2rrm4rwi" path="res://themes/theme_01.theme" id="2_81i17"]
 
 [node name="ListLevels" type="Node2D"]
+script = ExtResource("1_isbcx")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -60,10 +62,8 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="play" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(100, 50)
+[node name="OptionButton" type="OptionButton" parent="CanvasLayer/VBoxContainer/MarginContainer"]
 layout_mode = 2
-text = "select level"
 
 [node name="MarginContainer4" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
@@ -75,7 +75,7 @@ theme_override_constants/margin_bottom = 50
 [node name="create_level" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer4"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
-text = "create new level"
+text = "play selected level"
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
@@ -87,4 +87,6 @@ theme_override_constants/margin_bottom = 50
 [node name="exit" type="Button" parent="CanvasLayer/VBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
-text = "quit"
+text = "main menu"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/MarginContainer4/create_level" to="." method="_on_create_level_pressed"]
