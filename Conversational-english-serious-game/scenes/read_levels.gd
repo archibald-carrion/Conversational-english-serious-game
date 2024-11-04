@@ -9,14 +9,25 @@ func _ready():
 	var file = FileAccess.open("res://levels.txt", FileAccess.READ)
 	var content = file.get_as_text()
 	
-	# Parse the JSON content and add the levels to the OptionButton
-	var levels =  JSON.parse_string(content)
-	var option_button = $CanvasLayer/VBoxContainer/MarginContainer/OptionButton
-	for level in levels:
-		option_button.add_item(level)
-	
-	# Set the current level to the first one in the list
-	current_level = levels[0]
+	var json_result = JSON.parse_string(content)
+	if json_result != null:
+		var levels = json_result
+		if levels is Array:
+			var option_button = $CanvasLayer/VBoxContainer/MarginContainer/OptionButton
+			
+			# Iterate through the main array
+			for level_dict in levels:
+				# Each item is a dictionary with a single key (like "level 1" or "level 2")
+				for level_name in level_dict:
+					option_button.add_item(level_name)
+					
+			# Set the current level to the first one
+			if levels.size() > 0:
+				# Get the first key of the first dictionary
+				var first_level_name = levels[0].keys()[0]
+				current_level = first_level_name
+	else:
+		print("Error parsing JSON")
 
 # when CanvasLayer/VBoxContainer/MarginContainer4/create_level is clicked, set the selected option of CanvasLayer/VBoxContainer/MarginContainer/OptionButton as the current level (need to be global to be access in other scenes)
 func _on_create_level_pressed():

@@ -2,6 +2,7 @@
   {
 	"level 1": [
 	  {
+		"name": "Level 1",
 		"question": "Where do you work, \n and what kind of company is it?",
 		"answers": [
 		  "McDonald's is a well-known company that \n serves fast food and operates globally.",
@@ -106,6 +107,7 @@
   {
 	"level 2": [
 	  {
+		"name": "Level 1",
 		"question": "What is the main challenge\nyou face in your job?",
 		"answers": [
 		  "Communicating in different languages\nwith my clients is a constant\nstruggle for me.",
