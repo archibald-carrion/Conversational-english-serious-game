@@ -33,8 +33,7 @@ func _ready():
 
 # when CanvasLayer/VBoxContainer/MarginContainer4/create_level is clicked, set the selected option of CanvasLayer/VBoxContainer/MarginContainer/OptionButton as the current level (need to be global to be access in other scenes)
 func _on_create_level_pressed():
-	var option_button = $CanvasLayer/VBoxContainer/MarginContainer/OptionButton
-	current_level = option_button.get_selected_text()
+	get_tree().change_scene_to_file("res://scenes/level_01.tscn")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,3 +41,18 @@ func _process(delta):
 	pass
 
 
+
+
+func _on_option_button_item_selected(index):
+	var option_button = $CanvasLayer/VBoxContainer/MarginContainer/OptionButton
+	var selected_level = option_button.get_item_text(index)
+	current_level = selected_level
+	Global.current_level_id = selected_level
+	print("Selected level changed to: ", selected_level)
+
+
+
+
+
+func _on_exit_pressed():
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

@@ -89,4 +89,6 @@ custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "main menu"
 
+[connection signal="item_selected" from="CanvasLayer/VBoxContainer/MarginContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/MarginContainer4/create_level" to="." method="_on_create_level_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/MarginContainer2/exit" to="." method="_on_exit_pressed"]

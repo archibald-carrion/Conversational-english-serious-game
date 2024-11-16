@@ -1,128 +1,51 @@
 extends Node2D
 
-var questions = [
-	{
-		"question": "Where do you work, \n and what kind of company is it?",
-		"answers": [
-			"McDonald's is a well-known company that \n serves fast food and operates globally.",
-			"The company is in charge of organizing \n annual events for local communities.",
-			"I work at a software company that \n develops mobile applications."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/1.mp3"
-	},
-	{
-		"question": "What kind of projects do\nyou work on in your current job?",
-		"answers": [
-			"I teach Chemistry at a private\nuniversity in Guanacaste.",
-			"I work on designing new marketing\ncampaigns for our clients.",
-			"I enjoy experimenting with new\nrecipes in my free time."
-		],
-		"correct_answer": 1,
-		"audio_file" : "res://assets/audio/diff_01/2.mp3"
-	},
-	{
-		"question": "How long have you worked in this field, \n and what do you enjoy the most?",
-		"answers": [
-			"I once traveled to three countries \nin one summer, which was an\nunforgettable experience.",
-			"I enjoy painting landscapes during\nmy free time, especially in\nthe fall.",
-			"I’ve spent 7 years in this field,\nand I find fulfillment in\nworking with my colleagues."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/3.mp3"
-	},
-	{
-		"question": "Why did you decide to\nwork in this industry?",
-		"answers": [
-			"I pursued a degree in literature because\nI enjoy storytelling and exploration of ideas.",
-			"I decided to take cooking classes as a way\nto explore diverse culinary experiences.",
-			"I chose to enter this field due to my\nenthusiasm for technology and innovation."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/4.mp3"
-	},
-	{
-		"question": "Where did you start working\nwhen you began your career?",
-		"answers": [
-			"I was 22 when I decided to volunteer\nat a local charity to gain experience.",
-			"I began my career at a small startup\nfocused on innovative solutions.",
-			"I started my career as a musician because\nI wanted to bring joy to others with my songs."
-		],
-		"correct_answer": 1,
-		"audio_file" : "res://assets/audio/diff_01/5.mp3"
-	},
-	{
-		"question": "What responsibilities do\nyou have in your current job?",
-		"answers": [
-			"I enjoy attending conferences to\nlearn about industry trends.",
-			"The company has a strong focus on\ncommunity outreach and social responsibility.",
-			"My role involves leading a team\nand supervising project development."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/6.mp3"
-	},
-	{
-		"question": "How do you balance\nyour work with personal life?",
-		"answers": [
-			"I do so by setting clear boundaries\nand prioritizing family time.",
-			"I prefer watching movies at\nhome to going out.",
-			"I appreciate the support of\nmy friends and family in managing my time."
-		],
-		"correct_answer": 0,
-		"audio_file" : "res://assets/audio/diff_01/7.mp3"
-	},
-	{
-		"question": "What skills do you use most\noften at work, and how do\nthey help you succeed?",
-		"answers": [
-			"I use my cooking skills to make delicious\nmeals for my family, bringing us together.",
-			"I consider myself a creative person,\ncapable of expressing my emotions through art.",
-			"I often rely on communication and problem-solving\nskills, which enhance collaboration."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/8.mp3"
-	},
-	{
-		"question": "Where do you see yourself\nworking in five years,\nand what position\nwould you like to hold?",
-		"answers": [
-			"I see myself studying at a\nprestigious university, focusing on\nmy academic interests.",
-			"I see myself traveling to\ndifferent countries, exploring new\ncultures and experiences.",
-			"I envision being part of a\ndynamic team in the future,\npossibly in a leadership role."
-		],
-		"correct_answer": 2,
-		"audio_file" : "res://assets/audio/diff_01/9.mp3"
-	},
-	{
-		"question": "Why do you think working in\nteams is important for your job?",
-		"answers": [
-			"I think problem-solving skills\nare necessary in team-building activities\nin the workplace.",
-			"I believe collaboration is essential\nin my role, as it fosters creativity and\nhelps achieve common goals.",
-			"Employers should encourage their employees\nto work in teams to strengthen relationships\namong colleagues."
-		],
-		"correct_answer": 1,
-		"audio_file" : "res://assets/audio/diff_01/10.mp3"
-	}
-];
-
-
+var questions = []  # This will be populated from the JSON file
 var question_number = 0
 var current_correct_answer = 0
 var question_answered = false
 var current_correct_button = 0
 
 var score = 0
-var max_score = 100  # The maximum score achievable if all answers are correct on the first try
+var max_score = 100
 var attempts = 0
-var score_per_question = max_score / questions.size()  # Divide the total score evenly among all questions
+var score_per_question = 0  # We'll calculate this after loading questions
 
-var current_audio_file = ""  # Variable to store the current audio file
+var current_audio_file = ""
 
 func _ready():
+	# Load questions from JSON based on current_level_id
+	load_questions_from_json()
+	
 	get_node("congratulations").visible = false
 	get_node("congratulations").set_process(false)
 	get_node("not_congratulation").visible = false
 	get_node("not_congratulation").set_process(false)
 	show_question()
 
+func load_questions_from_json():
+	var file = FileAccess.open("res://levels.txt", FileAccess.READ)
+	var content = file.get_as_text()
+	
+	var json_result = JSON.parse_string(content)
+	if json_result != null:
+		var levels = json_result
+		if levels is Array:
+			# Find the level that matches current_level_id
+			for level_dict in levels:
+				print("reading: ")
+				print(Global.current_level_id)
+				if level_dict.has(Global.current_level_id):
+					questions = level_dict[Global.current_level_id]
+					score_per_question = max_score / questions.size()
+					break
+	else:
+		print("Error parsing JSON")
+		
+	if questions.size() == 0:
+		print("No questions found for level: ", Global.current_level_id)
+		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		
 func show_question():
 	var current_question = questions[question_number]
 	var question_text = str(current_question["question"])
