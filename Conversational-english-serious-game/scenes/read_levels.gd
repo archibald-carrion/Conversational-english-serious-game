@@ -26,6 +26,8 @@ func _ready():
 				# Get the first key of the first dictionary
 				var first_level_name = levels[0].keys()[0]
 				current_level = first_level_name
+				
+				Global.current_level_id = first_level_name
 	else:
 		print("Error parsing JSON")
 
