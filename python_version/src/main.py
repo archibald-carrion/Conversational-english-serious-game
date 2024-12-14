@@ -1,7 +1,12 @@
 import customtkinter as ctk
+from levels_manager import LevelsManager
 
-class LevelSelectorApp:
+class App:
     def __init__(self):
+
+        self.levels_manager = LevelsManager('levels.json')
+
+
         # Configure the main window
         self.root = ctk.CTk()
         self.root.title("Level Selector")
@@ -12,6 +17,8 @@ class LevelSelectorApp:
         # Set appearance and color theme
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
+
+
 
         ''' Main Menu '''
         
@@ -67,7 +74,7 @@ class LevelSelectorApp:
         # Level Dropdown
         self.level_dropdown = ctk.CTkOptionMenu(
             self.load_level_frame, 
-            values=["Level 1", "Level 2", "Level 3"]
+            values=self.levels_manager.get_level_names()
         )
         self.level_dropdown.pack(pady=20)
 
@@ -156,5 +163,5 @@ class LevelSelectorApp:
 
 # Run the application
 if __name__ == "__main__":
-    app = LevelSelectorApp()
+    app = App()
     app.run()
