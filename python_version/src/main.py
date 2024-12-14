@@ -5,7 +5,9 @@ class LevelSelectorApp:
         # Configure the main window
         self.root = ctk.CTk()
         self.root.title("Level Selector")
-        self.root.geometry("400x300")
+        # Set the window to full screen
+        self.root.size = (800, 600)
+        self.root.bind("<Escape>", lambda e: self.root.quit())       
 
         # Set appearance and color theme
         ctk.set_appearance_mode("Dark")
