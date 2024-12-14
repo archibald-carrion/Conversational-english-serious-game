@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from levels_manager import LevelsManager
+from PIL import Image
 
 class App:
     def __init__(self):
@@ -11,13 +12,14 @@ class App:
         self.root = ctk.CTk()
         self.root.title("Level Selector")
         # Set the window to full screen
-        self.root.size = (800, 600)
+        self.root.geometry("800x600")
         self.root.bind("<Escape>", lambda e: self.root.quit())       
 
         # Set appearance and color theme
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
 
+        self.bg_image = ctk.CTkImage(light_image=Image.open("assets/images/background.png"), dark_image=Image.open("assets/images/background.png"))
 
 
         ''' Main Menu '''
@@ -65,6 +67,10 @@ class App:
         )
         self.quit_btn.pack(pady=10)
 
+        # Set the background image
+        my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
+        my_background.pack(pady=10)
+
 
         ''' Load Level Frame '''
 
@@ -108,14 +114,16 @@ class App:
         # drop doiwn button with different window sizes 
         self.window_size_dropdown = ctk.CTkOptionMenu(
             self.game_configuration_frame, 
-            values=["800x600", "1024x768", "1280x720", "1920x1080"]
+            values=["800x600", "1024x768", "1280x720", "1920x1080"],
+            command=self.update_window_size
         )
         self.window_size_dropdown.pack(pady=20)
 
         # button at the right of the dropdown to confirm the selection
         self.confirm_window_size_btn = ctk.CTkButton(
             self.game_configuration_frame, 
-            text="Confirm Window Size"
+            text="Confirm Window Size",
+            command=self.apply_window_size
         )
         self.confirm_window_size_btn.pack(pady=10)
 
@@ -157,6 +165,16 @@ class App:
         
         # Show main menu
         self.main_menu_frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+    def apply_window_size(self):
+        """Apply the selected window size and reflect changes."""
+        self.root.geometry(self.selected_window_size)
+        # Optionally adjust UI elements to fit the new window size
+        self.my_background.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+    def update_window_size(self, size):
+        """Update the selected window size when the dropdown changes."""
+        self.selected_window_size = size
 
     def run(self):
         self.root.mainloop()
