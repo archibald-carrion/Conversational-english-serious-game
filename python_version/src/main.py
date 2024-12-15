@@ -11,21 +11,29 @@ class App:
         # Configure the main window
         self.root = ctk.CTk()
         self.root.title("Level Selector")
-        # Set the window to full screen
         self.root.geometry("800x600")
-        self.root.bind("<Escape>", lambda e: self.root.quit())       
+        # self.root.attributes('-transparentcolor', '#000001')  # Specify a color to make transparent
+        # self.root.configure(bg='#000001')  # Match this color with the transparency attribute
+        self.root.bind("<Escape>", lambda e: self.root.quit())
 
         # Set appearance and color theme
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
 
-        self.bg_image = ctk.CTkImage(light_image=Image.open("assets/images/background.png"), dark_image=Image.open("assets/images/background.png"))
+        # Set the background image - UPDATED PLACEMENT
+        self.bg_image = ctk.CTkImage(
+            light_image=Image.open("assets/images/background.png"), 
+            dark_image=Image.open("assets/images/background.png"),
+            size=(800, 600)  # Explicitly set size to match window
+        )
+        self.my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
+        self.my_background.place(x=0, y=0, relwidth=1, relheight=1)  # Ensure full coverage
 
 
         ''' Main Menu '''
         
         # Create main menu frame
-        self.main_menu_frame = ctk.CTkFrame(self.root)
+        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent")
         self.main_menu_frame.pack(pady=20, padx=20, fill="both", expand=True)
 
         # Main menu title
@@ -67,15 +75,11 @@ class App:
         )
         self.quit_btn.pack(pady=10)
 
-        # Set the background image
-        my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
-        my_background.pack(pady=10)
-
 
         ''' Load Level Frame '''
 
         # Load Level Frame (initially hidden)
-        self.load_level_frame = ctk.CTkFrame(self.root)
+        self.load_level_frame = ctk.CTkFrame(self.root, fg_color="transparent")
 
         # Level Dropdown
         self.level_dropdown = ctk.CTkOptionMenu(
@@ -102,7 +106,7 @@ class App:
         ''' Game Configuration Frame '''
 
         # Game configuration Frame (initially hidden)
-        self.game_configuration_frame = ctk.CTkFrame(self.root)
+        self.game_configuration_frame = ctk.CTkFrame(self.root, fg_color="transparent")
 
         # Game Title
         self.game_title = ctk.CTkLabel(
@@ -139,7 +143,7 @@ class App:
         ''' Level frame '''
 
         # Level Frame (initially hidden)
-        self.level_frame = ctk.CTkFrame(self.root)
+        self.level_frame = ctk.CTkFrame(self.root, fg_color="transparent")
 
         # Level Title, it's the name of the selected level from the dropdown
 
@@ -170,7 +174,17 @@ class App:
         """Apply the selected window size and reflect changes."""
         self.root.geometry(self.selected_window_size)
         # Optionally adjust UI elements to fit the new window size
-        self.my_background.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+        width, height = map(int, self.selected_window_size.split('x'))
+        self.bg_image = ctk.CTkImage(
+            light_image=Image.open("assets/images/background.png"), 
+            dark_image=Image.open("assets/images/background.png"),
+            size=(width, height)
+        )
+        self.my_background.configure(image=self.bg_image)
+        
+        # Ensure background covers the entire window
+        self.my_background.place(x=0, y=0, relwidth=1, relheight=1)
 
     def update_window_size(self, size):
         """Update the selected window size when the dropdown changes."""
