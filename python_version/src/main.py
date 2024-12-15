@@ -1,12 +1,15 @@
 import customtkinter as ctk
 from levels_manager import LevelsManager
 from PIL import Image
+import os
+from playsound import playsound
 
 class App:
     def __init__(self):
 
         self.levels_manager = LevelsManager('levels.json')
 
+        self.current_level = None
 
         # Configure the main window
         self.root = ctk.CTk()
@@ -92,7 +95,8 @@ class App:
         # Load Button in Level Selection
         self.confirm_load_btn = ctk.CTkButton(
             self.load_level_frame, 
-            text="Load Selected Level"
+            text="Load Selected Level",
+            command=self.load_selected_level
         )
         self.confirm_load_btn.pack(pady=10)
 
@@ -146,7 +150,54 @@ class App:
         # Level Frame (initially hidden)
         self.level_frame = ctk.CTkFrame(self.root, fg_color="transparent")
 
-        # Level Title, it's the name of the selected level from the dropdown
+        # Level Title
+        self.level_title = ctk.CTkLabel(
+            self.level_frame,
+            text="",
+            font=("Helvetica", 24)
+        )
+        self.level_title.pack(pady=20)
+
+        # Question Text
+        self.question_text = ctk.CTkLabel(
+            self.level_frame,
+            text="",
+            wraplength=600,
+            font=("Helvetica", 18)
+        )
+        self.question_text.pack(pady=20)
+
+        # Answer Buttons
+        self.answer_buttons = []
+        for i in range(3):
+            button = ctk.CTkButton(
+                self.level_frame,
+                text="",
+                command=lambda index=i: self.handle_answer_click(index),
+                width=400,
+                height=50
+            )
+            self.answer_buttons.append(button)
+            button.pack(pady=10)
+
+        # Back Button
+        self.back_button = ctk.CTkButton(
+            self.level_frame,
+            text="Back to Menu",
+            command=self.back_to_main_menu,
+            width=200,
+            height=40
+        )
+        self.back_button.pack(pady=20)
+
+
+    def load_selected_level(self):
+        """
+        Load the selected level from the dropdown.
+        """
+        print(f"Selected level: {self.level_dropdown.get()}")
+        self.current_level = self.level_dropdown.get()
+        self.load_level(self.current_level, 0)
 
     def open_game_configuration_window(self):
         # Hide main menu
@@ -167,6 +218,8 @@ class App:
         self.load_level_frame.pack_forget()
         # Hide game configuration frame
         self.game_configuration_frame.pack_forget()
+        # Hide level frame
+        self.level_frame.pack_forget()
         
         # Show main menu
         self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
@@ -190,6 +243,55 @@ class App:
     def update_window_size(self, size):
         """Update the selected window size when the dropdown changes."""
         self.selected_window_size = size
+
+
+    def load_level(self, level_name, question_index):
+        """
+        Load and display a specific question for a given level.
+        
+        Args:
+            level_name (str): Name of the level
+            question_index (int): Index of the question to load
+        """
+        # Hide other frames
+        self.main_menu_frame.pack_forget()
+        self.game_configuration_frame.pack_forget()
+        self.load_level_frame.pack_forget()
+
+        # Show the level frame
+        self.level_frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+        # Get the question data
+        question_data = self.levels_manager.get_level_question(level_name, question_index)
+        if question_data:
+            # Update the level title
+            self.level_title.configure(text=f"Level {level_name}")
+
+            # Update the question text
+            self.question_text.configure(text=question_data["question"])
+
+            # Update the answer buttons
+            for i, answer_text in enumerate(question_data["answers"]):
+                self.answer_buttons[i].configure(text=answer_text)
+
+            # Play the audio file
+            audio_file = question_data["audio_file"]
+            if os.path.exists(audio_file):
+                playsound(audio_file)
+            else:
+                print(f"Error: Audio file not found at {audio_file}")
+        else:
+            print(f"Error: Question not found for level {level_name} at index {question_index}")
+
+    def handle_answer_click(self, answer_index):
+        """
+        Handle the user's answer selection.
+        
+        Args:
+            answer_index (int): Index of the selected answer
+        """
+        # TODO: Implement logic to handle the answer selection
+        print(f"Selected answer at index {answer_index}")
 
     def run(self):
         self.root.mainloop()
