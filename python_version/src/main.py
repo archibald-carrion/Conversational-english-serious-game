@@ -12,6 +12,7 @@ class App:
         self.root = ctk.CTk()
         self.root.title("Level Selector")
         self.root.geometry("800x600")
+        self.root.resizable(False, False)
         # self.root.attributes('-transparentcolor', '#000001')  # Specify a color to make transparent
         # self.root.configure(bg='#000001')  # Match this color with the transparency attribute
         self.root.bind("<Escape>", lambda e: self.root.quit())
@@ -33,8 +34,8 @@ class App:
         ''' Main Menu '''
         
         # Create main menu frame
-        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-        self.main_menu_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent", bg_color="transparent")
+        self.main_menu_frame.pack(pady=50, padx=100, fill="both", expand=True, anchor="w")
 
         # Main menu title
         self.menu_title = ctk.CTkLabel(
@@ -42,7 +43,7 @@ class App:
             text="Level Manager", 
             font=("Helvetica", 24)
         )
-        self.menu_title.pack(pady=20)
+        self.menu_title.pack(pady=50)
 
         # Load Level Button
         self.load_level_btn = ctk.CTkButton(
@@ -118,7 +119,7 @@ class App:
         # drop doiwn button with different window sizes 
         self.window_size_dropdown = ctk.CTkOptionMenu(
             self.game_configuration_frame, 
-            values=["800x600", "1024x768", "1280x720", "1920x1080"],
+            values=["800x600", "1280x720", "1920x1080"],
             command=self.update_window_size
         )
         self.window_size_dropdown.pack(pady=20)
@@ -152,14 +153,14 @@ class App:
         self.main_menu_frame.pack_forget()
         
         # Show game configuration frame
-        self.game_configuration_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        self.game_configuration_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
     def open_load_level_window(self):
         # Hide main menu
         self.main_menu_frame.pack_forget()
         
         # Show load level frame
-        self.load_level_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        self.load_level_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
     def back_to_main_menu(self):
         # Hide load level frame
@@ -168,7 +169,7 @@ class App:
         self.game_configuration_frame.pack_forget()
         
         # Show main menu
-        self.main_menu_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
     def apply_window_size(self):
         """Apply the selected window size and reflect changes."""
