@@ -291,7 +291,7 @@ class App:
 
     def handle_answer_click(self, answer_index):
         """
-        Handle the user's answer selection with feedback.
+        Handle the user's answer selection with progression to next question.
         
         Args:
             answer_index (int): Index of the selected answer
@@ -301,16 +301,23 @@ class App:
             print("No level currently loaded")
             return
 
+        # Track the current question index (add this as an instance variable)
+        if not hasattr(self, 'current_question_index'):
+            self.current_question_index = 0
+
         # Get the current question data
-        question_data = self.levels_manager.get_level_question(self.current_level, 0)  # Assuming first question for now
+        question_data = self.levels_manager.get_level_question(
+            self.current_level, 
+            self.current_question_index
+        )
         
-        # Create a feedback label
+        # Create a feedback label if it doesn't exist
         if not hasattr(self, 'feedback_label'):
             self.feedback_label = ctk.CTkLabel(
                 self.level_frame,
                 text="",
                 font=("Helvetica", 20),
-                text_color="green"  # Default to green
+                text_color="green"
             )
             self.feedback_label.pack(pady=10)
 
@@ -322,8 +329,27 @@ class App:
                 text_color="green"
             )
             
-            # Optional: You might want to add a method to progress to the next level/question
-            # self.progress_to_next_level()
+            # Try to load the next question
+            next_question_index = self.current_question_index + 1
+            next_question = self.levels_manager.get_level_question(
+                self.current_level, 
+                next_question_index
+            )
+            
+            if next_question:
+                # Increment the question index
+                self.current_question_index = next_question_index
+                
+                # Delay and then load the next question
+                self.root.after(2000, lambda: self.load_level(self.current_level, next_question_index))
+            else:
+                # No more questions in this level
+                self.feedback_label.configure(
+                    text="Congratulations! Level Completed! 🎉", 
+                    text_color="green"
+                )
+                # Optionally return to main menu after a delay
+                self.root.after(3000, self.back_to_main_menu)
         else:
             # Incorrect answer
             self.feedback_label.configure(
@@ -331,7 +357,7 @@ class App:
                 text_color="red"
             )
 
-        # Clear the feedback after 2 seconds
+        # Clear the feedback after 2 seconds if not progressing
         self.root.after(2000, self.clear_feedback)
 
     def clear_feedback(self):
