@@ -8,6 +8,9 @@ from playsound import playsound
 class App:
     def __init__(self):
 
+        # Add a score attribute and initialize to 0
+        self.current_score = 0
+
         self.levels_manager = LevelsManager('levels.json')
 
         self.current_level = None
@@ -191,6 +194,47 @@ class App:
         )
         self.back_button.pack(pady=20)
 
+        ''' Level Completed Frame '''
+
+        # Level Completed Frame (initially hidden)
+        self.level_completed_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+
+        # Completion Message
+        self.completion_message = ctk.CTkLabel(
+            self.level_completed_frame,
+            text="Level Completed!",
+            font=("Helvetica", 24),
+            text_color="green"
+        )
+        self.completion_message.pack(pady=20)
+
+        # Score Display
+        self.score_label = ctk.CTkLabel(
+            self.level_completed_frame,
+            text="Your Score: 0",
+            font=("Helvetica", 20)
+        )
+        self.score_label.pack(pady=10)
+
+        # Button to return to the main menu
+        self.return_to_menu_btn = ctk.CTkButton(
+            self.level_completed_frame,
+            text="Return to Main Menu",
+            command=self.back_to_main_menu
+        )
+        self.return_to_menu_btn.pack(pady=20)
+
+
+
+
+        # Add score display to the main game frame
+        self.score_display = ctk.CTkLabel(
+            self.level_frame,
+            text=f"Score: {self.current_score}",
+            font=("Helvetica", 16)
+        )
+        self.score_display.pack(pady=10, anchor="ne")  # Position at top-right
+
 
     def load_selected_level(self):
         """
@@ -253,6 +297,12 @@ class App:
             level_name (str): Name of the level
             question_index (int): Index of the question to load
         """
+
+        # Reset score when starting a new level
+        if question_index == 0:
+            self.current_score = 0
+            self.score_display.configure(text=f"Score: {self.current_score}")
+
         # Hide other frames
         self.main_menu_frame.pack_forget()
         self.game_configuration_frame.pack_forget()
@@ -290,12 +340,6 @@ class App:
             print(f"Error: Question not found for level {level_name} at index {question_index}")
 
     def handle_answer_click(self, answer_index):
-        """
-        Handle the user's answer selection with progression to next question.
-        
-        Args:
-            answer_index (int): Index of the selected answer
-        """
         # Ensure a level is currently loaded
         if not self.current_level:
             print("No level currently loaded")
@@ -323,6 +367,12 @@ class App:
 
         # Check if the selected answer is correct
         if answer_index == question_data.get("correct_answer", -1):
+            # Correct answer - increase score
+            self.current_score += 10  # Add 10 points for each correct answer
+            
+            # Update score display
+            self.score_display.configure(text=f"Score: {self.current_score}")
+            
             # Correct answer
             self.feedback_label.configure(
                 text="Congratulations! ✅", 
@@ -345,11 +395,10 @@ class App:
             else:
                 # No more questions in this level
                 self.feedback_label.configure(
-                    text="Congratulations! Level Completed! 🎉", 
+                    text="Level Completed! 🎉", 
                     text_color="green"
                 )
-                # Optionally return to main menu after a delay
-                self.root.after(3000, self.back_to_main_menu)
+                self.root.after(2000, self.show_level_completed_frame)
         else:
             # Incorrect answer
             self.feedback_label.configure(
@@ -366,6 +415,18 @@ class App:
         """
         if hasattr(self, 'feedback_label'):
             self.feedback_label.configure(text="")
+
+    def show_level_completed_frame(self):
+        """
+        Display the level completed frame with the score.
+        """
+        # Hide other frames
+        self.level_frame.pack_forget()
+
+        # Update and show the level completed frame
+        self.score_label.configure(text=f"Your Score: {self.current_score}")
+        self.level_completed_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
 
     def run(self):
         self.root.mainloop()
