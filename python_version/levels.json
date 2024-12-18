@@ -10,7 +10,7 @@
 		  "I work at a software company that \n develops mobile applications."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/1.mp3"
+		"audio_file": "assets//audio//diff_01//1.mp3"
 	  },
 	  {
 		"question": "What kind of projects do\nyou work on in your current job?",

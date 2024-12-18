@@ -2,6 +2,7 @@ import customtkinter as ctk
 from levels_manager import LevelsManager
 from PIL import Image
 import os
+import threading
 from playsound import playsound
 
 class App:
@@ -244,10 +245,9 @@ class App:
         """Update the selected window size when the dropdown changes."""
         self.selected_window_size = size
 
-
     def load_level(self, level_name, question_index):
         """
-        Load and display a specific question for a given level.
+        Load and display a specific question for a given level with parallel audio playback.
         
         Args:
             level_name (str): Name of the level
@@ -274,10 +274,16 @@ class App:
             for i, answer_text in enumerate(question_data["answers"]):
                 self.answer_buttons[i].configure(text=answer_text)
 
-            # Play the audio file
+            # Play the audio file in a separate thread
             audio_file = question_data["audio_file"]
             if os.path.exists(audio_file):
-                playsound(audio_file)
+                def play_audio():
+                    playsound(audio_file)
+                
+                # Create and start the audio thread
+                audio_thread = threading.Thread(target=play_audio)
+                audio_thread.daemon = True  # Ensure the thread doesn't block app closing
+                audio_thread.start()
             else:
                 print(f"Error: Audio file not found at {audio_file}")
         else:
@@ -285,13 +291,55 @@ class App:
 
     def handle_answer_click(self, answer_index):
         """
-        Handle the user's answer selection.
+        Handle the user's answer selection with feedback.
         
         Args:
             answer_index (int): Index of the selected answer
         """
-        # TODO: Implement logic to handle the answer selection
-        print(f"Selected answer at index {answer_index}")
+        # Ensure a level is currently loaded
+        if not self.current_level:
+            print("No level currently loaded")
+            return
+
+        # Get the current question data
+        question_data = self.levels_manager.get_level_question(self.current_level, 0)  # Assuming first question for now
+        
+        # Create a feedback label
+        if not hasattr(self, 'feedback_label'):
+            self.feedback_label = ctk.CTkLabel(
+                self.level_frame,
+                text="",
+                font=("Helvetica", 20),
+                text_color="green"  # Default to green
+            )
+            self.feedback_label.pack(pady=10)
+
+        # Check if the selected answer is correct
+        if answer_index == question_data.get("correct_answer", -1):
+            # Correct answer
+            self.feedback_label.configure(
+                text="Congratulations! ✅", 
+                text_color="green"
+            )
+            
+            # Optional: You might want to add a method to progress to the next level/question
+            # self.progress_to_next_level()
+        else:
+            # Incorrect answer
+            self.feedback_label.configure(
+                text="Try Again! ❌", 
+                text_color="red"
+            )
+
+        # Clear the feedback after 2 seconds
+        self.root.after(2000, self.clear_feedback)
+
+    def clear_feedback(self):
+        """
+        Clear the feedback label text.
+        """
+        if hasattr(self, 'feedback_label'):
+            self.feedback_label.configure(text="")
 
     def run(self):
         self.root.mainloop()
