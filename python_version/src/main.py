@@ -194,6 +194,14 @@ class App:
         )
         self.back_button.pack(pady=20)
 
+        self.score_display = ctk.CTkLabel(
+            self.level_frame,
+            text=f"Score: {self.current_score}",
+            font=("Helvetica", 16),
+            text_color="white"
+        )
+        self.score_display.place(relx=0.95, rely=0.05, anchor="ne")  # Top-right corner
+
         ''' Level Completed Frame '''
 
         # Level Completed Frame (initially hidden)
@@ -227,13 +235,6 @@ class App:
 
 
 
-        # Add score display to the main game frame
-        self.score_display = ctk.CTkLabel(
-            self.level_frame,
-            text=f"Score: {self.current_score}",
-            font=("Helvetica", 16)
-        )
-        self.score_display.pack(pady=10, anchor="ne")  # Position at top-right
 
 
     def load_selected_level(self):
@@ -265,6 +266,8 @@ class App:
         self.game_configuration_frame.pack_forget()
         # Hide level frame
         self.level_frame.pack_forget()
+        # Hide level completed frame
+        self.level_completed_frame.pack_forget()
         
         # Show main menu
         self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
@@ -426,7 +429,6 @@ class App:
         # Update and show the level completed frame
         self.score_label.configure(text=f"Your Score: {self.current_score}")
         self.level_completed_frame.pack(pady=50, padx=50, fill="both", expand=True)
-
 
     def run(self):
         self.root.mainloop()

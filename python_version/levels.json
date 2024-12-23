@@ -20,7 +20,7 @@
 		  "I enjoy experimenting with new\nrecipes in my free time."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_01/2.mp3"
+		"audio_file": "assets//audio//diff_01//2.mp3"
 	  },
 	  {
 		"question": "How long have you worked in this field, \n and what do you enjoy the most?",
@@ -30,7 +30,7 @@
 		  "I've spent 7 years in this field,\nand I find fulfillment in\nworking with my colleagues."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/3.mp3"
+		"audio_file": "assets//audio//diff_01//3.mp3"
 	  },
 	  {
 		"question": "Why did you decide to\nwork in this industry?",
@@ -40,7 +40,7 @@
 		  "I chose to enter this field due to my\nenthusiasm for technology and innovation."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/4.mp3"
+		"audio_file": "assets//audio//diff_01//4.mp3"
 	  },
 	  {
 		"question": "Where did you start working\nwhen you began your career?",
@@ -50,7 +50,7 @@
 		  "I started my career as a musician because\nI wanted to bring joy to others with my songs."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_01/5.mp3"
+		"audio_file": "assets//audio//diff_01//5.mp3"
 	  },
 	  {
 		"question": "What responsibilities do\nyou have in your current job?",
@@ -60,7 +60,7 @@
 		  "My role involves leading a team\nand supervising project development."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/6.mp3"
+		"audio_file": "assets//audio//diff_01//6.mp3"
 	  },
 	  {
 		"question": "How do you balance\nyour work with personal life?",
@@ -70,7 +70,7 @@
 		  "I appreciate the support of\nmy friends and family in managing my time."
 		],
 		"correct_answer": 0,
-		"audio_file": "res://assets/audio/diff_01/7.mp3"
+		"audio_file": "assets//audio//diff_01//7.mp3"
 	  },
 	  {
 		"question": "What skills do you use most\noften at work, and how do\nthey help you succeed?",
@@ -80,7 +80,7 @@
 		  "I often rely on communication and problem-solving\nskills, which enhance collaboration."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/8.mp3"
+		"audio_file": "assets//audio//diff_01//8.mp3"
 	  },
 	  {
 		"question": "Where do you see yourself\nworking in five years,\nand what position\nwould you like to hold?",
@@ -90,7 +90,7 @@
 		  "I envision being part of a\ndynamic team in the future,\npossibly in a leadership role."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_01/9.mp3"
+		"audio_file": "assets//audio//diff_01//9.mp3"
 	  },
 	  {
 		"question": "Why do you think working in\nteams is important for your job?",
@@ -100,7 +100,7 @@
 		  "Employers should encourage their employees\nto work in teams to strengthen relationships\namong colleagues."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_01/10.mp3"
+		"audio_file": "assets//audio//diff_01//10.mp3"
 	  }
 	]
   },
@@ -115,7 +115,7 @@
 		  "Prioritizing tasks and setting deadlines\nto manage my time appropriately\nis really difficult for me."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_02/1.mp3"
+		"audio_file": "assets//audio//diff_02//1.mp3"
 	  },
 	  {
 		"question": "How has your role in the\ncompany changed over time?",
@@ -125,7 +125,7 @@
 		  "At the beginning I was in an\nentry-level position, but now I am\nworking as a manager."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_02/2.mp3"
+		"audio_file": "assets//audio//diff_02//2.mp3"
 	  },
 	  {
 		"question": "What motivates you to keep\nimproving in your current occupation?",
@@ -135,7 +135,7 @@
 		  "How my colleagues inspire me\nevery day is my main motivation."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_02/3.mp3"
+		"audio_file": "assets//audio//diff_02//3.mp3"
 	  },
 	  {
 		"question": "How do you manage stress\nand pressure at work?",
@@ -145,7 +145,7 @@
 		  "Mindfulness and exercising have\nhelped me in this kind of situation."
 		],
 		"correct_answer": 0,
-		"audio_file": "res://assets/audio/diff_02/4.mp3"
+		"audio_file": "assets//audio//diff_02//4.mp3"
 	  },
 	  {
 		"question": "What are the most important\nqualities to succeed in\nyour industry?",
@@ -155,7 +155,7 @@
 		  "Organization and punctuality\nare key in any job."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_02/5.mp3"
+		"audio_file": "assets//audio//diff_02//5.mp3"
 	  },
 	  {
 		"question": "What kind of impact do you hope\nyour work will have on the company\nand its future growth?",
@@ -165,7 +165,7 @@
 		  "I hope my work will improve\ncommunication between departments."
 		],
 		"correct_answer": 1,
-		"audio_file": "res://assets/audio/diff_02/6.mp3"
+		"audio_file": "assets//audio//diff_02//6.mp3"
 	  },
 	  {
 		"question": "How do you keep yourself updated\nwith the latest trends and\nadvancements in your field?",
@@ -175,7 +175,7 @@
 		  "I learn new trends by following\nprofessionals on social media."
 		],
 		"correct_answer": 0,
-		"audio_file": "res://assets/audio/diff_02/7.mp3"
+		"audio_file": "assets//audio//diff_02//7.mp3"
 	  },
 	  {
 		"question": "How does technology help you\nimprove your job performance?",
@@ -185,7 +185,7 @@
 		  "Technology plays a key role by\nallowing the participation in\ninternational trainings online."
 		],
 		"correct_answer": 0,
-		"audio_file": "res://assets/audio/diff_02/8.mp3"
+		"audio_file": "assets//audio//diff_02//8.mp3"
 	  },
 	  {
 		"question": "How does teamwork contribute\nto achieving the company's goals?",
@@ -195,7 +195,7 @@
 		  "Motivating team members to work\ntogether is a key contribution."
 		],
 		"correct_answer": 0,
-		"audio_file": "res://assets/audio/diff_02/9.mp3"
+		"audio_file": "assets//audio//diff_02//9.mp3"
 	  },
 	  {
 		"question": "What advice would you give to\nsomeone starting a career\nin your field?",
@@ -205,7 +205,7 @@
 		  "I'd recommend focusing on technical\nskills and networking."
 		],
 		"correct_answer": 2,
-		"audio_file": "res://assets/audio/diff_02/10.mp3"
+		"audio_file": "assets//audio//diff_02//10.mp3"
 	  }
 	]
   }
