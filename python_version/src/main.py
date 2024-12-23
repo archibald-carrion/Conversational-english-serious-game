@@ -268,7 +268,6 @@ class App:
         self.level_frame.pack_forget()
         # Hide level completed frame
         self.level_completed_frame.pack_forget()
-        
         # Show main menu
         self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
@@ -343,22 +342,21 @@ class App:
             print(f"Error: Question not found for level {level_name} at index {question_index}")
 
     def handle_answer_click(self, answer_index):
-        # Ensure a level is currently loaded
         if not self.current_level:
             print("No level currently loaded")
             return
 
-        # Track the current question index (add this as an instance variable)
         if not hasattr(self, 'current_question_index'):
             self.current_question_index = 0
+            
+        if not hasattr(self, 'current_attempts'):
+            self.current_attempts = 0
 
-        # Get the current question data
         question_data = self.levels_manager.get_level_question(
             self.current_level, 
             self.current_question_index
         )
         
-        # Create a feedback label if it doesn't exist
         if not hasattr(self, 'feedback_label'):
             self.feedback_label = ctk.CTkLabel(
                 self.level_frame,
@@ -370,19 +368,23 @@ class App:
 
         # Check if the selected answer is correct
         if answer_index == question_data.get("correct_answer", -1):
-            # Correct answer - increase score
-            self.current_score += 10  # Add 10 points for each correct answer
+            # Award points based on number of attempts
+            points = 10 if self.current_attempts == 0 else (5 if self.current_attempts == 1 else 0)
+            self.current_score += points
             
             # Update score display
             self.score_display.configure(text=f"Score: {self.current_score}")
             
-            # Correct answer
+            # Feedback message includes points earned
             self.feedback_label.configure(
-                text="Congratulations! ✅", 
+                text=f"Correct! +{points} points ✅", 
                 text_color="green"
             )
             
-            # Try to load the next question
+            # Reset attempts for next question
+            self.current_attempts = 0
+            
+            # Try to load next question
             next_question_index = self.current_question_index + 1
             next_question = self.levels_manager.get_level_question(
                 self.current_level, 
@@ -390,26 +392,33 @@ class App:
             )
             
             if next_question:
-                # Increment the question index
                 self.current_question_index = next_question_index
-                
-                # Delay and then load the next question
                 self.root.after(2000, lambda: self.load_level(self.current_level, next_question_index))
             else:
-                # No more questions in this level
                 self.feedback_label.configure(
                     text="Level Completed! 🎉", 
                     text_color="green"
                 )
                 self.root.after(2000, self.show_level_completed_frame)
         else:
-            # Incorrect answer
+            # Increment attempts counter
+            self.current_attempts += 1
+            
+            # Update feedback based on remaining attempts
+            remaining_attempts = 3 - self.current_attempts
+            feedback_text = f"Try Again! {remaining_attempts} attempts left ❌"
+            
+            if self.current_attempts >= 3:
+                feedback_text = "Moving to next question..."
+                self.current_attempts = 0
+                next_question_index = self.current_question_index + 1
+                self.root.after(2000, lambda: self.load_level(self.current_level, next_question_index))
+                
             self.feedback_label.configure(
-                text="Try Again! ❌", 
+                text=feedback_text, 
                 text_color="red"
             )
 
-        # Clear the feedback after 2 seconds if not progressing
         self.root.after(2000, self.clear_feedback)
 
     def clear_feedback(self):
