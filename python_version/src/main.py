@@ -10,6 +10,7 @@ class App:
 
         # Add a score attribute and initialize to 0
         self.current_score = 0
+        self.total_possible_score = 0
 
         self.levels_manager = LevelsManager('levels.json')
 
@@ -235,7 +236,8 @@ class App:
 
 
 
-
+    def get_level_data(self, level_name):
+        return self.levels.get(level_name)
 
     def load_selected_level(self):
         """
@@ -303,7 +305,10 @@ class App:
         # Reset score when starting a new level
         if question_index == 0:
             self.current_score = 0
-            self.score_display.configure(text=f"Score: {self.current_score}")
+            # Calculate total possible score (10 points per question)
+            level_questions = self.levels_manager.get_level_questions(level_name)
+            self.total_possible_score = len(level_questions) * 10
+            self.score_display.configure(text=f"Score: {self.current_score}/{self.total_possible_score}")
 
         # Hide other frames
         self.main_menu_frame.pack_forget()
@@ -373,7 +378,7 @@ class App:
             self.current_score += points
             
             # Update score display
-            self.score_display.configure(text=f"Score: {self.current_score}")
+            self.score_display.configure(text=f"Score: {self.current_score}/{self.total_possible_score}")
             
             # Feedback message includes points earned
             self.feedback_label.configure(
@@ -436,7 +441,7 @@ class App:
         self.level_frame.pack_forget()
 
         # Update and show the level completed frame
-        self.score_label.configure(text=f"Your Score: {self.current_score}")
+        self.score_label.configure(text=f"Your Score: {self.current_score}/{self.total_possible_score}")
         self.level_completed_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
     def run(self):
