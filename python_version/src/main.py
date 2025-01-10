@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import threading
 from playsound import playsound
+from tkinter import filedialog
 
 class App:
     def __init__(self):
@@ -61,10 +62,11 @@ class App:
         )
         self.load_level_btn.pack(pady=10)
 
-        # Modify Levels Button
+        # Update the Modify Levels Button command
         self.modify_levels_btn = ctk.CTkButton(
             self.main_menu_frame, 
-            text="Modify Levels"
+            text="Modify Levels",
+            command=self.open_modify_levels_window
         )
         self.modify_levels_btn.pack(pady=10)
 
@@ -234,7 +236,189 @@ class App:
         self.return_to_menu_btn.pack(pady=20)
 
 
+         
 
+        # Add new frames for level modification
+
+        ''' Modify Levels Frame '''
+        self.modify_levels_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        
+        # Level selection dropdown
+        self.modify_level_dropdown = ctk.CTkOptionMenu(
+            self.modify_levels_frame,
+            values=self.levels_manager.get_level_names()
+        )
+        self.modify_level_dropdown.pack(pady=20)
+
+        # Select level button
+        self.select_level_btn = ctk.CTkButton(
+            self.modify_levels_frame,
+            text="Select Level",
+            command=self.open_question_selection
+        )
+        self.select_level_btn.pack(pady=10)
+
+        # Back button
+        self.modify_back_btn = ctk.CTkButton(
+            self.modify_levels_frame,
+            text="Back to Menu",
+            command=self.back_to_main_menu
+        )
+        self.modify_back_btn.pack(pady=10)
+
+        ''' Question Selection Frame '''
+        self.question_selection_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        
+        # Question selection dropdown (will be populated when level is selected)
+        self.question_dropdown = ctk.CTkOptionMenu(
+            self.question_selection_frame,
+            values=[""]
+        )
+        self.question_dropdown.pack(pady=20)
+
+        # Select question button
+        self.select_question_btn = ctk.CTkButton(
+            self.question_selection_frame,
+            text="Modify Selected Question",
+            command=self.open_question_editor
+        )
+        self.select_question_btn.pack(pady=10)
+
+        # Back button
+        self.question_select_back_btn = ctk.CTkButton(
+            self.question_selection_frame,
+            text="Back to Level Selection",
+            command=self.back_to_modify_levels
+        )
+        self.question_select_back_btn.pack(pady=10)
+
+        ''' Question Editor Frame '''
+        # Create main frame
+        self.question_editor_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        
+        # Create a canvas with scrollbar
+        self.editor_canvas = ctk.CTkCanvas(
+            self.question_editor_frame,
+            width=700,
+            height=500,
+            bg='#2b2b2b',  # Match dark theme
+            highlightthickness=0
+        )
+        self.editor_scrollbar = ctk.CTkScrollbar(
+            self.question_editor_frame,
+            orientation="vertical",
+            command=self.editor_canvas.yview
+        )
+        self.editor_canvas.configure(yscrollcommand=self.editor_scrollbar.set)
+
+        # Create a frame inside canvas for content
+        self.editor_content_frame = ctk.CTkFrame(self.editor_canvas, fg_color="transparent")
+
+        # Pack scrollbar and canvas
+        self.editor_scrollbar.pack(side="right", fill="y")
+        self.editor_canvas.pack(side="left", fill="both", expand=True, padx=5)
+
+        # Create window in canvas
+        self.canvas_frame = self.editor_canvas.create_window(
+            (0, 0),
+            window=self.editor_content_frame,
+            anchor="nw",
+            width=680  # Slightly less than canvas width
+        )
+
+        # Question text entry
+        self.question_label = ctk.CTkLabel(
+            self.editor_content_frame,
+            text="Question:"
+        )
+        self.question_label.pack(pady=3)
+        
+        self.question_entry = ctk.CTkTextbox(
+            self.editor_content_frame,
+            height=80,  # Reduced height
+            width=600
+        )
+        self.question_entry.pack(pady=5)
+
+        # Answer entries
+        self.answer_entries = []
+        for i in range(3):
+            label = ctk.CTkLabel(
+                self.editor_content_frame,
+                text=f"Answer {i+1}:"
+            )
+            label.pack(pady=2)
+            
+            entry = ctk.CTkEntry(
+                self.editor_content_frame,
+                width=500
+            )
+            entry.pack(pady=3)
+            self.answer_entries.append(entry)
+
+        # Correct answer selection
+        self.correct_answer_label = ctk.CTkLabel(
+            self.editor_content_frame,
+            text="Correct Answer (0-2):"
+        )
+        self.correct_answer_label.pack(pady=2)
+        
+        self.correct_answer_entry = ctk.CTkEntry(
+            self.editor_content_frame,
+            width=50
+        )
+        self.correct_answer_entry.pack(pady=3)
+
+        # Audio file selection
+        self.audio_path_label = ctk.CTkLabel(
+            self.editor_content_frame,
+            text="Current Audio File: None",
+            wraplength=500  # Prevent long paths from expanding the window
+        )
+        self.audio_path_label.pack(pady=2)
+
+        self.select_audio_btn = ctk.CTkButton(
+            self.editor_content_frame,
+            text="Select Audio File",
+            command=self.select_audio_file
+        )
+        self.select_audio_btn.pack(pady=3)
+
+        # Save changes button
+        self.save_changes_btn = ctk.CTkButton(
+            self.editor_content_frame,
+            text="Save Changes",
+            command=self.save_question_changes
+        )
+        self.save_changes_btn.pack(pady=3)
+
+        # Back button
+        self.editor_back_btn = ctk.CTkButton(
+            self.editor_content_frame,
+            text="Back to Question Selection",
+            command=self.back_to_question_selection
+        )
+        self.editor_back_btn.pack(pady=3)
+
+        # Bind canvas configuration to update scroll region
+        self.editor_content_frame.bind("<Configure>", self.update_scrollregion)
+        self.editor_canvas.bind("<Configure>", self.update_canvas_width)
+
+        # Bind mousewheel to scroll
+        self.editor_canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+
+    def update_scrollregion(self, event):
+        """Update the scroll region when the content frame changes"""
+        self.editor_canvas.configure(scrollregion=self.editor_canvas.bbox("all"))
+
+    def update_canvas_width(self, event):
+        """Update the width of the canvas window when the canvas is resized"""
+        self.editor_canvas.itemconfig(self.canvas_frame, width=event.width-20)
+
+    def on_mousewheel(self, event):
+        """Handle mousewheel scrolling"""
+        if self.question_editor_frame.winfo_ismapped():  # Only scroll if editor frame is visible
+            self.editor_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def get_level_data(self, level_name):
         return self.levels.get(level_name)
@@ -444,6 +628,94 @@ class App:
         self.score_label.configure(text=f"Your Score: {self.current_score}/{self.total_possible_score}")
         self.level_completed_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
+    def open_modify_levels_window(self):
+        """Open the modify levels window"""
+        self.main_menu_frame.pack_forget()
+        self.modify_levels_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def open_question_selection(self):
+        """Open the question selection window for the chosen level"""
+        selected_level = self.modify_level_dropdown.get()
+        questions = self.levels_manager.get_level_questions(selected_level)
+        
+        # Update question dropdown with question numbers
+        question_numbers = [f"Question {i+1}" for i in range(len(questions))]
+        self.question_dropdown.configure(values=question_numbers)
+        if question_numbers:
+            self.question_dropdown.set(question_numbers[0])
+
+        self.modify_levels_frame.pack_forget()
+        self.question_selection_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def open_question_editor(self):
+        """Open the question editor for the selected question"""
+        selected_level = self.modify_level_dropdown.get()
+        question_index = int(self.question_dropdown.get().split()[-1]) - 1
+        
+        # Get current question data
+        question_data = self.levels_manager.get_level_question(selected_level, question_index)
+        
+        # Populate fields with current data
+        self.question_entry.delete("0.0", "end")
+        self.question_entry.insert("0.0", question_data["question"])
+        
+        for i, answer in enumerate(question_data["answers"]):
+            self.answer_entries[i].delete(0, "end")
+            self.answer_entries[i].insert(0, answer)
+        
+        self.correct_answer_entry.delete(0, "end")
+        self.correct_answer_entry.insert(0, str(question_data["correct_answer"]))
+        
+        self.audio_path_label.configure(text=f"Current Audio File: {question_data['audio_file']}")
+        self.current_audio_path = question_data['audio_file']
+
+        self.question_selection_frame.pack_forget()
+        self.question_editor_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def select_audio_file(self):
+        """Open file dialog to select new audio file"""
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Audio Files", "*.mp3 *.wav")]
+        )
+        if file_path:
+            self.current_audio_path = file_path
+            self.audio_path_label.configure(text=f"Current Audio File: {file_path}")
+
+    def save_question_changes(self):
+        """Save the modified question data"""
+        selected_level = self.modify_level_dropdown.get()
+        question_index = int(self.question_dropdown.get().split()[-1]) - 1
+        
+        # Get the updated data
+        updated_data = {
+            "question": self.question_entry.get("0.0", "end").strip(),
+            "answers": [entry.get() for entry in self.answer_entries],
+            "correct_answer": int(self.correct_answer_entry.get()),
+            "audio_file": self.current_audio_path
+        }
+        
+        # Update the question in the levels manager
+        self.levels_manager.update_question(selected_level, question_index, updated_data)
+        
+        # Show confirmation message
+        confirmation = ctk.CTkLabel(
+            self.question_editor_frame,
+            text="Changes saved successfully!",
+            text_color="green"
+        )
+        confirmation.pack(pady=10)
+        self.root.after(2000, confirmation.destroy)
+
+    def back_to_modify_levels(self):
+        """Return to the modify levels frame"""
+        self.question_selection_frame.pack_forget()
+        self.modify_levels_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def back_to_question_selection(self):
+        """Return to the question selection frame"""
+        self.question_editor_frame.pack_forget()
+        self.question_selection_frame.pack(pady=50, padx=50, fill="both", expand=True)
+    
     def run(self):
         self.root.mainloop()
 
