@@ -454,6 +454,12 @@ class App:
         self.level_frame.pack_forget()
         # Hide level completed frame
         self.level_completed_frame.pack_forget()
+        # Hide modify levels frame
+        self.modify_levels_frame.pack_forget()
+        # Hide question selection frame
+        self.question_selection_frame.pack_forget()
+        # Hide question editor frame
+        self.question_editor_frame.pack_forget()
         # Show main menu
         self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
