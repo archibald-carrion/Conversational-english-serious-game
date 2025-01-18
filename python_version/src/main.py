@@ -5,6 +5,7 @@ import os
 import threading
 from playsound import playsound
 from tkinter import filedialog
+import pygame
 
 class App:
     def __init__(self):
@@ -485,12 +486,15 @@ class App:
 
     def load_level(self, level_name, question_index):
         """
-        Load and display a specific question for a given level with parallel audio playback.
+        Load and display a specific question for a given level with parallel audio playback using pygame.
         
         Args:
             level_name (str): Name of the level
             question_index (int): Index of the question to load
         """
+        # Initialize pygame mixer if not already initialized
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
 
         # Reset score when starting a new level
         if question_index == 0:
@@ -525,8 +529,14 @@ class App:
             audio_file = question_data["audio_file"]
             if os.path.exists(audio_file):
                 def play_audio():
-                    playsound(audio_file)
-                
+                    try:
+                        sound = pygame.mixer.Sound(audio_file)
+                        sound.play()
+                        # Optional: Wait for the sound to finish
+                        pygame.time.wait(int(sound.get_length() * 1000))
+                    except Exception as e:
+                        print(f"Error playing audio: {e}")
+                        
                 # Create and start the audio thread
                 audio_thread = threading.Thread(target=play_audio)
                 audio_thread.daemon = True  # Ensure the thread doesn't block app closing
@@ -535,6 +545,17 @@ class App:
                 print(f"Error: Audio file not found at {audio_file}")
         else:
             print(f"Error: Question not found for level {level_name} at index {question_index}")
+
+        # Add cleanup method for properly closing pygame mixer
+        def cleanup_pygame():
+            pygame.mixer.quit()
+        
+        # Bind cleanup to window closing if not already bound
+        if not hasattr(self, '_pygame_cleanup_bound'):
+            if hasattr(self, 'master'):  # Assuming this is within a tkinter application
+                self.master.protocol("WM_DELETE_WINDOW", 
+                    lambda: (cleanup_pygame(), self.master.destroy()))
+                self._pygame_cleanup_bound = True
 
     def handle_answer_click(self, answer_index):
         if not self.current_level:
