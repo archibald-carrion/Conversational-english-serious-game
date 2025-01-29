@@ -71,6 +71,14 @@ class App:
         )
         self.modify_levels_btn.pack(pady=10)
 
+        # create new level button
+        self.create_level_btn = ctk.CTkButton(
+            self.main_menu_frame,
+            text="Create New Level",
+            command=self.create_new_level
+        )
+        self.create_level_btn.pack(pady=10)
+
         # Game Configuration Button
         self.game_configuration_btn = ctk.CTkButton(
             self.main_menu_frame, 
@@ -407,6 +415,9 @@ class App:
 
         # Bind mousewheel to scroll
         self.editor_canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+
+    def create_new_level(self):
+        print("Create new level")
 
     def update_scrollregion(self, event):
         """Update the scroll region when the content frame changes"""
