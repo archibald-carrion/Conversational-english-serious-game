@@ -21,7 +21,7 @@ class App:
         # Configure the main window
         self.root = ctk.CTk()
         self.root.title("Level Selector")
-        self.root.geometry("800x600")
+        self.root.geometry("1280x720")
         self.root.resizable(False, False)
         # self.root.attributes('-transparentcolor', '#000001')  # Specify a color to make transparent
         # self.root.configure(bg='#000001')  # Match this color with the transparency attribute
@@ -31,20 +31,20 @@ class App:
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
 
-        # Set the background image - UPDATED PLACEMENT
-        self.bg_image = ctk.CTkImage(
-            light_image=Image.open("assets/images/background.png"), 
-            dark_image=Image.open("assets/images/background.png"),
-            size=(800, 600)  # Explicitly set size to match window
-        )
-        self.my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
-        self.my_background.place(x=0, y=0, relwidth=1, relheight=1)  # Ensure full coverage
+        # # Set the background image - UPDATED PLACEMENT
+        # self.bg_image = ctk.CTkImage(
+        #     light_image=Image.open("assets/images/background.png"), 
+        #     dark_image=Image.open("assets/images/background.png"),
+        #     size=(800, 600)  # Explicitly set size to match window
+        # )
+        # self.my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
+        # self.my_background.place(x=0, y=0, relwidth=1, relheight=1)  # Ensure full coverage
 
 
         ''' Main Menu '''
         
         # Create main menu frame
-        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent", bg_color="transparent")
+        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent")
         self.main_menu_frame.pack(pady=50, padx=100, fill="both", expand=True, anchor="w")
 
         # Main menu title
@@ -486,10 +486,10 @@ class App:
             dark_image=Image.open("assets/images/background.png"),
             size=(width, height)
         )
-        self.my_background.configure(image=self.bg_image)
+        #self.my_background.configure(image=self.bg_image)
         
         # Ensure background covers the entire window
-        self.my_background.place(x=0, y=0, relwidth=1, relheight=1)
+        #self.my_background.place(x=0, y=0, relwidth=1, relheight=1)
 
     def update_window_size(self, size):
         """Update the selected window size when the dropdown changes."""
@@ -735,14 +735,23 @@ class App:
         # Update the question in the levels manager
         self.levels_manager.update_question(selected_level, question_index, updated_data)
         
-        # Show confirmation message
-        confirmation = ctk.CTkLabel(
-            self.question_editor_frame,
-            text="Changes saved successfully!",
-            text_color="green"
+        # Remove any existing confirmation message
+        if hasattr(self, 'confirmation_label'):
+            self.confirmation_label.destroy()
+        
+        # Create new confirmation message
+        self.confirmation_label = ctk.CTkLabel(
+            self.editor_content_frame,  # Place it in the content frame
+            text="Changes saved successfully! ✓",
+            text_color="green",
+            font=("Helvetica", 16)
         )
-        confirmation.pack(pady=10)
-        self.root.after(2000, confirmation.destroy)
+        
+        # Place the confirmation message after the back button
+        self.confirmation_label.pack(pady=10)
+        
+        # Remove the confirmation message after 2 seconds
+        self.root.after(2000, lambda: self.confirmation_label.destroy() if hasattr(self, 'confirmation_label') else None)
 
     def back_to_modify_levels(self):
         """Return to the modify levels frame"""
