@@ -124,6 +124,8 @@ class App:
         )
         self.back_btn.pack(pady=10)
 
+        
+
         ''' Game Configuration Frame '''
 
         # Game configuration Frame (initially hidden)
@@ -213,6 +215,19 @@ class App:
             text_color="white"
         )
         self.score_display.place(relx=0.95, rely=0.05, anchor="ne")  # Top-right corner
+
+        # Add audio replay button to the level frame
+        self.replay_audio_btn = ctk.CTkButton(
+            self.level_frame,
+            text="🔊 Replay Audio",
+            command=self.replay_audio,
+            width=200,
+            height=40
+        )
+        self.replay_audio_btn.pack(pady=10)
+
+        # Add a flag to track audio playback
+        self.is_audio_playing = False
 
         ''' Level Completed Frame '''
 
@@ -495,13 +510,45 @@ class App:
         """Update the selected window size when the dropdown changes."""
         self.selected_window_size = size
 
+    def replay_audio(self):
+        """
+        Replay the audio for the current question if not already playing.
+        """
+        if not self.is_audio_playing and hasattr(self, 'current_level'):
+            question_data = self.levels_manager.get_level_question(
+                self.current_level, 
+                self.current_question_index
+            )
+            
+            audio_file = question_data["audio_file"]
+            if os.path.exists(audio_file):
+                def play_audio():
+                    try:
+                        # Set flag to prevent multiple playbacks
+                        self.is_audio_playing = True
+                        
+                        sound = pygame.mixer.Sound(audio_file)
+                        sound.play()
+                        
+                        # Wait for the sound to finish
+                        pygame.time.wait(int(sound.get_length() * 1000))
+                        
+                        # Reset the flag when audio finishes
+                        self.is_audio_playing = False
+                    except Exception as e:
+                        print(f"Error playing audio: {e}")
+                        self.is_audio_playing = False
+                
+                # Create and start the audio thread
+                audio_thread = threading.Thread(target=play_audio)
+                audio_thread.daemon = True  # Ensure the thread doesn't block app closing
+                audio_thread.start()
+            else:
+                print(f"Error: Audio file not found at {audio_file}")
+
     def load_level(self, level_name, question_index):
         """
-        Load and display a specific question for a given level with parallel audio playback using pygame.
-        
-        Args:
-            level_name (str): Name of the level
-            question_index (int): Index of the question to load
+        Load and display a specific question for a given level
         """
         # Initialize pygame mixer if not already initialized
         if not pygame.mixer.get_init():
@@ -523,9 +570,16 @@ class App:
         # Show the level frame
         self.level_frame.pack(pady=20, padx=20, fill="both", expand=True)
 
+        # Reset audio playing flag
+        self.is_audio_playing = False
+
         # Get the question data
         question_data = self.levels_manager.get_level_question(level_name, question_index)
         if question_data:
+            # Set current level and question index
+            self.current_level = level_name
+            self.current_question_index = question_index
+
             # Update the level title
             self.level_title.configure(text=f"Level {level_name}")
 
@@ -536,21 +590,22 @@ class App:
             for i, answer_text in enumerate(question_data["answers"]):
                 self.answer_buttons[i].configure(text=answer_text)
 
-            # Play the audio file in a separate thread
+            # Play the audio file
             audio_file = question_data["audio_file"]
             if os.path.exists(audio_file):
                 def play_audio():
                     try:
+                        self.is_audio_playing = True
                         sound = pygame.mixer.Sound(audio_file)
                         sound.play()
-                        # Optional: Wait for the sound to finish
                         pygame.time.wait(int(sound.get_length() * 1000))
+                        self.is_audio_playing = False
                     except Exception as e:
                         print(f"Error playing audio: {e}")
+                        self.is_audio_playing = False
                         
-                # Create and start the audio thread
                 audio_thread = threading.Thread(target=play_audio)
-                audio_thread.daemon = True  # Ensure the thread doesn't block app closing
+                audio_thread.daemon = True
                 audio_thread.start()
             else:
                 print(f"Error: Audio file not found at {audio_file}")
