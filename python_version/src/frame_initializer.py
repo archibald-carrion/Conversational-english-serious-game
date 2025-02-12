@@ -151,20 +151,24 @@ class FrameInitializer:
         """Initialize the level completed frame and its components"""
         self.app.level_completed_frame = ctk.CTkFrame(self.app.root, fg_color="transparent")
 
-        labels = [
-            ("Level Completed!", ("Helvetica", 24), "green"),
-            ("Your Score: 0", ("Helvetica", 20), None)
-        ]
+        # Completion Message
+        self.app.completion_message = ctk.CTkLabel(
+            self.app.level_completed_frame,
+            text="Level Completed!",
+            font=("Helvetica", 24),
+            text_color="green"
+        )
+        self.app.completion_message.pack(pady=20)
 
-        for text, font, color in labels:
-            label = ctk.CTkLabel(
-                self.app.level_completed_frame,
-                text=text,
-                font=font,
-                text_color=color if color else "white"
-            )
-            label.pack(pady=10)
+        # Score Display
+        self.app.score_label = ctk.CTkLabel(
+            self.app.level_completed_frame,
+            text="Your Score: 0",
+            font=("Helvetica", 20)
+        )
+        self.app.score_label.pack(pady=10)
 
+        # Button to return to the main menu
         self.app.return_to_menu_btn = ctk.CTkButton(
             self.app.level_completed_frame,
             text="Return to Main Menu",
