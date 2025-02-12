@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from levels_manager import LevelsManager
+from frame_initializer import FrameInitializer
 from PIL import Image
 import os
 import threading
@@ -9,428 +10,41 @@ import pygame
 
 class App:
     def __init__(self):
-
-        # Add a score attribute and initialize to 0
+        # Initialize basic attributes
         self.current_score = 0
         self.total_possible_score = 0
-
         self.levels_manager = LevelsManager('levels.json')
-
         self.current_level = None
+        self.is_audio_playing = False
 
         # Configure the main window
         self.root = ctk.CTk()
         self.root.title("Level Selector")
         self.root.geometry("1280x720")
         self.root.resizable(False, False)
-        # self.root.attributes('-transparentcolor', '#000001')  # Specify a color to make transparent
-        # self.root.configure(bg='#000001')  # Match this color with the transparency attribute
         self.root.bind("<Escape>", lambda e: self.root.quit())
 
         # Set appearance and color theme
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
 
-        # # Set the background image - UPDATED PLACEMENT
-        # self.bg_image = ctk.CTkImage(
-        #     light_image=Image.open("assets/images/background.png"), 
-        #     dark_image=Image.open("assets/images/background.png"),
-        #     size=(800, 600)  # Explicitly set size to match window
-        # )
-        # self.my_background = ctk.CTkLabel(self.root, text="", image=self.bg_image)
-        # self.my_background.place(x=0, y=0, relwidth=1, relheight=1)  # Ensure full coverage
+        # Initialize all frames
+        self.initialize_frames()
 
-
-        ''' Main Menu '''
+    def initialize_frames(self):
+        """Initialize all frames in the application"""
+        frame_initializer = FrameInitializer(self)
         
-        # Create main menu frame
-        self.main_menu_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-        self.main_menu_frame.pack(pady=50, padx=100, fill="both", expand=True, anchor="w")
-
-        # Main menu title
-        self.menu_title = ctk.CTkLabel(
-            self.main_menu_frame, 
-            text="Level Manager", 
-            font=("Helvetica", 24)
-        )
-        self.menu_title.pack(pady=50)
-
-        # Load Level Button
-        self.load_level_btn = ctk.CTkButton(
-            self.main_menu_frame, 
-            text="Load Level", 
-            command=self.open_load_level_window
-        )
-        self.load_level_btn.pack(pady=10)
-
-        # Update the Modify Levels Button command
-        self.modify_levels_btn = ctk.CTkButton(
-            self.main_menu_frame, 
-            text="Modify Levels",
-            command=self.open_modify_levels_window
-        )
-        self.modify_levels_btn.pack(pady=10)
-
-        # create new level button
-        self.create_level_btn = ctk.CTkButton(
-            self.main_menu_frame,
-            text="Create New Level",
-            command=self.create_new_level
-        )
-        self.create_level_btn.pack(pady=10)
-
-        # Game Configuration Button
-        self.game_configuration_btn = ctk.CTkButton(
-            self.main_menu_frame, 
-            text="Game Configuration", 
-            command=self.open_game_configuration_window
-        )
-        self.game_configuration_btn.pack(pady=10)
-
-        # Quit Button
-        self.quit_btn = ctk.CTkButton(
-            self.main_menu_frame, 
-            text="Quit Game", 
-            command=self.root.quit
-        )
-        self.quit_btn.pack(pady=10)
-
-
-        ''' Load Level Frame '''
-
-        # Load Level Frame (initially hidden)
-        self.load_level_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-
-        # Level Dropdown
-        self.level_dropdown = ctk.CTkOptionMenu(
-            self.load_level_frame, 
-            values=self.levels_manager.get_level_names()
-        )
-        self.level_dropdown.pack(pady=20)
-
-        # Load Button in Level Selection
-        self.confirm_load_btn = ctk.CTkButton(
-            self.load_level_frame, 
-            text="Load Selected Level",
-            command=self.load_selected_level
-        )
-        self.confirm_load_btn.pack(pady=10)
-
-        # Back Button
-        self.back_btn = ctk.CTkButton(
-            self.load_level_frame, 
-            text="Back to Menu", 
-            command=self.back_to_main_menu
-        )
-        self.back_btn.pack(pady=10)
-
-        
-
-        ''' Game Configuration Frame '''
-
-        # Game configuration Frame (initially hidden)
-        self.game_configuration_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-
-        # Game Title
-        self.game_title = ctk.CTkLabel(
-            self.game_configuration_frame, 
-            text="Game Configuration", 
-            font=("Helvetica", 24)
-        )
-
-        # drop doiwn button with different window sizes 
-        self.window_size_dropdown = ctk.CTkOptionMenu(
-            self.game_configuration_frame, 
-            values=["800x600", "1280x720", "1920x1080"],
-            command=self.update_window_size
-        )
-        self.window_size_dropdown.pack(pady=20)
-
-        # button at the right of the dropdown to confirm the selection
-        self.confirm_window_size_btn = ctk.CTkButton(
-            self.game_configuration_frame, 
-            text="Confirm Window Size",
-            command=self.apply_window_size
-        )
-        self.confirm_window_size_btn.pack(pady=10)
-
-        # back button to go back to the main menu
-        self.back_to_menu_btn = ctk.CTkButton(
-            self.game_configuration_frame, 
-            text="Back to Menu", 
-            command=self.back_to_main_menu
-        )
-        self.back_to_menu_btn.pack(pady=10)
-
-
-        ''' Level frame '''
-
-        # Level Frame (initially hidden)
-        self.level_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-
-        # Level Title
-        self.level_title = ctk.CTkLabel(
-            self.level_frame,
-            text="",
-            font=("Helvetica", 24)
-        )
-        self.level_title.pack(pady=20)
-
-        # Question Text
-        self.question_text = ctk.CTkLabel(
-            self.level_frame,
-            text="",
-            wraplength=600,
-            font=("Helvetica", 18)
-        )
-        self.question_text.pack(pady=20)
-
-        # Answer Buttons
-        self.answer_buttons = []
-        for i in range(3):
-            button = ctk.CTkButton(
-                self.level_frame,
-                text="",
-                command=lambda index=i: self.handle_answer_click(index),
-                width=400,
-                height=50
-            )
-            self.answer_buttons.append(button)
-            button.pack(pady=10)
-
-        # Back Button
-        self.back_button = ctk.CTkButton(
-            self.level_frame,
-            text="Back to Menu",
-            command=self.back_to_main_menu,
-            width=200,
-            height=40
-        )
-        self.back_button.pack(pady=20)
-
-        self.score_display = ctk.CTkLabel(
-            self.level_frame,
-            text=f"Score: {self.current_score}",
-            font=("Helvetica", 16),
-            text_color="white"
-        )
-        self.score_display.place(relx=0.95, rely=0.05, anchor="ne")  # Top-right corner
-
-        # Add audio replay button to the level frame
-        self.replay_audio_btn = ctk.CTkButton(
-            self.level_frame,
-            text="🔊 Replay Audio",
-            command=self.replay_audio,
-            width=200,
-            height=40
-        )
-        self.replay_audio_btn.pack(pady=10)
-
-        # Add a flag to track audio playback
-        self.is_audio_playing = False
-
-        ''' Level Completed Frame '''
-
-        # Level Completed Frame (initially hidden)
-        self.level_completed_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-
-        # Completion Message
-        self.completion_message = ctk.CTkLabel(
-            self.level_completed_frame,
-            text="Level Completed!",
-            font=("Helvetica", 24),
-            text_color="green"
-        )
-        self.completion_message.pack(pady=20)
-
-        # Score Display
-        self.score_label = ctk.CTkLabel(
-            self.level_completed_frame,
-            text="Your Score: 0",
-            font=("Helvetica", 20)
-        )
-        self.score_label.pack(pady=10)
-
-        # Button to return to the main menu
-        self.return_to_menu_btn = ctk.CTkButton(
-            self.level_completed_frame,
-            text="Return to Main Menu",
-            command=self.back_to_main_menu
-        )
-        self.return_to_menu_btn.pack(pady=20)
-
-
-         
-
-        # Add new frames for level modification
-
-        ''' Modify Levels Frame '''
-        self.modify_levels_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-        
-        # Level selection dropdown
-        self.modify_level_dropdown = ctk.CTkOptionMenu(
-            self.modify_levels_frame,
-            values=self.levels_manager.get_level_names()
-        )
-        self.modify_level_dropdown.pack(pady=20)
-
-        # Select level button
-        self.select_level_btn = ctk.CTkButton(
-            self.modify_levels_frame,
-            text="Select Level",
-            command=self.open_question_selection
-        )
-        self.select_level_btn.pack(pady=10)
-
-        # Back button
-        self.modify_back_btn = ctk.CTkButton(
-            self.modify_levels_frame,
-            text="Back to Menu",
-            command=self.back_to_main_menu
-        )
-        self.modify_back_btn.pack(pady=10)
-
-        ''' Question Selection Frame '''
-        self.question_selection_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-        
-        # Question selection dropdown (will be populated when level is selected)
-        self.question_dropdown = ctk.CTkOptionMenu(
-            self.question_selection_frame,
-            values=[""]
-        )
-        self.question_dropdown.pack(pady=20)
-
-        # Select question button
-        self.select_question_btn = ctk.CTkButton(
-            self.question_selection_frame,
-            text="Modify Selected Question",
-            command=self.open_question_editor
-        )
-        self.select_question_btn.pack(pady=10)
-
-        # Back button
-        self.question_select_back_btn = ctk.CTkButton(
-            self.question_selection_frame,
-            text="Back to Level Selection",
-            command=self.back_to_modify_levels
-        )
-        self.question_select_back_btn.pack(pady=10)
-
-        ''' Question Editor Frame '''
-        # Create main frame
-        self.question_editor_frame = ctk.CTkFrame(self.root, fg_color="transparent")
-        
-        # Create a canvas with scrollbar
-        self.editor_canvas = ctk.CTkCanvas(
-            self.question_editor_frame,
-            width=700,
-            height=500,
-            bg='#2b2b2b',  # Match dark theme
-            highlightthickness=0
-        )
-        self.editor_scrollbar = ctk.CTkScrollbar(
-            self.question_editor_frame,
-            orientation="vertical",
-            command=self.editor_canvas.yview
-        )
-        self.editor_canvas.configure(yscrollcommand=self.editor_scrollbar.set)
-
-        # Create a frame inside canvas for content
-        self.editor_content_frame = ctk.CTkFrame(self.editor_canvas, fg_color="transparent")
-
-        # Pack scrollbar and canvas
-        self.editor_scrollbar.pack(side="right", fill="y")
-        self.editor_canvas.pack(side="left", fill="both", expand=True, padx=5)
-
-        # Create window in canvas
-        self.canvas_frame = self.editor_canvas.create_window(
-            (0, 0),
-            window=self.editor_content_frame,
-            anchor="nw",
-            width=680  # Slightly less than canvas width
-        )
-
-        # Question text entry
-        self.question_label = ctk.CTkLabel(
-            self.editor_content_frame,
-            text="Question:"
-        )
-        self.question_label.pack(pady=3)
-        
-        self.question_entry = ctk.CTkTextbox(
-            self.editor_content_frame,
-            height=80,  # Reduced height
-            width=600
-        )
-        self.question_entry.pack(pady=5)
-
-        # Answer entries
-        self.answer_entries = []
-        for i in range(3):
-            label = ctk.CTkLabel(
-                self.editor_content_frame,
-                text=f"Answer {i+1}:"
-            )
-            label.pack(pady=2)
-            
-            entry = ctk.CTkEntry(
-                self.editor_content_frame,
-                width=500
-            )
-            entry.pack(pady=3)
-            self.answer_entries.append(entry)
-
-        # Correct answer selection
-        self.correct_answer_label = ctk.CTkLabel(
-            self.editor_content_frame,
-            text="Correct Answer (0-2):"
-        )
-        self.correct_answer_label.pack(pady=2)
-        
-        self.correct_answer_entry = ctk.CTkEntry(
-            self.editor_content_frame,
-            width=50
-        )
-        self.correct_answer_entry.pack(pady=3)
-
-        # Audio file selection
-        self.audio_path_label = ctk.CTkLabel(
-            self.editor_content_frame,
-            text="Current Audio File: None",
-            wraplength=500  # Prevent long paths from expanding the window
-        )
-        self.audio_path_label.pack(pady=2)
-
-        self.select_audio_btn = ctk.CTkButton(
-            self.editor_content_frame,
-            text="Select Audio File",
-            command=self.select_audio_file
-        )
-        self.select_audio_btn.pack(pady=3)
-
-        # Save changes button
-        self.save_changes_btn = ctk.CTkButton(
-            self.editor_content_frame,
-            text="Save Changes",
-            command=self.save_question_changes
-        )
-        self.save_changes_btn.pack(pady=3)
-
-        # Back button
-        self.editor_back_btn = ctk.CTkButton(
-            self.editor_content_frame,
-            text="Back to Question Selection",
-            command=self.back_to_question_selection
-        )
-        self.editor_back_btn.pack(pady=3)
-
-        # Bind canvas configuration to update scroll region
-        self.editor_content_frame.bind("<Configure>", self.update_scrollregion)
-        self.editor_canvas.bind("<Configure>", self.update_canvas_width)
-
-        # Bind mousewheel to scroll
-        self.editor_canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-
+        frame_initializer.initialize_main_menu_frame()
+        frame_initializer.initialize_load_level_frame()
+        frame_initializer.initialize_game_configuration_frame()
+        frame_initializer.initialize_level_frame()
+        frame_initializer.initialize_level_completed_frame()
+        frame_initializer.initialize_modify_levels_frame()
+        frame_initializer.initialize_question_selection_frame()
+        frame_initializer.initialize_question_editor_frame()
+        self.initialize_level_creator_frames()
+    
     def create_new_level(self):
         print("Create new level")
 
@@ -817,6 +431,337 @@ class App:
         """Return to the question selection frame"""
         self.question_editor_frame.pack_forget()
         self.question_selection_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+
+    def create_new_level(self):
+        # Hide main menu
+        self.main_menu_frame.pack_forget()
+        
+        # Show the level name frame
+        self.level_name_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def initialize_level_creator_frames(self):
+        """Add this to __init__ after other frame declarations"""
+        
+        ''' Level Name Frame '''
+        self.level_name_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        
+        # Title
+        self.new_level_title = ctk.CTkLabel(
+            self.level_name_frame,
+            text="Create New Level",
+            font=("Helvetica", 24)
+        )
+        self.new_level_title.pack(pady=20)
+        
+        # Level name entry
+        self.level_name_label = ctk.CTkLabel(
+            self.level_name_frame,
+            text="Enter Level Name:"
+        )
+        self.level_name_label.pack(pady=5)
+        
+        self.level_name_entry = ctk.CTkEntry(
+            self.level_name_frame,
+            width=300
+        )
+        self.level_name_entry.pack(pady=10)
+        
+        # Continue button
+        self.continue_to_questions_btn = ctk.CTkButton(
+            self.level_name_frame,
+            text="Continue to Questions",
+            command=self.start_question_creation
+        )
+        self.continue_to_questions_btn.pack(pady=10)
+        
+        # Back button
+        self.name_back_btn = ctk.CTkButton(
+            self.level_name_frame,
+            text="Back to Menu",
+            command=self.back_to_main_menu
+        )
+        self.name_back_btn.pack(pady=10)
+
+        ''' Question Creation Frame '''
+        self.question_creation_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        
+        # Create a canvas with scrollbar for question creation
+        self.creation_canvas = ctk.CTkCanvas(
+            self.question_creation_frame,
+            width=700,
+            height=500,
+            bg='#2b2b2b',
+            highlightthickness=0
+        )
+        self.creation_scrollbar = ctk.CTkScrollbar(
+            self.question_creation_frame,
+            orientation="vertical",
+            command=self.creation_canvas.yview
+        )
+        self.creation_canvas.configure(yscrollcommand=self.creation_scrollbar.set)
+        
+        # Create a frame inside canvas for content
+        self.creation_content_frame = ctk.CTkFrame(self.creation_canvas, fg_color="transparent")
+        
+        # Pack scrollbar and canvas
+        self.creation_scrollbar.pack(side="right", fill="y")
+        self.creation_canvas.pack(side="left", fill="both", expand=True, padx=5)
+        
+        # Create window in canvas
+        self.creation_window = self.creation_canvas.create_window(
+            (0, 0),
+            window=self.creation_content_frame,
+            anchor="nw",
+            width=680
+        )
+        
+        # Progress indicator
+        self.question_progress = ctk.CTkLabel(
+            self.creation_content_frame,
+            text="Question 1/10",
+            font=("Helvetica", 18)
+        )
+        self.question_progress.pack(pady=10)
+        
+        # Question text entry
+        self.new_question_label = ctk.CTkLabel(
+            self.creation_content_frame,
+            text="Question:"
+        )
+        self.new_question_label.pack(pady=3)
+        
+        self.new_question_entry = ctk.CTkTextbox(
+            self.creation_content_frame,
+            height=80,
+            width=600
+        )
+        self.new_question_entry.pack(pady=5)
+        
+        # Answer entries
+        self.new_answer_entries = []
+        for i in range(3):
+            label = ctk.CTkLabel(
+                self.creation_content_frame,
+                text=f"Answer {i+1}:"
+            )
+            label.pack(pady=2)
+            
+            entry = ctk.CTkEntry(
+                self.creation_content_frame,
+                width=500
+            )
+            entry.pack(pady=3)
+            self.new_answer_entries.append(entry)
+        
+        # Correct answer selection
+        self.new_correct_answer_label = ctk.CTkLabel(
+            self.creation_content_frame,
+            text="Correct Answer (0-2):"
+        )
+        self.new_correct_answer_label.pack(pady=2)
+        
+        self.new_correct_answer_entry = ctk.CTkEntry(
+            self.creation_content_frame,
+            width=50
+        )
+        self.new_correct_answer_entry.pack(pady=3)
+        
+        # Audio file selection
+        self.new_audio_path_label = ctk.CTkLabel(
+            self.creation_content_frame,
+            text="Current Audio File: None",
+            wraplength=500
+        )
+        self.new_audio_path_label.pack(pady=2)
+        
+        self.new_select_audio_btn = ctk.CTkButton(
+            self.creation_content_frame,
+            text="Select Audio File",
+            command=self.select_new_audio_file
+        )
+        self.new_select_audio_btn.pack(pady=3)
+        
+        # Navigation buttons
+        self.button_frame = ctk.CTkFrame(
+            self.creation_content_frame,
+            fg_color="transparent"
+        )
+        self.button_frame.pack(pady=10)
+        
+        self.prev_question_btn = ctk.CTkButton(
+            self.button_frame,
+            text="Previous Question",
+            command=self.prev_question
+        )
+        self.prev_question_btn.pack(side="left", padx=5)
+        
+        self.next_question_btn = ctk.CTkButton(
+            self.button_frame,
+            text="Next Question",
+            command=self.next_question
+        )
+        self.next_question_btn.pack(side="left", padx=5)
+        
+        # Save level button (initially hidden)
+        self.save_level_btn = ctk.CTkButton(
+            self.creation_content_frame,
+            text="Save Level",
+            command=self.save_new_level
+        )
+        
+        # Back button
+        self.creation_back_btn = ctk.CTkButton(
+            self.creation_content_frame,
+            text="Back to Level Name",
+            command=self.back_to_level_name
+        )
+        self.creation_back_btn.pack(pady=10)
+        
+        # Bind canvas configuration
+        self.creation_content_frame.bind("<Configure>", self.update_creation_scrollregion)
+        self.creation_canvas.bind("<Configure>", self.update_creation_canvas_width)
+        self.creation_canvas.bind_all("<MouseWheel>", self.on_creation_mousewheel)
+
+    def start_question_creation(self):
+        """Start creating questions for the new level"""
+        level_name = self.level_name_entry.get().strip()
+        if not level_name:
+            # Show error message if no name is provided
+            if hasattr(self, 'name_error_label'):
+                self.name_error_label.destroy()
+            self.name_error_label = ctk.CTkLabel(
+                self.level_name_frame,
+                text="Please enter a level name",
+                text_color="red"
+            )
+            self.name_error_label.pack(pady=5)
+            return
+        
+        # Initialize question storage
+        self.new_level_questions = [{"question": "", "answers": ["", "", ""], "correct_answer": 0, "audio_file": ""} for _ in range(10)]
+        self.current_creation_index = 0
+        
+        # Hide level name frame and show question creation frame
+        self.level_name_frame.pack_forget()
+        self.question_creation_frame.pack(pady=50, padx=50, fill="both", expand=True)
+        
+        # Update progress indicator
+        self.update_creation_progress()
+
+    def update_creation_progress(self):
+        """Update the progress indicator and navigation buttons"""
+        self.question_progress.configure(text=f"Question {self.current_creation_index + 1}/10")
+        
+        # Update navigation button states
+        self.prev_question_btn.configure(state="normal" if self.current_creation_index > 0 else "disabled")
+        
+        # Show/hide save button on last question
+        if self.current_creation_index == 9:
+            self.next_question_btn.pack_forget()
+            self.save_level_btn.pack(side="left", padx=5)
+        else:
+            self.save_level_btn.pack_forget()
+            self.next_question_btn.pack(side="left", padx=5)
+
+    def save_current_question(self):
+        """Save the current question data"""
+        self.new_level_questions[self.current_creation_index] = {
+            "question": self.new_question_entry.get("0.0", "end").strip(),
+            "answers": [entry.get() for entry in self.new_answer_entries],
+            "correct_answer": int(self.new_correct_answer_entry.get() or 0),
+            "audio_file": getattr(self, 'current_new_audio_path', "")
+        }
+
+    def load_current_question(self):
+        """Load the current question data into the form"""
+        question_data = self.new_level_questions[self.current_creation_index]
+        
+        self.new_question_entry.delete("0.0", "end")
+        self.new_question_entry.insert("0.0", question_data["question"])
+        
+        for i, answer in enumerate(question_data["answers"]):
+            self.new_answer_entries[i].delete(0, "end")
+            self.new_answer_entries[i].insert(0, answer)
+        
+        self.new_correct_answer_entry.delete(0, "end")
+        self.new_correct_answer_entry.insert(0, str(question_data["correct_answer"]))
+        
+        self.new_audio_path_label.configure(text=f"Current Audio File: {question_data['audio_file']}")
+        self.current_new_audio_path = question_data['audio_file']
+
+    def next_question(self):
+        """Save current question and move to next"""
+        self.save_current_question()
+        self.current_creation_index = min(9, self.current_creation_index + 1)
+        self.load_current_question()
+        self.update_creation_progress()
+
+    def prev_question(self):
+        """Save current question and move to previous"""
+        self.save_current_question()
+        self.current_creation_index = max(0, self.current_creation_index - 1)
+        self.load_current_question()
+        self.update_creation_progress()
+
+    def select_new_audio_file(self):
+        """Select audio file for new question"""
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Audio Files", "*.mp3 *.wav")]
+        )
+        if file_path:
+            self.current_new_audio_path = file_path
+            self.new_audio_path_label.configure(text=f"Current Audio File: {file_path}")
+
+    def save_new_level(self):
+        """Save the complete new level"""
+        self.save_current_question()  # Save the last question
+        level_name = self.level_name_entry.get().strip()
+        
+        # Add the new level to the levels manager
+        self.levels_manager.add_level(level_name, self.new_level_questions)
+        
+        # Show success message
+        self.show_success_message()
+        
+        # Return to main menu
+        self.back_to_main_menu()
+
+    def show_success_message(self):
+        """Show a success message when level is saved"""
+        success_window = ctk.CTkToplevel(self.root)
+        success_window.title("Success")
+        success_window.geometry("300x100")
+        
+        label = ctk.CTkLabel(
+            success_window,
+            text="Level saved successfully!",
+            font=("Helvetica", 16)
+        )
+        label.pack(pady=20)
+        
+        def close_window():
+            success_window.destroy()
+        
+        self.root.after(2000, close_window)
+
+    def back_to_level_name(self):
+        """Return to level name frame"""
+        self.question_creation_frame.pack_forget()
+        self.level_name_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def update_creation_scrollregion(self, event):
+        """Update the scroll region for question creation"""
+        self.creation_canvas.configure(scrollregion=self.creation_canvas.bbox("all"))
+
+    def update_creation_canvas_width(self, event):
+        """Update the width of the creation canvas window"""
+        self.creation_canvas.itemconfig(self.creation_window, width=event.width-20)
+
+    def on_creation_mousewheel(self, event):
+        """Handle mousewheel scrolling in creation frame"""
+        if self.question_creation_frame.winfo_ismapped():
+            self.creation_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
     
     def run(self):
         self.root.mainloop()
