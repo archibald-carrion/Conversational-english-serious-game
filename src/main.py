@@ -84,20 +84,8 @@ class App:
         self.load_level_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
     def back_to_main_menu(self):
-        # Hide load level frame
-        self.load_level_frame.pack_forget()
-        # Hide game configuration frame
-        self.game_configuration_frame.pack_forget()
-        # Hide level frame
-        self.level_frame.pack_forget()
-        # Hide level completed frame
-        self.level_completed_frame.pack_forget()
-        # Hide modify levels frame
-        self.modify_levels_frame.pack_forget()
-        # Hide question selection frame
-        self.question_selection_frame.pack_forget()
-        # Hide question editor frame
-        self.question_editor_frame.pack_forget()
+        # Use the centralized method to hide all frames
+        self.hide_all_frames()
         # Show main menu
         self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
 
@@ -811,7 +799,9 @@ class App:
         # Add the new level to the levels manager
         if self.levels_manager.add_level(level_name, final_questions):
             self.show_success_message()
-            self.back_to_main_menu()
+            # Use hide_all_frames instead of just hiding the current frame
+            self.hide_all_frames()
+            self.main_menu_frame.pack(pady=50, padx=50, fill="both", expand=True)
         else:
             self.creation_error_label.configure(text="Failed to save level. Please try again.")
             self.creation_error_label.pack(pady=5)
@@ -865,6 +855,36 @@ class App:
         """Handle mousewheel scrolling in creation frame"""
         if self.question_creation_frame.winfo_ismapped():
             self.creation_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+
+    def hide_all_frames(self):
+        """Hide all frames in the application to prevent frame stacking issues"""
+        # Main frames
+        if hasattr(self, 'main_menu_frame'):
+            self.main_menu_frame.pack_forget()
+        if hasattr(self, 'load_level_frame'):
+            self.load_level_frame.pack_forget()
+        if hasattr(self, 'game_configuration_frame'):
+            self.game_configuration_frame.pack_forget()
+        if hasattr(self, 'level_frame'):
+            self.level_frame.pack_forget()
+        if hasattr(self, 'level_completed_frame'):
+            self.level_completed_frame.pack_forget()
+        
+        # Level modification frames
+        if hasattr(self, 'modify_levels_frame'):
+            self.modify_levels_frame.pack_forget()
+        if hasattr(self, 'question_selection_frame'):
+            self.question_selection_frame.pack_forget()
+        if hasattr(self, 'question_editor_frame'):
+            self.question_editor_frame.pack_forget()
+        
+        # Level creation frames
+        if hasattr(self, 'level_name_frame'):
+            self.level_name_frame.pack_forget()
+        if hasattr(self, 'question_creation_frame'):
+            self.question_creation_frame.pack_forget()
+
     
     def run(self):
         self.root.mainloop()
