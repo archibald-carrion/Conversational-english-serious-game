@@ -596,7 +596,7 @@ class App:
             self.creation_content_frame,
             fg_color="transparent"
         )
-        self.button_frame.pack(pady=10)
+        self.button_frame.pack(pady=10, expand=True, anchor="center")  # Add expand and center anchoring
         
         self.prev_question_btn = ctk.CTkButton(
             self.button_frame,
@@ -613,12 +613,20 @@ class App:
         )
         self.next_question_btn.pack(side="left", padx=5)
         
+        # Create a frame for save button to help with centering
+        self.save_button_frame = ctk.CTkFrame(
+            self.creation_content_frame, 
+            fg_color="transparent"
+        )
+        self.save_button_frame.pack(pady=10, expand=True, anchor="center")
+
         # Save level button (initially hidden)
         self.save_level_btn = ctk.CTkButton(
-            self.creation_content_frame,
+            self.save_button_frame,  # Use the new frame as parent
             text="Save Level",
             command=self.save_new_level
         )
+        self.save_level_btn.pack(anchor="center")  # Center within the frame
         
         # Back button
         self.creation_back_btn = ctk.CTkButton(
