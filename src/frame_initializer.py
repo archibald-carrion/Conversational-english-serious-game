@@ -321,3 +321,213 @@ class FrameInitializer:
         self.app.editor_content_frame.bind("<Configure>", self.app.update_scrollregion)
         self.app.editor_canvas.bind("<Configure>", self.app.update_canvas_width)
         self.app.editor_canvas.bind_all("<MouseWheel>", self.app.on_mousewheel)
+
+    def initialize_level_creator_frames(self):
+        """Initialize frames for creating new levels"""
+        
+        ''' Level Name Frame '''
+        self.app.level_name_frame = ctk.CTkFrame(self.app.root, fg_color="transparent")
+        
+        # Title
+        self.app.new_level_title = ctk.CTkLabel(
+            self.app.level_name_frame,
+            text="Create New Level",
+            font=("Helvetica", 24)
+        )
+        self.app.new_level_title.pack(pady=20)
+        
+        # Level name entry
+        self.app.level_name_label = ctk.CTkLabel(
+            self.app.level_name_frame,
+            text="Enter Level Name:"
+        )
+        self.app.level_name_label.pack(pady=5)
+        
+        self.app.level_name_entry = ctk.CTkEntry(
+            self.app.level_name_frame,
+            width=300
+        )
+        self.app.level_name_entry.pack(pady=10)
+        
+        # Error message label (initially hidden)
+        self.app.name_error_label = ctk.CTkLabel(
+            self.app.level_name_frame,
+            text="",
+            text_color="red"
+        )
+        self.app.name_error_label.pack(pady=5)
+        self.app.name_error_label.pack_forget()  # Hide initially
+        
+        # Continue button
+        self.app.continue_to_questions_btn = ctk.CTkButton(
+            self.app.level_name_frame,
+            text="Continue to Questions",
+            command=self.app.start_question_creation
+        )
+        self.app.continue_to_questions_btn.pack(pady=10)
+        
+        # Back button
+        self.app.name_back_btn = ctk.CTkButton(
+            self.app.level_name_frame,
+            text="Back to Menu",
+            command=self.app.back_to_main_menu
+        )
+        self.app.name_back_btn.pack(pady=10)
+
+        ''' Question Creation Frame '''
+        self.app.question_creation_frame = ctk.CTkFrame(self.app.root, fg_color="transparent")
+        
+        # Create a canvas with scrollbar for question creation
+        self.app.creation_canvas = ctk.CTkCanvas(
+            self.app.question_creation_frame,
+            width=700,
+            height=500,
+            bg='#2b2b2b',
+            highlightthickness=0
+        )
+        self.app.creation_scrollbar = ctk.CTkScrollbar(
+            self.app.question_creation_frame,
+            orientation="vertical",
+            command=self.app.creation_canvas.yview
+        )
+        self.app.creation_canvas.configure(yscrollcommand=self.app.creation_scrollbar.set)
+        
+        # Create a frame inside canvas for content
+        self.app.creation_content_frame = ctk.CTkFrame(self.app.creation_canvas, fg_color="#2b2b2b")
+        
+        # Pack scrollbar and canvas
+        self.app.creation_scrollbar.pack(side="right", fill="y")
+        self.app.creation_canvas.pack(side="left", fill="both", expand=True, padx=5)
+        
+        # Create window in canvas
+        self.app.creation_window = self.app.creation_canvas.create_window(
+            (0, 0),
+            window=self.app.creation_content_frame,
+            anchor="nw",
+            width=680
+        )
+        
+        # Progress indicator
+        self.app.question_progress = ctk.CTkLabel(
+            self.app.creation_content_frame,
+            text="Question 1/10",
+            font=("Helvetica", 18)
+        )
+        self.app.question_progress.pack(pady=10)
+        
+        # Question text entry
+        self.app.new_question_label = ctk.CTkLabel(
+            self.app.creation_content_frame,
+            text="Question:"
+        )
+        self.app.new_question_label.pack(pady=3)
+        
+        self.app.new_question_entry = ctk.CTkTextbox(
+            self.app.creation_content_frame,
+            height=80,
+            width=600
+        )
+        self.app.new_question_entry.pack(pady=5)
+        
+        # Answer entries
+        self.app.new_answer_entries = []
+        for i in range(3):
+            label = ctk.CTkLabel(
+                self.app.creation_content_frame,
+                text=f"Answer {i+1}:"
+            )
+            label.pack(pady=2)
+            
+            entry = ctk.CTkEntry(
+                self.app.creation_content_frame,
+                width=500
+            )
+            entry.pack(pady=3)
+            self.app.new_answer_entries.append(entry)
+        
+        # Correct answer selection
+        self.app.new_correct_answer_label = ctk.CTkLabel(
+            self.app.creation_content_frame,
+            text="Correct Answer (0-2):"
+        )
+        self.app.new_correct_answer_label.pack(pady=2)
+        
+        self.app.new_correct_answer_entry = ctk.CTkEntry(
+            self.app.creation_content_frame,
+            width=50
+        )
+        self.app.new_correct_answer_entry.pack(pady=3)
+        
+        # Error message for validation
+        self.app.creation_error_label = ctk.CTkLabel(
+            self.app.creation_content_frame,
+            text="",
+            text_color="red"
+        )
+        self.app.creation_error_label.pack(pady=5)
+        self.app.creation_error_label.pack_forget()  # Hide initially
+        
+        # Audio file selection
+        self.app.new_audio_path_label = ctk.CTkLabel(
+            self.app.creation_content_frame,
+            text="Current Audio File: None",
+            wraplength=500
+        )
+        self.app.new_audio_path_label.pack(pady=2)
+        
+        self.app.new_select_audio_btn = ctk.CTkButton(
+            self.app.creation_content_frame,
+            text="Select Audio File",
+            command=self.app.select_new_audio_file
+        )
+        self.app.new_select_audio_btn.pack(pady=3)
+        
+        # Navigation buttons
+        self.app.button_frame = ctk.CTkFrame(
+            self.app.creation_content_frame,
+            fg_color="transparent"
+        )
+        self.app.button_frame.pack(pady=10, expand=True, anchor="center")
+        
+        self.app.prev_question_btn = ctk.CTkButton(
+            self.app.button_frame,
+            text="Previous Question",
+            command=self.app.prev_question,
+            state="disabled"  # Initially disabled
+        )
+        self.app.prev_question_btn.pack(side="left", padx=5)
+        
+        self.app.next_question_btn = ctk.CTkButton(
+            self.app.button_frame,
+            text="Next Question",
+            command=self.app.next_question
+        )
+        self.app.next_question_btn.pack(side="left", padx=5)
+        
+        # Create a frame for save button to help with centering
+        self.app.save_button_frame = ctk.CTkFrame(
+            self.app.creation_content_frame, 
+            fg_color="transparent"
+        )
+        self.app.save_button_frame.pack(pady=10, expand=True, anchor="center")
+
+        # Save level button (initially hidden)
+        self.app.save_level_btn = ctk.CTkButton(
+            self.app.save_button_frame,
+            text="Save Level",
+            command=self.app.save_new_level
+        )
+        self.app.save_level_btn.pack(anchor="center")
+        
+        # Back button
+        self.app.creation_back_btn = ctk.CTkButton(
+            self.app.creation_content_frame,
+            text="Back to Level Name",
+            command=self.app.back_to_level_name
+        )
+        self.app.creation_back_btn.pack(pady=10)
+        
+        # Bind canvas configuration
+        self.app.creation_content_frame.bind("<Configure>", self.app.update_creation_scrollregion)
+        self.app.creation_canvas.bind("<Configure>", self.app.update_creation_canvas_width)
+        self.app.root.bind("<MouseWheel>", self.app.on_creation_mousewheel)
