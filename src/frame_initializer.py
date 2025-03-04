@@ -39,9 +39,10 @@ class FrameInitializer:
         """Initialize the load level frame and its components"""
         self.app.load_level_frame = ctk.CTkFrame(self.app.root, fg_color="transparent")
 
+        # Create the dropdown without initial values
         self.app.level_dropdown = ctk.CTkOptionMenu(
             self.app.load_level_frame,
-            values=self.app.levels_manager.get_level_names()
+            values=[]  # Start with empty list
         )
         self.app.level_dropdown.pack(pady=20)
 

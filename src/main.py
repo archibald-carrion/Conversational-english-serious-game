@@ -79,9 +79,24 @@ class App:
     def open_load_level_window(self):
         # Hide main menu
         self.main_menu_frame.pack_forget()
+
+        # Update the level dropdown before showing
+        self.update_level_dropdown()
         
         # Show load level frame
         self.load_level_frame.pack(pady=50, padx=50, fill="both", expand=True)
+
+    def update_level_dropdown(self):
+        """Update the level dropdown with current levels"""
+        # Get the latest list of levels
+        level_names = self.levels_manager.get_level_names()
+        
+        # Update the dropdown values
+        self.level_dropdown.configure(values=level_names)
+        
+        # If there are levels, set the first one as default
+        if level_names:
+            self.level_dropdown.set(level_names[0])
 
     def back_to_main_menu(self):
         # Use the centralized method to hide all frames
