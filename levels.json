@@ -1,214 +1,210 @@
 {
-  "levels": [
-    {
-      "level 1": [
-        {
+  "levels": {
+      "level 1": {
+        "0": {
           "name": "Level 1",
           "question": "Where do you work, \n and what kind of company is it?",
-          "answers": [
-            "McDonald's is a well-known company that \n serves fast food and operates globally.",
-            "The company is in charge of organizing \n annual events for local communities.",
-            "I work at a software company that \n develops mobile applications."
-          ],
+          "answers": {
+            "0": "McDonald's is a well-known company that \n serves fast food and operates globally.",
+            "1": "The company is in charge of organizing \n annual events for local communities.",
+            "2": "I work at a software company that \n develops mobile applications."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//1.mp3"
         },
-        {
+        "1": {
           "question": "What kind of projects do\nyou work on in your current job?",
-          "answers": [
-            "I teach Chemistry at a private\nuniversity in Guanacaste.",
-            "I work on designing new marketing\ncampaigns for our clients.",
-            "I enjoy experimenting with new\nrecipes in my free time."
-          ],
+          "answers": {
+            "0": "I teach Chemistry at a private\nuniversity in Guanacaste.",
+            "1": "I work on designing new marketing\ncampaigns for our clients.",
+            "2": "I enjoy experimenting with new\nrecipes in my free time."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_01//2.mp3"
         },
-        {
+        "2": {
           "question": "How long have you worked in this field, \n and what do you enjoy the most?",
-          "answers": [
-            "I once traveled to three countries \nin one summer, which was an\nunforgettable experience.",
-            "I enjoy painting landscapes during\nmy free time, especially in\nthe fall.",
-            "I've spent 7 years in this field,\nand I find fulfillment in\nworking with my colleagues."
-          ],
+          "answers": {
+            "0": "I once traveled to three countries \nin one summer, which was an\nunforgettable experience.",
+            "1": "I enjoy painting landscapes during\nmy free time, especially in\nthe fall.",
+            "2": "I've spent 7 years in this field,\nand I find fulfillment in\nworking with my colleagues."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//3.mp3"
         },
-        {
+        "3": {
           "question": "Why did you decide to\nwork in this industry?",
-          "answers": [
-            "I pursued a degree in literature because\nI enjoy storytelling and exploration of ideas.",
-            "I decided to take cooking classes as a way\nto explore diverse culinary experiences.",
-            "I chose to enter this field due to my\nenthusiasm for technology and innovation."
-          ],
+          "answers": {
+            "0": "I pursued a degree in literature because\nI enjoy storytelling and exploration of ideas.",
+            "1": "I decided to take cooking classes as a way\nto explore diverse culinary experiences.",
+            "2": "I chose to enter this field due to my\nenthusiasm for technology and innovation."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//4.mp3"
         },
-        {
+        "4": {
           "question": "Where did you start working\nwhen you began your career?",
-          "answers": [
-            "I was 22 when I decided to volunteer\nat a local charity to gain experience.",
-            "I began my career at a small startup\nfocused on innovative solutions.",
-            "I started my career as a musician because\nI wanted to bring joy to others with my songs."
-          ],
+          "answers": {
+            "0": "I was 22 when I decided to volunteer\nat a local charity to gain experience.",
+            "1": "I began my career at a small startup\nfocused on innovative solutions.",
+            "2": "I started my career as a musician because\nI wanted to bring joy to others with my songs."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_01//5.mp3"
         },
-        {
+        "5": {
           "question": "What responsibilities do\nyou have in your current job?",
-          "answers": [
-            "I enjoy attending conferences to\nlearn about industry trends.",
-            "The company has a strong focus on\ncommunity outreach and social responsibility.",
-            "My role involves leading a team\nand supervising project development."
-          ],
+          "answers": {
+            "0": "I enjoy attending conferences to\nlearn about industry trends.",
+            "1": "The company has a strong focus on\ncommunity outreach and social responsibility.",
+            "2": "My role involves leading a team\nand supervising project development."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//6.mp3"
         },
-        {
+        "6": {
           "question": "How do you balance\nyour work with personal life?",
-          "answers": [
-            "I do so by setting clear boundaries\nand prioritizing family time.",
-            "I prefer watching movies at\nhome to going out.",
-            "I appreciate the support of\nmy friends and family in managing my time."
-          ],
+          "answers": {
+            "0": "I do so by setting clear boundaries\nand prioritizing family time.",
+            "1": "I prefer watching movies at\nhome to going out.",
+            "2": "I appreciate the support of\nmy friends and family in managing my time."
+          },
           "correct_answer": 0,
           "audio_file": "assets//audio//diff_01//7.mp3"
         },
-        {
+        "7": {
           "question": "What skills do you use most\noften at work, and how do\nthey help you succeed?",
-          "answers": [
-            "I use my cooking skills to make delicious\nmeals for my family, bringing us together.",
-            "I consider myself a creative person,\ncapable of expressing my emotions through art.",
-            "I often rely on communication and problem-solving\nskills, which enhance collaboration."
-          ],
+          "answers": {
+            "0": "I use my cooking skills to make delicious\nmeals for my family, bringing us together.",
+            "1": "I consider myself a creative person,\ncapable of expressing my emotions through art.",
+            "2": "I often rely on communication and problem-solving\nskills, which enhance collaboration."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//8.mp3"
         },
-        {
+        "8": {
           "question": "Where do you see yourself\nworking in five years,\nand what position\nwould you like to hold?",
-          "answers": [
-            "I see myself studying at a\nprestigious university, focusing on\nmy academic interests.",
-            "I see myself traveling to\ndifferent countries, exploring new\ncultures and experiences.",
-            "I envision being part of a\ndynamic team in the future,\npossibly in a leadership role."
-          ],
+          "answers": {
+            "0": "I see myself studying at a\nprestigious university, focusing on\nmy academic interests.",
+            "1": "I see myself traveling to\ndifferent countries, exploring new\ncultures and experiences.",
+            "2": "I envision being part of a\ndynamic team in the future,\npossibly in a leadership role."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_01//9.mp3"
         },
-        {
+        "9": {
           "question": "Why do you think working in\nteams is important for your job?",
-          "answers": [
-            "I think problem-solving skills\nare necessary in team-building activities\nin the workplace.",
-            "I believe collaboration is essential\nin my role, as it fosters creativity and\nhelps achieve common goals.",
-            "Employers should encourage their employees\nto work in teams to strengthen relationships\namong colleagues."
-          ],
+          "answers": {
+            "0": "I think problem-solving skills\nare necessary in team-building activities\nin the workplace.",
+            "1": "I believe collaboration is essential\nin my role, as it fosters creativity and\nhelps achieve common goals.",
+            "2": "Employers should encourage their employees\nto work in teams to strengthen relationships\namong colleagues."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_01//10.mp3"
         }
-      ]
     },
-    {
-      "level 2": [
-        {
+      "level 2": {
+        "0": {
           "name": "Level 1",
           "question": "What is the main challenge\nyou face in your job?",
-          "answers": [
-            "Communicating in different languages\nwith my clients is a constant\nstruggle for me.",
-            "Commuting becomes a daily problem\nas I spend more time in my car\nthan in the office.",
-            "Prioritizing tasks and setting deadlines\nto manage my time appropriately\nis really difficult for me."
-          ],
+          "answers": {
+            "0": "Communicating in different languages\nwith my clients is a constant\nstruggle for me.",
+            "1": "Commuting becomes a daily problem\nas I spend more time in my car\nthan in the office.",
+            "2": "Prioritizing tasks and setting deadlines\nto manage my time appropriately\nis really difficult for me."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_02//1.mp3"
         },
-        {
+        "1": {
           "question": "How has your role in the\ncompany changed over time?",
-          "answers": [
-            "My responsibilities have been\nconsistent since the my first\nday working here.",
-            "I'm now working part-time instead\nof full-time as I needed to\nfinish my studies.",
-            "At the beginning I was in an\nentry-level position, but now I am\nworking as a manager."
-          ],
+          "answers": {
+            "0": "My responsibilities have been\nconsistent since the my first\nday working here.",
+            "1": "I'm now working part-time instead\nof full-time as I needed to\nfinish my studies.",
+            "2": "At the beginning I was in an\nentry-level position, but now I am\nworking as a manager."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_02//2.mp3"
         },
-        {
+        "2": {
           "question": "What motivates you to keep\nimproving in your current occupation?",
-          "answers": [
-            "I enjoy the routine of my daily\nwork, so I stay motivated.",
-            "I am motivated by continuously\nlearning new technologies.",
-            "How my colleagues inspire me\nevery day is my main motivation."
-          ],
+          "answers": {
+            "0": "I enjoy the routine of my daily\nwork, so I stay motivated.",
+            "1": "I am motivated by continuously\nlearning new technologies.",
+            "2": "How my colleagues inspire me\nevery day is my main motivation."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_02//3.mp3"
         },
-        {
+        "3": {
           "question": "How do you manage stress\nand pressure at work?",
-          "answers": [
-            "I try to stay organized and take\nregular breaks to maintain a\nwork-life balance.",
-            "Talking to my friends and family\nabout my challenges works for me.",
-            "Mindfulness and exercising have\nhelped me in this kind of situation."
-          ],
+          "answers": {
+            "0": "I try to stay organized and take\nregular breaks to maintain a\nwork-life balance.",
+            "1": "Talking to my friends and family\nabout my challenges works for me.",
+            "2": "Mindfulness and exercising have\nhelped me in this kind of situation."
+          },
           "correct_answer": 0,
           "audio_file": "assets//audio//diff_02//4.mp3"
         },
-        {
+        "4": {
           "question": "What are the most important\nqualities to succeed in\nyour industry?",
-          "answers": [
-            "Creativity and innovation are\nimportant in my field.",
-            "Adaptability, teamwork, and\nproblem-solving are crucial.",
-            "Organization and punctuality\nare key in any job."
-          ],
+          "answers": {
+            "0": "Creativity and innovation are\nimportant in my field.",
+            "1": "Adaptability, teamwork, and\nproblem-solving are crucial.",
+            "2": "Organization and punctuality\nare key in any job."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_02//5.mp3"
         },
-        {
+        "5": {
           "question": "What kind of impact do you hope\nyour work will have on the company\nand its future growth?",
-          "answers": [
-            "I hope my work will help the\ncompany reach new clients.",
-            "I hope my work will contribute to\nthe company's expansion into new markets.",
-            "I hope my work will improve\ncommunication between departments."
-          ],
+          "answers": {
+            "0": "I hope my work will help the\ncompany reach new clients.",
+            "1": "I hope my work will contribute to\nthe company's expansion into new markets.",
+            "2": "I hope my work will improve\ncommunication between departments."
+          },
           "correct_answer": 1,
           "audio_file": "assets//audio//diff_02//6.mp3"
         },
-        {
+        "6": {
           "question": "How do you keep yourself updated\nwith the latest trends and\nadvancements in your field?",
-          "answers": [
-            "I regularly attend conferences\nand take online courses.",
-            "Watching the news every morning\nhelps me keep updated.",
-            "I learn new trends by following\nprofessionals on social media."
-          ],
+          "answers": {
+            "0": "I regularly attend conferences\nand take online courses.",
+            "1": "Watching the news every morning\nhelps me keep updated.",
+            "2": "I learn new trends by following\nprofessionals on social media."
+          },
           "correct_answer": 0,
           "audio_file": "assets//audio//diff_02//7.mp3"
         },
-        {
+        "7": {
           "question": "How does technology help you\nimprove your job performance?",
-          "answers": [
-            "Technology plays a key role by\nstreamlining processes and\nautomating tasks.",
-            "Technology plays a key role by\nfacilitating communication with\ninternational teams.",
-            "Technology plays a key role by\nallowing the participation in\ninternational trainings online."
-          ],
+          "answers": {
+            "0": "Technology plays a key role by\nstreamlining processes and\nautomating tasks.",
+            "1": "Technology plays a key role by\nfacilitating communication with\ninternational teams.",
+            "2": "Technology plays a key role by\nallowing the participation in\ninternational trainings online."
+          },
           "correct_answer": 0,
           "audio_file": "assets//audio//diff_02//8.mp3"
         },
-        {
+        "8": {
           "question": "How does teamwork contribute\nto achieving the company's goals?",
-          "answers": [
-            "It combines expertise to meet\nobjectives through clear communication.",
-            "The main factor of teamwork is\nsharing ideas to advance efficiently.",
-            "Motivating team members to work\ntogether is a key contribution."
-          ],
+          "answers": {
+            "0": "It combines expertise to meet\nobjectives through clear communication.",
+            "1": "The main factor of teamwork is\nsharing ideas to advance efficiently.",
+            "2": "Motivating team members to work\ntogether is a key contribution."
+          },
           "correct_answer": 0,
           "audio_file": "assets//audio//diff_02//9.mp3"
         },
-        {
+        "9": {
           "question": "What advice would you give to\nsomeone starting a career\nin your field?",
-          "answers": [
-            "I'd suggest building strong\nrelationships with colleagues.",
-            "They should work on being patient\nand open to learning.",
-            "I'd recommend focusing on technical\nskills and networking."
-          ],
+          "answers": {
+            "0": "I'd suggest building strong\nrelationships with colleagues.",
+            "1": "They should work on being patient\nand open to learning.",
+            "2": "I'd recommend focusing on technical\nskills and networking."
+          },
           "correct_answer": 2,
           "audio_file": "assets//audio//diff_02//10.mp3"
         }
-      ]
+      }
     }
-  ]
-}
+  }
