@@ -51,4 +51,16 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## 🗺 Application Flow
+## Development of the Application
+### Model-View-Controller (MVC) Architecture
+The application is designed using the Model-View-Controller (MVC) architecture, which separates the application into three main components:
+- **Model**: Contains the data and logic of the application.
+- **View**: Contains the user interface elements of the application.
+- **Controller**: Handles user input and updates the model and view accordingly.
+
+```mermaid
+graph TD;
+    View["View<br>Defines display (UI)<br>e.g. user clicks 'add to cart'"] -->|User interacts| Controller["Controller<br>Contains control logic<br>e.g. receives update from view then notifies model to 'add item'"];
+    Controller -->|Updates data| Model["Model<br>Defines data structure<br>e.g. updates application to reflect added item"];
+    Model -->|Notifies update| View;
+```
