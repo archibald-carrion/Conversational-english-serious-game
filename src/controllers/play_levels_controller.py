@@ -15,6 +15,7 @@ class PlayLevelsController():
     def load_level(self, level_name):
         # load the level
         self.current_level = level_name
+        # if the current question is None, set it to 0
         self.current_question = 0
         return self.model.load_level(level_name)
     
@@ -25,4 +26,12 @@ class PlayLevelsController():
     def get_current_question_index(self):
         # get the current question index
         return self.current_question + 1
+    
+    def check_answer(self, answer):
+        # check the answer
+        correct = self.model.check_answer(self.current_level, self.current_question, answer)
+        # # only increase the current question if the answer is correct
+        if correct:
+            self.current_question += 1
+        return correct
 

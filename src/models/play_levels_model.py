@@ -53,3 +53,10 @@ class PlayLevelsModel():
         
         # Return the full content for the specified question
         return data[question_key]
+    
+    def check_answer(self, level_name, question_number, answer):
+        # Check the answer
+        content_level = self.json_controller.get_item(level_name)
+        question = self.get_question_data(content_level, question_number)
+        correct_answer = question["correct_answer"] 
+        return correct_answer == answer

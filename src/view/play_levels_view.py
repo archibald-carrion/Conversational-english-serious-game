@@ -171,22 +171,25 @@ class PlayLevelsView(ctk.CTkFrame):
         """Load the current question from the controller"""
         # Get current question data from controller
         question_data = self.controller.get_current_question()
-        # the reeturned index is 1 to 10
+        # the returned index is 1 to 10
         current_question_index = self.controller.get_current_question_index()
         total_questions = 10 # TODO: change this to be class variable instead of local
         # self.controller.get_total_questions()
-         
+        
         # Update question counter
         self.question_counter.configure(
             text=f"Question {current_question_index}/{total_questions}"
         )
         
         if question_data:
-            # print(f"Loading question {current_question_index}: {question_data}")
             # Initialize attempts counter for this question if it doesn't exist
             question_id = question_data.get("id", current_question_index)
             if question_id not in self.question_attempts:
                 self.question_attempts[question_id] = 0
+            
+            # Clear selected answers for this new question
+            if hasattr(self, 'selected_answers'):
+                self.selected_answers[question_id] = set()
                 
             # Update question text
             self.question_label.configure(text=question_data.get("question", ""))
@@ -198,10 +201,12 @@ class PlayLevelsView(ctk.CTkFrame):
             for i, button in enumerate(self.answer_buttons):
                 answer_key = str(i)  # Convert index to string key
                 if answer_key in answers:
-                    button.configure(text=answers[answer_key])
+                    button.configure(
+                        text=answers[answer_key],
+                        fg_color="#1f6aa5",  # Reset to default color
+                        state="normal"  # Enable all buttons for the new question
+                    )
                     button.pack(pady=10)
-                    # Reset button color
-                    button.configure(fg_color="transparent")
                 else:
                     button.pack_forget()  # Hide buttons if we don't have an answer for this index
             
@@ -256,15 +261,24 @@ class PlayLevelsView(ctk.CTkFrame):
         question_data = self.controller.get_current_question()
         question_id = question_data.get("id", self.controller.get_current_question_index())
         
+        # Initialize a set to track selected answers for this question if not already there
+        if not hasattr(self, 'selected_answers'):
+            self.selected_answers = {}
+        
+        if question_id not in self.selected_answers:
+            self.selected_answers[question_id] = set()
+        
+        # Add this answer to the selected set
+        self.selected_answers[question_id].add(answer_idx)
+        
         # Increment attempts counter for this question
         self.question_attempts[question_id] += 1
         
         # Check if answer is correct
         result = self.controller.check_answer(answer_idx)
         
-        # Calculate score based on attempts
         if result:
-            # Award points based on number of attempts
+            # Calculate score based on attempts
             attempts = self.question_attempts[question_id]
             if attempts == 1:
                 # First attempt - 10 points
@@ -273,8 +287,8 @@ class PlayLevelsView(ctk.CTkFrame):
                 # Second attempt - 5 points
                 points = 5
             else:
-                # Third or more attempt - 0 points
-                points = 0
+                # Third attempt - 2 points
+                points = 2
                 
             # Add points to total score
             self.score += points
@@ -284,30 +298,53 @@ class PlayLevelsView(ctk.CTkFrame):
                 fg_color="green", 
                 text=f"{self.answer_buttons[answer_idx].cget('text')} (+{points} pts)"
             )
+            
+            # Disable all buttons to prevent further selection after correct answer
+            for btn in self.answer_buttons:
+                btn.configure(state="disabled")
+                
+            # Load next question after a delay
+            self.after(1500, self.load_next_question)
         else:
             # Wrong answer - no points, just visual feedback
-            self.answer_buttons[answer_idx].configure(fg_color="red")
+            self.answer_buttons[answer_idx].configure(fg_color="red", state="disabled")
             
-        # Disable all buttons to prevent multiple selections
-        for btn in self.answer_buttons:
-            btn.configure(state="disabled")
-            
-        # Load next question after a delay
-        self.after(1500, self.load_next_question)
+            # Check if this was the 3rd attempt
+            if self.question_attempts[question_id] >= 3:
+                # Highlight the correct answer if we've used all attempts
+                correct_idx = self.get_correct_answer_index(question_data)
+                if correct_idx is not None:
+                    self.answer_buttons[correct_idx].configure(
+                        fg_color="green",
+                        text=f"{self.answer_buttons[correct_idx].cget('text')} (Correct)"
+                    )
+                
+                # Disable all remaining buttons
+                for idx, btn in enumerate(self.answer_buttons):
+                    btn.configure(state="disabled")
+                    
+                # Move to next question after a delay
+                self.after(1500, self.load_next_question)
+
+    def get_correct_answer_index(self, question_data):
+        """Get the index of the correct answer"""
+        correct_answer = question_data.get("correct_answer")
+        if correct_answer is not None:
+            try:
+                return int(correct_answer)
+            except (ValueError, TypeError):
+                pass
+        return None
 
     def load_next_question(self):
         """Load the next question or end the level"""
-        has_next = self.controller.next_question()
-        
-        # Re-enable buttons for the next question
-        for btn in self.answer_buttons:
-            btn.configure(state="normal", fg_color=None)
-        
-        if has_next:
-            # Load the next question
+        current_question_index = self.controller.get_current_question_index()
+        total_questions = 10 # TODO: change this to be class variable instead of local
+        if current_question_index < total_questions:
+            # Load next question
             self.load_question()
         else:
-            # End of level, show results
+            # End of level - show completion message
             self.show_level_complete()
 
     def show_level_complete(self):
