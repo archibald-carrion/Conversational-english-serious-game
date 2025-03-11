@@ -201,7 +201,7 @@ class PlayLevelsView(ctk.CTkFrame):
                     button.configure(text=answers[answer_key])
                     button.pack(pady=10)
                     # Reset button color
-                    button.configure(fg_color=None)
+                    button.configure(fg_color="transparent")
                 else:
                     button.pack_forget()  # Hide buttons if we don't have an answer for this index
             
