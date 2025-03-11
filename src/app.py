@@ -1,4 +1,4 @@
-# main.py
+# app.py
 import customtkinter as ctk  
 from controllers.create_levels_controller import CreateLevelsController
 from controllers.modify_levels_controller import ModifyLevelsController

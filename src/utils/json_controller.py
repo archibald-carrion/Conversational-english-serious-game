@@ -13,7 +13,7 @@ class JSONController:
         self.json_path = os.path.abspath(json_path)  # Get absolute path
         print(f"Using JSON file at: {self.json_path}")
         self.data = self.load_data()
-        print("DATA:", self.data)
+        # print("DATA:", self.data)
 
     def load_data(self):
         """
@@ -85,10 +85,41 @@ class JSONController:
             print(f"Error saving JSON: {str(e)}")
             traceback.print_exc()
             return False
+        
+    def get_item(self, key, content_to_search=None):
+        """
+        Retrieve an item by key from any level of nesting.
+        
+        Args:
+            key (str): The key to retrieve.
+            content_to_search (dict, optional): String to search in. If None then search in the whole JSON.
+        
+        Returns:
+            Any: The value associated with the key, or None if not found.
+        """
+        if content_to_search is None:
+            self.get_item(key)
+        else:
+            def search(data):
+                if isinstance(data, dict):
+                    if key in data:
+                        return data[key]
+                    for v in data.values():
+                        result = search(v)
+                        if result is not None:
+                            return result
+                elif isinstance(data, list):
+                    for item in data:
+                        result = search(item)
+                        if result is not None:
+                            return result
+                return None
+            
+            return search(content_to_search)
 
     def get_item(self, key):
         """
-        Retrieve an item by key.
+        Retrieve an item by key from any level of nesting.
         
         Args:
             key (str): The key to retrieve.
@@ -96,7 +127,23 @@ class JSONController:
         Returns:
             Any: The value associated with the key, or None if not found.
         """
-        return self.data.get(key, None)
+        def search(data):
+            if isinstance(data, dict):
+                if key in data:
+                    return data[key]
+                for v in data.values():
+                    result = search(v)
+                    if result is not None:
+                        return result
+            elif isinstance(data, list):
+                for item in data:
+                    result = search(item)
+                    if result is not None:
+                        return result
+            return None
+        
+        return search(self.data)
+
     
     def get_keys(self, key=None):
         """
