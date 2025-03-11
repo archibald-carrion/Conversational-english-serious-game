@@ -171,16 +171,18 @@ class PlayLevelsView(ctk.CTkFrame):
         """Load the current question from the controller"""
         # Get current question data from controller
         question_data = self.controller.get_current_question()
+        # the reeturned index is 1 to 10
         current_question_index = self.controller.get_current_question_index()
         total_questions = 10 # TODO: change this to be class variable instead of local
         # self.controller.get_total_questions()
          
         # Update question counter
         self.question_counter.configure(
-            text=f"Question {current_question_index + 1}/{total_questions}"
+            text=f"Question {current_question_index}/{total_questions}"
         )
         
         if question_data:
+            # print(f"Loading question {current_question_index}: {question_data}")
             # Initialize attempts counter for this question if it doesn't exist
             question_id = question_data.get("id", current_question_index)
             if question_id not in self.question_attempts:
@@ -191,29 +193,32 @@ class PlayLevelsView(ctk.CTkFrame):
             
             # Update answer buttons
             answers = question_data.get("answers", [])
+            print("Answers:", answers)
+            # Fixed code to fill buttons with answers
             for i, button in enumerate(self.answer_buttons):
-                if i < len(answers):
-                    button.configure(text=answers[i])
+                answer_key = str(i)  # Convert index to string key
+                if answer_key in answers:
+                    button.configure(text=answers[answer_key])
                     button.pack(pady=10)
                     # Reset button color
                     button.configure(fg_color=None)
                 else:
-                    button.pack_forget()  # Hide buttons if we have fewer than 3 answers
+                    button.pack_forget()  # Hide buttons if we don't have an answer for this index
             
             # Handle image
-            image_path = question_data.get("image_path", "")
-            if image_path and os.path.exists(image_path):
-                self.display_image(image_path)
-            else:
-                # Hide or clear image
-                self.clear_image()
+            # image_path = question_data.get("image_path", "")
+            # if image_path and os.path.exists(image_path):
+            #     self.display_image(image_path)
+            # else:
+            #     # Hide or clear image
+            #     self.clear_image()
                 
             # Store audio path for later playing
-            self.current_audio = question_data.get("audio_path", "")
-            if not self.current_audio or not os.path.exists(self.current_audio):
-                self.audio_button.configure(state="disabled")
-            else:
-                self.audio_button.configure(state="normal")
+            # self.current_audio = question_data.get("audio_path", "")
+            # if not self.current_audio or not os.path.exists(self.current_audio):
+            #     self.audio_button.configure(state="disabled")
+            # else:
+            #     self.audio_button.configure(state="normal")
 
     def display_image(self, image_path):
         """Display an image in the image frame"""
