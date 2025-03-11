@@ -34,4 +34,10 @@ class PlayLevelsController():
         if correct:
             self.current_question += 1
         return correct
+    
+
+    def reset_current_question_index(self):
+        # reset the current question index
+        self.current_question = 0
+        return self.current_question
 

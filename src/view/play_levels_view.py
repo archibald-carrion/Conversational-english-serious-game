@@ -343,7 +343,7 @@ class PlayLevelsView(ctk.CTkFrame):
         """Load the next question or end the level"""
         current_question_index = self.controller.get_current_question_index()
         total_questions = 10 # TODO: change this to be class variable instead of local
-        if current_question_index < total_questions:
+        if current_question_index <= total_questions:
             # Load next question
             self.load_question()
         else:
@@ -429,10 +429,19 @@ class PlayLevelsView(ctk.CTkFrame):
         """Replay the current level"""
         # Reset score and attempts
         self.score = 0
-        self.question_attempts = {} # used to contains the posible answers that were already selected
+        self.question_attempts = {}
+        
+        # Completely destroy the old game frame
+        self.game_frame.destroy()
+        
+        # Create a new game frame and components
+        self.create_game_components()
+        
+        # Show the game view again
+        self.show_game_view()
         
         # Reset level in controller
-        # self.controller.reset_level()
+        self.controller.reset_current_question_index()  # You need to implement this method in your controller
         
         # Load the first question
         self.load_question()
