@@ -169,6 +169,9 @@ class PlayLevelsView(ctk.CTkFrame):
 
     def load_question(self):
         """Load the current question from the controller"""
+        # reset attempts 
+        self.attempts = 0
+
         # Get current question data from controller
         question_data = self.controller.get_current_question()
         # the returned index is 1 to 10
@@ -272,18 +275,18 @@ class PlayLevelsView(ctk.CTkFrame):
         self.selected_answers[question_id].add(answer_idx)
         
         # Increment attempts counter for this question
-        self.question_attempts[question_id] += 1
+        self.attempts += 1
         
         # Check if answer is correct
         result = self.controller.check_answer(answer_idx)
         
         if result:
             # Calculate score based on attempts
-            attempts = self.question_attempts[question_id]
-            if attempts == 1:
+            # attempts = self.question_attempts[question_id]
+            if self.attempts == 1:
                 # First attempt - 10 points
                 points = 10
-            elif attempts == 2:
+            elif self.attempts == 2:
                 # Second attempt - 5 points
                 points = 5
             else:
@@ -426,10 +429,10 @@ class PlayLevelsView(ctk.CTkFrame):
         """Replay the current level"""
         # Reset score and attempts
         self.score = 0
-        self.question_attempts = {}
+        self.question_attempts = {} # used to contains the posible answers that were already selected
         
         # Reset level in controller
-        self.controller.reset_level()
+        # self.controller.reset_level()
         
         # Load the first question
         self.load_question()
