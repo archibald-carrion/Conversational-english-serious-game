@@ -1,5 +1,3 @@
-# view/modify_levels_view.py
-import customtkinter as ctk
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
@@ -25,13 +23,17 @@ class ModifyLevelsView(ctk.CTkFrame):
 
     def create_level_selection_view(self):
         """Initialize the level selection frame and its components"""
-        # Main container for level selection UI
+        # Main container for level selection UI - now using scrollable frame
         self.level_selection_frame = ctk.CTkFrame(self)
         self.level_selection_frame.pack(fill="both", expand=True)
         
+        # Add a scrollable frame inside the main frame
+        self.level_selection_scrollable = ctk.CTkScrollableFrame(self.level_selection_frame)
+        self.level_selection_scrollable.pack(fill="both", expand=True, padx=10, pady=10)
+        
         # Main title
         title = ctk.CTkLabel(
-            self.level_selection_frame, 
+            self.level_selection_scrollable, 
             text="Modify Questions", 
             font=("Helvetica", 24)
         )
@@ -39,14 +41,14 @@ class ModifyLevelsView(ctk.CTkFrame):
 
         # Create the dropdown for level selection
         level_label = ctk.CTkLabel(
-            self.level_selection_frame,
+            self.level_selection_scrollable,
             text="Select a Level to Modify:",
             font=("Helvetica", 16)
         )
         level_label.pack(pady=(20, 5))
         
         self.level_dropdown = ctk.CTkOptionMenu(
-            self.level_selection_frame,
+            self.level_selection_scrollable,
             values=[]  # Start with empty list
         )
         self.level_dropdown.pack(pady=10)
@@ -59,7 +61,7 @@ class ModifyLevelsView(ctk.CTkFrame):
 
         for text, command in buttons:
             btn = ctk.CTkButton(
-                self.level_selection_frame,
+                self.level_selection_scrollable,
                 text=text,
                 command=command,
                 width=200
@@ -71,9 +73,13 @@ class ModifyLevelsView(ctk.CTkFrame):
         # Main container for question selection UI
         self.question_selection_frame = ctk.CTkFrame(self)
         
+        # Add a scrollable frame inside the main frame
+        self.question_selection_scrollable = ctk.CTkScrollableFrame(self.question_selection_frame)
+        self.question_selection_scrollable.pack(fill="both", expand=True, padx=10, pady=10)
+        
         # Header
         header = ctk.CTkLabel(
-            self.question_selection_frame, 
+            self.question_selection_scrollable, 
             text="Select a Question to Modify", 
             font=("Helvetica", 24)
         )
@@ -81,7 +87,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Level info label
         self.level_info_label = ctk.CTkLabel(
-            self.question_selection_frame,
+            self.question_selection_scrollable,
             text="Current Level: None",
             font=("Helvetica", 16)
         )
@@ -89,25 +95,16 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Create a scrollable frame for questions
         self.questions_container = ctk.CTkScrollableFrame(
-            self.question_selection_frame,
+            self.question_selection_scrollable,
             width=500,
             height=300
         )
         self.questions_container.pack(pady=20, fill="both", expand=True)
         
         # Container for the action buttons
-        button_frame = ctk.CTkFrame(self.question_selection_frame)
+        button_frame = ctk.CTkFrame(self.question_selection_scrollable)
         button_frame.pack(pady=20, fill="x")
-        
-        # Add New Question button
-        self.add_question_btn = ctk.CTkButton(
-            button_frame,
-            text="Add New Question",
-            command=self.create_new_question,
-            width=200
-        )
-        self.add_question_btn.pack(side="left", padx=10, pady=10)
-        
+
         # Back button
         back_btn = ctk.CTkButton(
             button_frame,
@@ -122,9 +119,13 @@ class ModifyLevelsView(ctk.CTkFrame):
         # Main container for question editor UI
         self.question_editor_frame = ctk.CTkFrame(self)
         
+        # Add a scrollable frame inside the main frame
+        self.question_editor_scrollable = ctk.CTkScrollableFrame(self.question_editor_frame)
+        self.question_editor_scrollable.pack(fill="both", expand=True, padx=10, pady=10)
+        
         # Header
         header = ctk.CTkLabel(
-            self.question_editor_frame, 
+            self.question_editor_scrollable, 
             text="Edit Question", 
             font=("Helvetica", 24)
         )
@@ -135,7 +136,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Question text entry
         question_label = ctk.CTkLabel(
-            self.question_editor_frame,
+            self.question_editor_scrollable,
             text="Question Text:",
             font=("Helvetica", 16),
             anchor="w"
@@ -143,7 +144,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         question_label.pack(pady=(10, 5), padx=20, anchor="w")
         
         self.question_entry = ctk.CTkTextbox(
-            self.question_editor_frame,
+            self.question_editor_scrollable,
             height=100,
             width=500
         )
@@ -151,7 +152,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Answer entries
         answers_label = ctk.CTkLabel(
-            self.question_editor_frame,
+            self.question_editor_scrollable,
             text="Answer Options:",
             font=("Helvetica", 16),
             anchor="w"
@@ -163,7 +164,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         self.answer_frames = []
         
         for i in range(3):
-            answer_frame = ctk.CTkFrame(self.question_editor_frame)
+            answer_frame = ctk.CTkFrame(self.question_editor_scrollable)
             answer_frame.pack(pady=5, padx=20, fill="x")
             self.answer_frames.append(answer_frame)
             
@@ -190,7 +191,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Media section - Image
         media_label = ctk.CTkLabel(
-            self.question_editor_frame,
+            self.question_editor_scrollable,
             text="Media Files:",
             font=("Helvetica", 16),
             anchor="w"
@@ -198,7 +199,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         media_label.pack(pady=(20, 5), padx=20, anchor="w")
         
         # Image selection
-        image_frame = ctk.CTkFrame(self.question_editor_frame)
+        image_frame = ctk.CTkFrame(self.question_editor_scrollable)
         image_frame.pack(pady=5, padx=20, fill="x")
         
         image_label = ctk.CTkLabel(image_frame, text="Image:")
@@ -218,7 +219,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Display image preview
         self.image_preview_frame = ctk.CTkFrame(
-            self.question_editor_frame,
+            self.question_editor_scrollable,
             width=300,
             height=200
         )
@@ -227,7 +228,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         self.image_preview_label.pack(fill="both", expand=True)
         
         # Audio selection
-        audio_frame = ctk.CTkFrame(self.question_editor_frame)
+        audio_frame = ctk.CTkFrame(self.question_editor_scrollable)
         audio_frame.pack(pady=5, padx=20, fill="x")
         
         audio_label = ctk.CTkLabel(audio_frame, text="Audio:")
@@ -245,28 +246,8 @@ class ModifyLevelsView(ctk.CTkFrame):
         )
         audio_button.pack(side="right", padx=10)
         
-        # Audio playback controls
-        audio_controls = ctk.CTkFrame(self.question_editor_frame)
-        audio_controls.pack(pady=10, padx=20)
-        
-        play_button = ctk.CTkButton(
-            audio_controls,
-            text="Play",
-            command=self.play_audio_preview,
-            width=100
-        )
-        play_button.pack(side="left", padx=10)
-        
-        stop_button = ctk.CTkButton(
-            audio_controls,
-            text="Stop",
-            command=self.stop_audio,
-            width=100
-        )
-        stop_button.pack(side="left", padx=10)
-        
         # Action buttons
-        button_frame = ctk.CTkFrame(self.question_editor_frame)
+        button_frame = ctk.CTkFrame(self.question_editor_scrollable)
         button_frame.pack(pady=20, fill="x")
         
         save_btn = ctk.CTkButton(
@@ -276,17 +257,7 @@ class ModifyLevelsView(ctk.CTkFrame):
             width=150
         )
         save_btn.pack(side="left", padx=10, pady=10)
-        
-        delete_btn = ctk.CTkButton(
-            button_frame,
-            text="Delete Question",
-            command=self.delete_question,
-            fg_color="#b22222",  # Dark red
-            hover_color="#8b0000",  # Darker red
-            width=150
-        )
-        delete_btn.pack(side="left", padx=10, pady=10)
-        
+
         cancel_btn = ctk.CTkButton(
             button_frame,
             text="Cancel",
@@ -354,10 +325,6 @@ class ModifyLevelsView(ctk.CTkFrame):
                 # Get question text
                 question_text = question.get("question", f"Question {key}")
 
-                # # Truncate question text if too long
-                # if len(question_text) > 50:
-                #     question_text = question_text[:47] + "..."
-
                 # Create label with question number and text
                 label = ctk.CTkLabel(
                     question_frame,
@@ -383,7 +350,6 @@ class ModifyLevelsView(ctk.CTkFrame):
                 font=("Helvetica", 14)
             )
             label.pack(pady=20)
-
 
     def edit_question(self, question):
         """Load a question into the editor"""
@@ -520,25 +486,6 @@ class ModifyLevelsView(ctk.CTkFrame):
         self.image_preview_label.configure(image=None)
         self.image_preview_label.image = None
 
-    def play_audio_preview(self):
-        """Play the selected audio file"""
-        audio_path = self.audio_path_var.get()
-        if audio_path and os.path.exists(audio_path):
-            # Stop any currently playing audio
-            self.stop_audio()
-            
-            # Play the new audio
-            try:
-                pygame.mixer.music.load(audio_path)
-                pygame.mixer.music.play()
-            except Exception as e:
-                print(f"Error playing audio: {e}")
-
-    def stop_audio(self):
-        """Stop any currently playing audio"""
-        if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
-            pygame.mixer.music.stop()
-
     def save_question(self):
         """Save the current question data"""
         # Get question ID (empty for new questions)
@@ -600,34 +547,6 @@ class ModifyLevelsView(ctk.CTkFrame):
             # Show error message
             print("Failed to save question")
 
-    def delete_question(self):
-        """Delete the current question"""
-        question_id = self.question_id_var.get()
-        
-        # Only try to delete if we have a question ID
-        if question_id:
-            # Get confirmation (simplified for this example)
-            from tkinter import messagebox
-            confirm = messagebox.askyesno(
-                "Confirm Delete",
-                "Are you sure you want to delete this question?"
-            )
-            
-            if confirm:
-                # Delete question using controller
-                success = self.controller.delete_question(question_id)
-                
-                if success:
-                    # Return to question selection view and refresh the list
-                    self.back_to_question_selection()
-                    self.populate_questions_list()
-                else:
-                    # Show error message
-                    print("Failed to delete question")
-        else:
-            # New questions don't need to be deleted
-            self.back_to_question_selection()
-
     def show_question_selection_view(self):
         """Show the question selection view"""
         # Hide other frames
@@ -650,7 +569,7 @@ class ModifyLevelsView(ctk.CTkFrame):
     def back_to_level_selection(self):
         """Go back to level selection view"""
         # Stop any playing audio
-        self.stop_audio()
+        # self.stop_audio()
         
         # Hide current frame
         self.question_selection_frame.pack_forget()
@@ -660,9 +579,6 @@ class ModifyLevelsView(ctk.CTkFrame):
 
     def back_to_question_selection(self):
         """Go back to question selection view"""
-        # Stop any playing audio
-        self.stop_audio()
-        
         # Hide current frame
         self.question_editor_frame.pack_forget()
         
