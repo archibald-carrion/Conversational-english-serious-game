@@ -230,7 +230,7 @@ class PlayLevelsView(ctk.CTkFrame):
                     button.pack_forget()  # Hide buttons if we don't have an answer for this index
             
             # Handle image
-            image_path = question_data.get("image_path", "")
+            image_path = question_data.get("image_file", "")
             if image_path and os.path.exists(image_path):
                 self.display_image(image_path)
             else:
