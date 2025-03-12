@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
+import pygame  # For audio playback
 
 class PlayLevelsView(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -12,6 +13,10 @@ class PlayLevelsView(ctk.CTkFrame):
         # Score tracking
         self.question_attempts = {}  # To track attempts per question
         self.score = 0
+        
+        # Initialize pygame mixer for audio playback
+        pygame.mixer.init()
+        self.current_audio = None
         
         # Create the play levels UI
         self.create_play_levels_view()
@@ -76,14 +81,15 @@ class PlayLevelsView(ctk.CTkFrame):
         )
         self.question_label.pack(pady=(5, 20))
         
-        # Audio play button
-        self.audio_button = ctk.CTkButton(
+        # Replay audio button
+        self.replay_button = ctk.CTkButton(
             self.game_frame,
-            text="Play Audio",
-            command=self.play_audio,
-            width=150
+            text="Replay Audio",
+            command=self.replay_audio,
+            width=150,
+            state="disabled"  # Initially disabled until audio is played
         )
-        self.audio_button.pack(pady=10)
+        self.replay_button.pack(pady=10)
         
         # Image frame
         self.image_frame = ctk.CTkFrame(
@@ -166,6 +172,9 @@ class PlayLevelsView(ctk.CTkFrame):
         """Hide game view and show selection view"""
         self.game_frame.pack_forget()
         self.selection_frame.pack(fill="both", expand=True)
+        
+        # Stop any playing audio when leaving the game view
+        self.stop_audio()
 
     def load_question(self):
         """Load the current question from the controller"""
@@ -214,19 +223,23 @@ class PlayLevelsView(ctk.CTkFrame):
                     button.pack_forget()  # Hide buttons if we don't have an answer for this index
             
             # Handle image
-            # image_path = question_data.get("image_path", "")
-            # if image_path and os.path.exists(image_path):
-            #     self.display_image(image_path)
-            # else:
-            #     # Hide or clear image
-            #     self.clear_image()
+            image_path = question_data.get("image_path", "")
+            if image_path and os.path.exists(image_path):
+                self.display_image(image_path)
+            else:
+                # Hide or clear image
+                self.clear_image()
                 
-            # Store audio path for later playing
-            # self.current_audio = question_data.get("audio_path", "")
-            # if not self.current_audio or not os.path.exists(self.current_audio):
-            #     self.audio_button.configure(state="disabled")
-            # else:
-            #     self.audio_button.configure(state="normal")
+            # Store audio path and play it automatically
+            self.current_audio = question_data.get("audio_file", "")
+            if not self.current_audio or not os.path.exists(self.current_audio):
+                self.replay_button.configure(state="disabled")
+            else:
+                # Enable replay button
+                self.replay_button.configure(state="normal")
+                
+                # Auto-play the audio after a short delay
+                self.after(500, self.play_audio)
 
     def display_image(self, image_path):
         """Display an image in the image frame"""
@@ -255,8 +268,46 @@ class PlayLevelsView(ctk.CTkFrame):
 
     def play_audio(self):
         """Play the audio for the current question"""
-        if hasattr(self, 'current_audio') and self.current_audio:
-            self.controller.play_audio(self.current_audio)
+        if hasattr(self, 'current_audio') and self.current_audio and os.path.exists(self.current_audio):
+            # Stop any currently playing audio
+            self.stop_audio()
+            
+            # Play the new audio
+            try:
+                pygame.mixer.music.load(self.current_audio)
+                pygame.mixer.music.play()
+                
+                # Disable replay button during playback
+                self.replay_button.configure(state="disabled")
+                
+                # Re-enable replay button after audio finishes
+                audio_length = self.get_audio_length(self.current_audio)
+                self.after(int(audio_length * 1000), self.enable_replay_button)
+            except Exception as e:
+                print(f"Error playing audio: {e}")
+
+    def replay_audio(self):
+        """Replay the audio for the current question"""
+        self.play_audio()
+
+    def stop_audio(self):
+        """Stop any currently playing audio"""
+        if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
+            pygame.mixer.music.stop()
+
+    def enable_replay_button(self):
+        """Re-enable the replay button after audio finishes"""
+        if hasattr(self, 'current_audio') and self.current_audio and os.path.exists(self.current_audio):
+            self.replay_button.configure(state="normal")
+
+    def get_audio_length(self, audio_path):
+        """Get the length of an audio file in seconds"""
+        try:
+            sound = pygame.mixer.Sound(audio_path)
+            return sound.get_length()
+        except:
+            # Default to 3 seconds if can't determine length
+            return 3.0
 
     def select_answer(self, answer_idx):
         """Process the user's answer selection"""
@@ -275,6 +326,7 @@ class PlayLevelsView(ctk.CTkFrame):
         self.selected_answers[question_id].add(answer_idx)
         
         # Increment attempts counter for this question
+        self.question_attempts[question_id] = self.question_attempts.get(question_id, 0) + 1
         self.attempts += 1
         
         # Check if answer is correct
@@ -282,7 +334,6 @@ class PlayLevelsView(ctk.CTkFrame):
         
         if result:
             # Calculate score based on attempts
-            # attempts = self.question_attempts[question_id]
             if self.attempts == 1:
                 # First attempt - 10 points
                 points = 10
@@ -305,6 +356,9 @@ class PlayLevelsView(ctk.CTkFrame):
             # Disable all buttons to prevent further selection after correct answer
             for btn in self.answer_buttons:
                 btn.configure(state="disabled")
+            
+            # Disable replay button after correct answer
+            self.replay_button.configure(state="disabled")
                 
             # Load next question after a delay
             self.after(1500, self.load_next_question)
@@ -325,6 +379,9 @@ class PlayLevelsView(ctk.CTkFrame):
                 # Disable all remaining buttons
                 for idx, btn in enumerate(self.answer_buttons):
                     btn.configure(state="disabled")
+                
+                # Disable replay button
+                self.replay_button.configure(state="disabled")
                     
                 # Move to next question after a delay
                 self.after(1500, self.load_next_question)
