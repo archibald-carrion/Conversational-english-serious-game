@@ -59,6 +59,9 @@ class MenuView(ctk.CTkFrame):
     def open_modify_levels_window(self):
         """Open the modify levels window"""
         if self.modify_levels_view and self.switch_view_callback:
+
+            if hasattr(self.play_levels_view, 'update_level_dropdown'):
+                self.modify_levels_view.update_level_dropdown()
             self.switch_view_callback(self.parent, self.modify_levels_view)
 
     def create_new_level(self):
