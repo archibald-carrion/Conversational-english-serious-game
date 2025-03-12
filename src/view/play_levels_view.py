@@ -175,6 +175,13 @@ class PlayLevelsView(ctk.CTkFrame):
         
         # Stop any playing audio when leaving the game view
         self.stop_audio()
+        
+        # Reset the controller's question index without triggering level complete
+        self.controller.reset_current_question_index()
+        
+        # Reset the game frame for when we come back
+        self.game_frame.destroy()
+        self.create_game_components()
 
     def load_question(self):
         """Load the current question from the controller"""
