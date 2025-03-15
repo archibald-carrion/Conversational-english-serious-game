@@ -68,3 +68,25 @@ class ModifyLevelsModel():
         correct_answer = extract_correct_answer(content_level, question_number)
         # print(json.dumps(answers, indent=2))
         return correct_answer
+    
+    def get_image_path(self, level_name, question_number):
+        content_level = self.json_controller.get_item(level_name)
+        # print("MODIFY LEVELS MODEL: Content level:", content_level)
+
+        def extract_image_path(content_level, question_number):
+            return content_level[str(question_number)]["image_file"]
+        
+        image_path = extract_image_path(content_level, question_number)
+        # print(json.dumps(answers, indent=2))
+        return image_path
+    
+    def get_audio_path(self, level_name, question_number):
+        content_level = self.json_controller.get_item(level_name)
+        # print("MODIFY LEVELS MODEL: Content level:", content_level)
+
+        def extract_audio_path(content_level, question_number):
+            return content_level[str(question_number)]["audio_file"]
+        
+        audio_path = extract_audio_path(content_level, question_number)
+        # print(json.dumps(answers, indent=2))
+        return audio_path

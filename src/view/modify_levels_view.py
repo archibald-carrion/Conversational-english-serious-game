@@ -428,9 +428,9 @@ class ModifyLevelsView(ctk.CTkFrame):
 
         # Set correct answer in dropdown
         correct_answer = self.controller.get_correct_answer_index(question.get("id", ""))
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        print(question)
-        print("Correct answer:", correct_answer)
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        # print(question)
+        # print("Correct answer:", correct_answer)
         try:
             correct_index = int(correct_answer)
             # Select the corresponding item in dropdown
@@ -442,7 +442,7 @@ class ModifyLevelsView(ctk.CTkFrame):
             self.correct_answer_dropdown.set(answer_texts[0])
 
         # Set image
-        image_path = question.get("image_file", "")
+        image_path = self.controller.get_image_path(question.get("id", ""))
         self.image_path_var.set(image_path)
         if image_path and os.path.exists(image_path):
             self.display_image_preview(image_path)
@@ -452,7 +452,7 @@ class ModifyLevelsView(ctk.CTkFrame):
             self.image_display.configure(text="No image selected")
 
         # Set audio
-        audio_path = question.get("audio_file", "")
+        audio_path = self.controller.get_audio_path(question.get("id", ""))
         self.audio_path_var.set(audio_path)
         if audio_path and os.path.exists(audio_path):
             self.audio_display.configure(text=os.path.basename(audio_path))

@@ -30,3 +30,12 @@ class ModifyLevelsController():
     
     def save_question(self, question_data):
         self.model.save_question(self.current_level, self.current_question, question_data)
+
+
+    def get_image_path(self, index_question):
+        self.current_question = index_question
+        return self.model.get_image_path(self.current_level, self.current_question-1)
+    
+    def get_audio_path(self, index_question):
+        self.current_question = index_question
+        return self.model.get_audio_path(self.current_level, self.current_question-1)
