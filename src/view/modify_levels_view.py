@@ -168,18 +168,6 @@ class ModifyLevelsView(ctk.CTkFrame):
             answer_frame.pack(pady=5, padx=20, fill="x")
             self.answer_frames.append(answer_frame)
             
-            # Radio button for correct answer
-            correct_var = ctk.IntVar(value=0)
-            self.correct_answer_var = correct_var
-            
-            radio = ctk.CTkRadioButton(
-                answer_frame,
-                text="",
-                variable=correct_var,
-                value=i
-            )
-            radio.pack(side="left", padx=5)
-            
             # Answer text entry
             entry = ctk.CTkEntry(
                 answer_frame,
@@ -188,6 +176,29 @@ class ModifyLevelsView(ctk.CTkFrame):
             )
             entry.pack(side="left", padx=10, fill="x", expand=True)
             self.answer_entries.append(entry)
+        
+        # Add dropdown for correct answer selection
+        correct_answer_frame = ctk.CTkFrame(self.question_editor_scrollable)
+        correct_answer_frame.pack(pady=10, padx=20, fill="x")
+        
+        correct_answer_label = ctk.CTkLabel(
+            correct_answer_frame,
+            text="Correct Answer:",
+            font=("Helvetica", 14),
+            anchor="w"
+        )
+        correct_answer_label.pack(side="left", padx=5)
+        
+        # Create string variable for dropdown
+        self.correct_answer_var = ctk.StringVar(value="0")
+        
+        # Create the dropdown for correct answer selection
+        self.correct_answer_dropdown = ctk.CTkOptionMenu(
+            correct_answer_frame,
+            values=["Answer 1", "Answer 2", "Answer 3"],
+            variable=self.correct_answer_var
+        )
+        self.correct_answer_dropdown.pack(side="left", padx=10)
         
         # Media section - Image
         media_label = ctk.CTkLabel(
@@ -351,35 +362,85 @@ class ModifyLevelsView(ctk.CTkFrame):
             )
             label.pack(pady=20)
 
+    # def update_answer_dropdown_values(self):
+    #     """Update dropdown values based on current answer entries"""
+    #     answer_texts = []
+    #     for i, entry in enumerate(self.answer_entries):
+    #         text = entry.get().strip()
+    #         if text:
+    #             answer_texts.append(f"Answer {i+1}: {text[:20]}...")
+    #         else:
+    #             answer_texts.append(f"Answer {i+1}: (empty)")
+        
+    #     # Update dropdown values
+    #     if answer_texts:
+    #         self.correct_answer_dropdown.configure(values=answer_texts)
+    
+    # def get_selected_answer_index(self):
+    #     """Get the index of the selected answer from the dropdown"""
+    #     current_value = self.correct_answer_var.get()
+    #     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + current_value)
+    #     # Extract the answer number from the dropdown text (e.g., "Answer 2: text..." -> 1)
+    #     if current_value.startswith("Answer "):
+    #         try:
+    #             index = int(current_value.split(":")[0].replace("Answer ", "")) - 1
+    #             return str(index)
+    #         except (ValueError, IndexError):
+    #             return "0"
+    #     return "0"  # Default to first answer if parsing fails
+
     def edit_question(self, question):
         """Load a question into the editor"""
         # Set question ID
         self.question_id_var.set(question.get("id", ""))
-        
-        # Set question text
+
+        # Set question text - display literal \n as is
         self.question_entry.delete("0.0", "end")
-        self.question_entry.insert("0.0", question.get("question", ""))
-        
-        # Set answers
-        answers = question.get("answers", {})
+        question_text = question.get("question", "")
+        self.question_entry.insert("0.0", question_text)
+
+        # Set answers - display literal \n as is
+        answers_dict = self.controller.get_question_answers(question.get("id", ""))
+        print("Answers:", answers_dict)
+
+        # Convert dictionary values to list, ensuring keys are correctly mapped
+        answers_list = [answers_dict[str(i)] for i in range(len(answers_dict)) if str(i) in answers_dict]
+
         for i in range(3):
-            answer_key = str(i)
-            if answer_key in answers:
+            if i < len(answers_list):
                 self.answer_entries[i].delete(0, "end")
-                self.answer_entries[i].insert(0, answers[answer_key])
+                self.answer_entries[i].insert(0, answers_list[i])
             else:
                 self.answer_entries[i].delete(0, "end")
-        
-        # Set correct answer
-        correct_answer = question.get("correct_answer", None)
-        if correct_answer is not None:
-            try:
-                self.correct_answer_var.set(int(correct_answer))
-            except (ValueError, TypeError):
-                self.correct_answer_var.set(0)
-        else:
-            self.correct_answer_var.set(0)
-        
+
+        # Update the dropdown with current answers
+        answer_texts = []
+        for i, entry in enumerate(self.answer_entries):
+            text = entry.get().strip()
+            if text:
+                # Show abbreviated text in dropdown
+                display_text = text if len(text) <= 20 else f"{text[:20]}..."
+                answer_texts.append(f"Answer {i+1}: {display_text}")
+            else:
+                answer_texts.append(f"Answer {i+1}: (empty)")
+
+        self.correct_answer_dropdown.configure(values=answer_texts)
+
+        # Set correct answer in dropdown
+        correct_answer = self.controller.get_correct_answer_index(question.get("id", ""))
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        print(question)
+        print("Correct answer:", correct_answer)
+        try:
+            correct_index = int(correct_answer)
+            # Select the corresponding item in dropdown
+            if 0 <= correct_index < len(answer_texts):
+                self.correct_answer_dropdown.set(answer_texts[correct_index])
+            else:
+                self.correct_answer_dropdown.set(answer_texts[0])
+        except (ValueError, TypeError):
+            self.correct_answer_dropdown.set(answer_texts[0])
+
         # Set image
         image_path = question.get("image_file", "")
         self.image_path_var.set(image_path)
@@ -389,7 +450,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         else:
             self.clear_image_preview()
             self.image_display.configure(text="No image selected")
-        
+
         # Set audio
         audio_path = question.get("audio_file", "")
         self.audio_path_var.set(audio_path)
@@ -397,7 +458,7 @@ class ModifyLevelsView(ctk.CTkFrame):
             self.audio_display.configure(text=os.path.basename(audio_path))
         else:
             self.audio_display.configure(text="No audio selected")
-        
+
         # Switch to editor view
         self.show_question_editor_view()
 
@@ -413,8 +474,10 @@ class ModifyLevelsView(ctk.CTkFrame):
         for entry in self.answer_entries:
             entry.delete(0, "end")
         
-        # Reset correct answer
-        self.correct_answer_var.set(0)
+        # Reset dropdown options
+        default_options = ["Answer 1: (empty)", "Answer 2: (empty)", "Answer 3: (empty)"]
+        self.correct_answer_dropdown.configure(values=default_options)
+        self.correct_answer_dropdown.set(default_options[0])
         
         # Clear image
         self.image_path_var.set("")
@@ -485,24 +548,36 @@ class ModifyLevelsView(ctk.CTkFrame):
         """Clear the image preview"""
         self.image_preview_label.configure(image=None)
         self.image_preview_label.image = None
+    
+    def get_correct_answer_index(self):
+        """Extract the index of the selected correct answer from dropdown"""
+        selected_option = self.correct_answer_dropdown.get()
+        try:
+            # Extract number from "Answer X: text"
+            answer_num = int(selected_option.split(":")[0].replace("Answer ", ""))
+            return str(answer_num - 1)  # Convert to 0-based index as string
+        except (ValueError, IndexError):
+            return "0"  # Default to first answer
 
     def save_question(self):
         """Save the current question data"""
         # Get question ID (empty for new questions)
         question_id = self.question_id_var.get()
         
-        # Get question text
+        # Get question text - keep literal \n as is
         question_text = self.question_entry.get("0.0", "end-1c").strip()
+        # No need to replace anything - keep the literal \n characters
+
         if not question_text:
-            # Show error message
             print("Question text cannot be empty")
             return
         
-        # Get answers
+        # Get answers - keep literal \n as is
         answers = {}
         empty_answers = 0
         for i, entry in enumerate(self.answer_entries):
             answer_text = entry.get().strip()
+            # No need to replace anything - keep the literal \n characters
             if answer_text:
                 answers[str(i)] = answer_text
             else:
@@ -510,16 +585,14 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # Ensure we have at least 2 answers
         if len(answers) < 2:
-            # Show error message
             print("You must provide at least 2 answer options")
             return
         
-        # Get correct answer
-        correct_answer = str(self.correct_answer_var.get())
+        # Get correct answer from dropdown
+        correct_answer = self.get_correct_answer_index()
         
         # Ensure correct answer has content
         if correct_answer not in answers:
-            # Show error message
             print("You must select a valid answer as correct")
             return
         
@@ -535,16 +608,17 @@ class ModifyLevelsView(ctk.CTkFrame):
         # If question ID exists, add it to the data
         if question_id:
             question_data["id"] = question_id
+
+        print("##################################")
+        print("Question data:", question_data)
         
         # Save question using controller
         success = self.controller.save_question(question_data)
         
         if success:
-            # Return to question selection view and refresh the list
             self.back_to_question_selection()
             self.populate_questions_list()
         else:
-            # Show error message
             print("Failed to save question")
 
     def show_question_selection_view(self):

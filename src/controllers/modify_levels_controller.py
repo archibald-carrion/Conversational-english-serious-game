@@ -18,3 +18,15 @@ class ModifyLevelsController():
     
     def get_all_questions(self):
         return self.model.get_all_questions(self.current_level)
+    
+    def get_question_answers(self, index_question):
+        self.current_question = index_question
+        return self.model.get_question_answers(self.current_level, self.current_question-1)
+    
+    def get_correct_answer_index(self, index_question):
+        self.current_question = index_question
+        answers = self.model.get_correct_answer_index(self.current_level, self.current_question-1)
+        return answers
+    
+    def save_question(self, question_data):
+        self.model.save_question(self.current_level, self.current_question, question_data)
