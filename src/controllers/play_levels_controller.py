@@ -41,3 +41,6 @@ class PlayLevelsController():
         self.current_question = 0
         return self.current_question
 
+    def refresh_json(self):
+        # refresh the json file
+        return self.model.refresh_json()

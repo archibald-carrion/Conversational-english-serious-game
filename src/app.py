@@ -29,6 +29,10 @@ def switch_view(container_frame, active_view):
     # Show the active view
     active_view.pack(fill="both", expand=True)
 
+    # If the view is PlayLevelsView, refresh it
+    if hasattr(active_view, 'refresh_view'):
+        active_view.refresh_view()
+
 def main():
     # create the root window
     root = ctk.CTk()
