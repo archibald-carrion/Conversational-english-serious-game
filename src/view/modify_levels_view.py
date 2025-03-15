@@ -564,28 +564,24 @@ class ModifyLevelsView(ctk.CTkFrame):
         # Get question ID (empty for new questions)
         question_id = self.question_id_var.get()
         
-        # Get question text - keep literal \n as is
         question_text = self.question_entry.get("0.0", "end-1c").strip()
-        # No need to replace anything - keep the literal \n characters
 
         if not question_text:
             print("Question text cannot be empty")
             return
         
-        # Get answers - keep literal \n as is
         answers = {}
         empty_answers = 0
         for i, entry in enumerate(self.answer_entries):
             answer_text = entry.get().strip()
-            # No need to replace anything - keep the literal \n characters
             if answer_text:
                 answers[str(i)] = answer_text
             else:
                 empty_answers += 1
         
-        # Ensure we have at least 2 answers
-        if len(answers) < 2:
-            print("You must provide at least 2 answer options")
+        # Ensure we have all answers filled
+        if len(answers) < 3:
+            print("You must provide all answer options")
             return
         
         # Get correct answer from dropdown
@@ -607,6 +603,8 @@ class ModifyLevelsView(ctk.CTkFrame):
         
         # If question ID exists, add it to the data
         if question_id:
+            # cast question_id to int
+            question_id = int(question_id)
             question_data["id"] = question_id
 
         print("##################################")

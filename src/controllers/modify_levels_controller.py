@@ -29,8 +29,9 @@ class ModifyLevelsController():
         return answers
     
     def save_question(self, question_data):
-        self.model.save_question(self.current_level, self.current_question, question_data)
-
+        question_data["id"] = question_data["id"] - 1
+        self.current_question = question_data["id"]
+        return self.model.save_question(self.current_level, self.current_question, question_data)
 
     def get_image_path(self, index_question):
         self.current_question = index_question

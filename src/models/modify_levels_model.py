@@ -45,19 +45,6 @@ class ModifyLevelsModel():
         # print(json.dumps(answers, indent=2))
         return answers
     
-    def save_question(self, level_name, question_number, question_data):
-        print("SAVING QUESTION | New question data:", question_data)
-        # content_level = self.json_controller.get_item(level_name)
-        # print("MODIFY LEVELS MODEL: Content level:", content_level)
-
-        # def update_question(content_level, question_number, question_data):
-        #     content_level[str(question_number)] = question_data
-        #     return content_level
-
-        # updated_content = update_question(content_level, question_number, question_data)
-        # self.json_controller.update_item(level_name, updated_content)
-        return None
-    
     def get_correct_answer_index(self, level_name, question_number):
         content_level = self.json_controller.get_item(level_name)
         # print("MODIFY LEVELS MODEL: Content level:", content_level)
@@ -90,3 +77,63 @@ class ModifyLevelsModel():
         audio_path = extract_audio_path(content_level, question_number)
         # print(json.dumps(answers, indent=2))
         return audio_path
+    
+    # def save_question(self, level_name, question_number, question_data):
+    #     print("SAVING QUESTION | New question data:", question_data)
+        
+    #     # Get the current data structure from the json_controller
+    #     # Since there's no get_data() method, we'll use the data attribute directly
+    #     levels_data = self.json_controller.data
+        
+    #     # Navigate to the correct location in the JSON structure
+    #     # First get the top level key (likely "levels")
+    #     top_level_key = self.json_controller.get_keys()[0]
+
+    #     question_data["id"] = int(question_data["id"])
+        
+    #     # Update the question data at the specified position
+    #     levels_data[top_level_key][level_name][str(question_number)] = question_data
+        
+    #     # Save the updated data back to the JSON file
+    #     # We don't need to pass the data as the controller already has the reference
+    #     self.json_controller.save_data()
+        
+    #     print(f"Question {question_number} in {level_name} updated successfully")
+    #     return True
+
+    def save_question(self, level_name, question_number, question_data):
+        print("SAVING QUESTION | New question data:", question_data)
+        
+        # Get the current data structure from the json_controller
+        levels_data = self.json_controller.data
+        
+        # Navigate to the correct location in the JSON structure
+        top_level_key = self.json_controller.get_keys()[0]
+        
+        # Ensure correct data types
+        # Convert id to integer
+        if "id" in question_data:
+            question_data["id"] = int(question_data["id"])
+        
+        # Convert correct_answer to integer (since this should be stored as number)
+        if "correct_answer" in question_data:
+            question_data["correct_answer"] = int(question_data["correct_answer"])
+        
+        # Make sure everything else is stored as strings
+        for key, value in question_data.items():
+            if key not in ["id", "correct_answer"]:
+                if isinstance(value, dict):
+                    # For nested dictionaries like answers
+                    for sub_key, sub_value in value.items():
+                        value[sub_key] = str(sub_value)
+                elif not isinstance(value, str):
+                    question_data[key] = str(value)
+        
+        # Update the question data at the specified position
+        levels_data[top_level_key][level_name][str(question_number)] = question_data
+        
+        # Save the updated data back to the JSON file
+        self.json_controller.save_data()
+        
+        print(f"Question {question_number} in {level_name} updated successfully")
+        return True
