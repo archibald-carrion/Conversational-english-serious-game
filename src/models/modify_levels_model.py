@@ -112,9 +112,14 @@ class ModifyLevelsModel():
         
         # Ensure correct data types
         # Convert id to integer
-        if "id" in question_data:
-            question_data["id"] = int(question_data["id"])
+        # if "id" in question_data:
+        #     question_data["id"] = int(question_data["id"])
         
+        # eliminate the id key from the question_data as it is not needed in the JSON file
+        if "id" in question_data:
+            del question_data["id"]
+
+
         # Convert correct_answer to integer (since this should be stored as number)
         if "correct_answer" in question_data:
             question_data["correct_answer"] = int(question_data["correct_answer"])
