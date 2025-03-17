@@ -639,10 +639,7 @@ class ModifyLevelsView(ctk.CTkFrame):
         self.question_editor_frame.pack(fill="both", expand=True)
 
     def back_to_level_selection(self):
-        """Go back to level selection view"""
-        # Stop any playing audio
-        # self.stop_audio()
-        
+        """Go back to level selection view"""        
         # Hide current frame
         self.question_selection_frame.pack_forget()
         

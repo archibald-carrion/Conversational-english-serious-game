@@ -512,6 +512,10 @@ class PlayLevelsView(ctk.CTkFrame):
 
     def back_to_main_menu(self):
         """Go back to the main menu"""
+
+        # Stop any playing audio
+        self.stop_audio()
+        
         # This will be called by the switch_view function from main.py
         from app import switch_view
         
