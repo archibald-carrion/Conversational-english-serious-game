@@ -19,8 +19,10 @@ class CreateLevelsModel():
         Returns:
         bool: True if level was created successfully, False otherwise
         """
+        print("#"*40)
         print("Creating a new level")
-        
+        print(level_data)
+        print("#"*40)
         try:
             # Get the top level key (likely "levels")
             top_level_key = self.json_controller.get_keys()[0]
@@ -52,7 +54,7 @@ class CreateLevelsModel():
                             question[key] = str(value)
                 
                 # Add to questions dictionary with position as key
-                questions_dict[str(i+1)] = question
+                questions_dict[str(i)] = question
             
             # Add the new level to the levels data
             levels_data[top_level_key][level_name] = questions_dict

@@ -1,4 +1,3 @@
-# view/create_level_view.py
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
@@ -18,7 +17,8 @@ class CreateLevelsView(ctk.CTkFrame):
         # Store questions as we create them
         self.questions = []
         self.current_question_index = 0
-        self.total_questions = 10
+        self.total_questions = 10  # Keep this as 10 for display purposes
+        self.zero_indexed_questions = range(0, 10)  # 0-9 indexing
         
         # Create the level name UI
         self.create_level_name_view()
@@ -306,13 +306,13 @@ class CreateLevelsView(ctk.CTkFrame):
         
         # Reset questions list
         self.questions = []
-        self.current_question_index = 0
+        self.current_question_index = 0  # Now represents question 0
         
         # Update level info
         self.level_info_label.configure(text=f"Level: {level_name}")
         
-        # Update question header
-        self.question_header.configure(text=f"Creating Question 1 of {self.total_questions}")
+        # Update question header - keep the display as 1-based for user-friendliness
+        self.question_header.configure(text=f"Creating Question {self.current_question_index + 1} of {self.total_questions}")
         
         # Clear form fields
         self.clear_question_form()
@@ -388,7 +388,7 @@ class CreateLevelsView(ctk.CTkFrame):
         for i, entry in enumerate(self.answer_entries):
             answer_text = entry.get().strip()
             if answer_text:
-                answers[str(i)] = answer_text
+                answers[str(i)] = answer_text  # Already using 0-based indexing for answers
             else:
                 empty_answers += 1
         
@@ -405,8 +405,9 @@ class CreateLevelsView(ctk.CTkFrame):
             print("You must select a valid answer as correct")
             return
         
-        # Create question data
+        # Create question data - using 0-based indexing internally
         question_data = {
+            "question_index": self.current_question_index,  # 0-based
             "question": question_text,
             "answers": answers,
             "correct_answer": correct_answer,
@@ -420,12 +421,12 @@ class CreateLevelsView(ctk.CTkFrame):
         # Increment question index
         self.current_question_index += 1
         
-        # Check if we've completed all questions
+        # Check if we've completed all questions - comparing against total_questions
         if self.current_question_index >= self.total_questions:
             # Save the level
             self.save_level()
         else:
-            # Update for next question
+            # Update for next question - but display user-friendly 1-based numbering
             self.question_header.configure(
                 text=f"Creating Question {self.current_question_index + 1} of {self.total_questions}"
             )
