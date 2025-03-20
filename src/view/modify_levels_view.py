@@ -3,6 +3,7 @@ import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
 import pygame
+from CTkMessagebox import CTkMessagebox  # Import CTkMessagebox for popup messages
 
 class ModifyLevelsView(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -105,6 +106,15 @@ class ModifyLevelsView(ctk.CTkFrame):
         # Container for the action buttons
         button_frame = ctk.CTkFrame(self.question_selection_scrollable)
         button_frame.pack(pady=20, fill="x")
+
+        # Add new question button
+        new_question_btn = ctk.CTkButton(
+            button_frame,
+            text="Add New Question",
+            command=self.create_new_question,
+            width=200
+        )
+        new_question_btn.pack(side="left", padx=10, pady=10)
 
         # Back button
         back_btn = ctk.CTkButton(
@@ -257,6 +267,15 @@ class ModifyLevelsView(ctk.CTkFrame):
             width=100
         )
         audio_button.pack(side="right", padx=10)
+
+        # Preview audio button
+        preview_audio_btn = ctk.CTkButton(
+            audio_frame,
+            text="Preview",
+            command=self.preview_audio,
+            width=100
+        )
+        preview_audio_btn.pack(side="right", padx=10)
         
         # Action buttons
         button_frame = ctk.CTkFrame(self.question_editor_scrollable)
@@ -309,8 +328,12 @@ class ModifyLevelsView(ctk.CTkFrame):
                 # Switch to question selection view
                 self.show_question_selection_view()
             else:
-                # Show error message
-                print(f"Failed to load level '{selected_level}'")
+                # Show error message using CTkMessagebox
+                CTkMessagebox(
+                    title="Error",
+                    message=f"Failed to load level '{selected_level}'",
+                    icon="cancel"
+                )
     
     def populate_questions_list(self):
         """Populate the questions list with buttons for each question"""
@@ -363,33 +386,6 @@ class ModifyLevelsView(ctk.CTkFrame):
             )
             label.pack(pady=20)
 
-    # def update_answer_dropdown_values(self):
-    #     """Update dropdown values based on current answer entries"""
-    #     answer_texts = []
-    #     for i, entry in enumerate(self.answer_entries):
-    #         text = entry.get().strip()
-    #         if text:
-    #             answer_texts.append(f"Answer {i+1}: {text[:20]}...")
-    #         else:
-    #             answer_texts.append(f"Answer {i+1}: (empty)")
-        
-    #     # Update dropdown values
-    #     if answer_texts:
-    #         self.correct_answer_dropdown.configure(values=answer_texts)
-    
-    # def get_selected_answer_index(self):
-    #     """Get the index of the selected answer from the dropdown"""
-    #     current_value = self.correct_answer_var.get()
-    #     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + current_value)
-    #     # Extract the answer number from the dropdown text (e.g., "Answer 2: text..." -> 1)
-    #     if current_value.startswith("Answer "):
-    #         try:
-    #             index = int(current_value.split(":")[0].replace("Answer ", "")) - 1
-    #             return str(index)
-    #         except (ValueError, IndexError):
-    #             return "0"
-    #     return "0"  # Default to first answer if parsing fails
-
     def edit_question(self, question):
         """Load a question into the editor"""
         # Set question ID
@@ -429,9 +425,6 @@ class ModifyLevelsView(ctk.CTkFrame):
 
         # Set correct answer in dropdown
         correct_answer = self.controller.get_correct_answer_index(question.get("id", ""))
-        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        # print(question)
-        # print("Correct answer:", correct_answer)
         try:
             correct_index = int(correct_answer)
             # Select the corresponding item in dropdown
@@ -525,6 +518,34 @@ class ModifyLevelsView(ctk.CTkFrame):
             self.audio_path_var.set(file_path)
             self.audio_display.configure(text=os.path.basename(file_path))
 
+    def preview_audio(self):
+        """Preview the selected audio file"""
+        audio_path = self.audio_path_var.get()
+        
+        # Stop current audio if playing
+        if self.current_audio:
+            pygame.mixer.music.stop()
+            self.current_audio = None
+            
+        # Play new audio if exists
+        if audio_path and os.path.exists(audio_path):
+            try:
+                pygame.mixer.music.load(audio_path)
+                pygame.mixer.music.play()
+                self.current_audio = audio_path
+            except Exception as e:
+                CTkMessagebox(
+                    title="Audio Error",
+                    message=f"Failed to play audio: {str(e)}",
+                    icon="warning"
+                )
+        else:
+            CTkMessagebox(
+                title="No Audio",
+                message="No audio file selected or file doesn't exist.",
+                icon="info"
+            )
+
     def display_image_preview(self, image_path):
         """Display an image preview"""
         try:
@@ -542,7 +563,11 @@ class ModifyLevelsView(ctk.CTkFrame):
             # Keep a reference to prevent garbage collection
             self.image_preview_label.image = tk_image
         except Exception as e:
-            print(f"Error loading image: {e}")
+            CTkMessagebox(
+                title="Image Error",
+                message=f"Error loading image: {str(e)}",
+                icon="warning"
+            )
             self.clear_image_preview()
 
     def clear_image_preview(self):
@@ -560,38 +585,52 @@ class ModifyLevelsView(ctk.CTkFrame):
         except (ValueError, IndexError):
             return "0"  # Default to first answer
 
+    def validate_question_data(self):
+        """Validate question data before saving"""
+        # Check if question text is empty
+        question_text = self.question_entry.get("0.0", "end-1c").strip()
+        if not question_text:
+            CTkMessagebox(
+                title="Validation Error",
+                message="Question text cannot be empty.",
+                icon="cancel"
+            )
+            return False
+        
+        # Check if any answer is empty
+        empty_answers = []
+        for i, entry in enumerate(self.answer_entries):
+            if not entry.get().strip():
+                empty_answers.append(f"Answer {i+1}")
+        
+        if empty_answers:
+            CTkMessagebox(
+                title="Validation Error",
+                message=f"The following answers cannot be empty: {', '.join(empty_answers)}",
+                icon="cancel"
+            )
+            return False
+        
+        return True
+
     def save_question(self):
         """Save the current question data"""
+        # Validate question data
+        if not self.validate_question_data():
+            return
+            
         # Get question ID (empty for new questions)
         question_id = self.question_id_var.get()
         
         question_text = self.question_entry.get("0.0", "end-1c").strip()
-
-        if not question_text:
-            print("Question text cannot be empty")
-            return
         
         answers = {}
-        empty_answers = 0
         for i, entry in enumerate(self.answer_entries):
             answer_text = entry.get().strip()
-            if answer_text:
-                answers[str(i)] = answer_text
-            else:
-                empty_answers += 1
-        
-        # Ensure we have all answers filled
-        if len(answers) < 3:
-            print("You must provide all answer options")
-            return
+            answers[str(i)] = answer_text
         
         # Get correct answer from dropdown
         correct_answer = self.get_correct_answer_index()
-        
-        # Ensure correct answer has content
-        if correct_answer not in answers:
-            print("You must select a valid answer as correct")
-            return
         
         # Create question data
         question_data = {
@@ -607,18 +646,24 @@ class ModifyLevelsView(ctk.CTkFrame):
             # cast question_id to int
             question_id = int(question_id)
             question_data["id"] = question_id
-
-        print("##################################")
-        print("Question data:", question_data)
         
         # Save question using controller
         success = self.controller.save_question(question_data)
         
         if success:
+            CTkMessagebox(
+                title="Success",
+                message="Question saved successfully!",
+                icon="check"
+            )
             self.back_to_question_selection()
             self.populate_questions_list()
         else:
-            print("Failed to save question")
+            CTkMessagebox(
+                title="Error",
+                message="Failed to save question. Please try again.",
+                icon="cancel"
+            )
 
     def show_question_selection_view(self):
         """Show the question selection view"""
@@ -649,6 +694,11 @@ class ModifyLevelsView(ctk.CTkFrame):
 
     def back_to_question_selection(self):
         """Go back to question selection view"""
+        # Stop any playing audio
+        if self.current_audio:
+            pygame.mixer.music.stop()
+            self.current_audio = None
+            
         # Hide current frame
         self.question_editor_frame.pack_forget()
         
@@ -657,6 +707,11 @@ class ModifyLevelsView(ctk.CTkFrame):
 
     def back_to_main_menu(self):
         """Go back to the main menu"""
+        # Stop any playing audio
+        if self.current_audio:
+            pygame.mixer.music.stop()
+            self.current_audio = None
+            
         # This will be called by the switch_view function from main.py
         from app import switch_view
         
