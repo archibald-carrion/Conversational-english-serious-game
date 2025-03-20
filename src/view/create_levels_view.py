@@ -1,7 +1,9 @@
+# view/create_levels_view.py
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
 import pygame
+from CTkMessagebox import CTkMessagebox  # Import the message box component
 
 class CreateLevelsView(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -301,7 +303,12 @@ class CreateLevelsView(ctk.CTkFrame):
         level_name = self.level_name_entry.get().strip()
         
         if not level_name:
-            print("Level name cannot be empty")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message="Level name cannot be empty.",
+                icon="warning"
+            )
             return
         
         # Reset questions list
@@ -380,7 +387,12 @@ class CreateLevelsView(ctk.CTkFrame):
         question_text = self.question_entry.get("0.0", "end-1c").strip()
 
         if not question_text:
-            print("Question text cannot be empty")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message="Question text cannot be empty.",
+                icon="warning"
+            )
             return
         
         answers = {}
@@ -394,7 +406,12 @@ class CreateLevelsView(ctk.CTkFrame):
         
         # Ensure we have all answers filled
         if len(answers) < 3:
-            print("You must provide all answer options")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message="You must provide all three answer options.",
+                icon="warning"
+            )
             return
         
         # Get correct answer from dropdown
@@ -402,7 +419,12 @@ class CreateLevelsView(ctk.CTkFrame):
         
         # Ensure correct answer has content
         if correct_answer not in answers:
-            print("You must select a valid answer as correct")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message="You must select a valid answer as correct.",
+                icon="warning"
+            )
             return
         
         # Create question data - using 0-based indexing internally
@@ -459,7 +481,12 @@ class CreateLevelsView(ctk.CTkFrame):
             # Show completion view
             self.show_completion_view()
         else:
-            print("Failed to save level")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message="Failed to save level. Please try again.",
+                icon="error"
+            )
 
     def browse_image(self):
         """Open file dialog to select an image"""
@@ -505,7 +532,12 @@ class CreateLevelsView(ctk.CTkFrame):
                 pygame.mixer.music.play()
                 self.current_audio = file_path
             except Exception as e:
-                print(f"Error playing audio: {e}")
+                # Show popup message box instead of print
+                CTkMessagebox(
+                    title="Error",
+                    message=f"Error playing audio: {e}",
+                    icon="error"
+                )
 
     def display_image_preview(self, image_path):
         """Display an image preview"""
@@ -524,7 +556,12 @@ class CreateLevelsView(ctk.CTkFrame):
             # Keep a reference to prevent garbage collection
             self.image_preview_label.image = tk_image
         except Exception as e:
-            print(f"Error loading image: {e}")
+            # Show popup message box instead of print
+            CTkMessagebox(
+                title="Error",
+                message=f"Error loading image: {e}",
+                icon="error"
+            )
             self.clear_image_preview()
 
     def clear_image_preview(self):
@@ -576,8 +613,16 @@ class CreateLevelsView(ctk.CTkFrame):
         """Go back to level name view"""
         # Confirm with user that progress will be lost
         if self.questions:
-            # In a real app, we'd add a confirmation dialog here
-            pass
+            # Show a confirmation dialog
+            confirm = CTkMessagebox(
+                title="Confirm",
+                message="Going back will discard your current progress. Continue?",
+                icon="question",
+                option_1="Yes",
+                option_2="No"
+            )
+            if confirm.get() == "No":
+                return
         
         # Reset questions
         self.questions = []
@@ -588,6 +633,18 @@ class CreateLevelsView(ctk.CTkFrame):
 
     def back_to_main_menu(self):
         """Go back to the main menu"""
+        # If we have questions, confirm with user
+        if hasattr(self, 'questions') and self.questions:
+            confirm = CTkMessagebox(
+                title="Confirm",
+                message="Going back to menu will discard your current progress. Continue?",
+                icon="question",
+                option_1="Yes",
+                option_2="No"
+            )
+            if confirm.get() == "No":
+                return
+        
         # This will be called by the switch_view function from main.py
         from app import switch_view
         
