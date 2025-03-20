@@ -532,3 +532,5 @@ class PlayLevelsView(ctk.CTkFrame):
         """Refresh the play levels view with the latest data"""
         # Update the dropdown with the latest levels
         self.controller.refresh_json()
+        # Update the dropdown with the latest levels
+        self.update_level_dropdown()
