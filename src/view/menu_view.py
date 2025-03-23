@@ -4,7 +4,7 @@ import customtkinter as ctk
 class MenuView(ctk.CTkFrame):
     def __init__(self, parent, controller, switch_view_callback=None, 
                  create_levels_view=None, modify_levels_view=None, 
-                 play_levels_view=None, config_menu_view=None):
+                 play_levels_view=None) :#, config_menu_view=None):
         super().__init__(parent)
         
         self.controller = controller
@@ -15,7 +15,7 @@ class MenuView(ctk.CTkFrame):
         self.create_levels_view = create_levels_view
         self.modify_levels_view = modify_levels_view
         self.play_levels_view = play_levels_view
-        self.config_menu_view = config_menu_view
+        # self.config_menu_view = config_menu_view
         
         # Create the main menu
         self.create_menu()
@@ -35,7 +35,7 @@ class MenuView(ctk.CTkFrame):
             ("Load Level", self.open_load_level_window),
             ("Modify Levels", self.open_modify_levels_window),
             ("Create New Level", self.create_new_level),
-            ("Game Configuration", self.open_game_configuration_window),
+            #("Game Configuration", self.open_game_configuration_window),
             ("Quit Game", self.quit_game)
         ]
 

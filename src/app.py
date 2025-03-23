@@ -5,21 +5,21 @@ from controllers.modify_levels_controller import ModifyLevelsController
 from controllers.play_levels_controller import PlayLevelsController
 from controllers.delete_levels_controller import DeleteLevelsController
 from controllers.menu_controller import MenuController
-from controllers.config_menu_controller import ConfigMenuController  
+#from controllers.config_menu_controller import ConfigMenuController  
 
 from models.create_levels_model import CreateLevelsModel
 from models.modify_levels_model import ModifyLevelsModel
 from models.play_levels_model import PlayLevelsModel
 from models.delete_levels_model import DeleteLevelsModel
 from models.menu_model import MenuModel
-from models.config_menu_model import ConfigMenuModel  
+#from models.config_menu_model import ConfigMenuModel  
 
 from view.create_levels_view import CreateLevelsView
 from view.modify_levels_view import ModifyLevelsView
 from view.play_levels_view import PlayLevelsView
 from view.delete_levels_view import DeleteLevelsView
 from view.menu_view import MenuView
-from view.config_menu_view import ConfigMenuView  
+#from view.config_menu_view import ConfigMenuView  
 
 def switch_view(container_frame, active_view):
     # Hide all views
@@ -55,7 +55,7 @@ def main():
     play_levels_model = PlayLevelsModel()
     delete_levels_model = DeleteLevelsModel()
     menu_model = MenuModel()
-    config_menu_model = ConfigMenuModel()
+    #config_menu_model = ConfigMenuModel()
      
     # then the controllers
     create_levels_controller = CreateLevelsController(create_levels_model)
@@ -63,14 +63,14 @@ def main():
     play_levels_controller = PlayLevelsController(play_levels_model)
     delete_levels_controller = DeleteLevelsController(delete_levels_model)
     menu_controller = MenuController(menu_model)
-    config_menu_controller = ConfigMenuController(config_menu_model)
+    #config_menu_controller = ConfigMenuController(config_menu_model)
      
     # and finally the views
     create_levels_view = CreateLevelsView(container_frame, create_levels_controller)
     modify_levels_view = ModifyLevelsView(container_frame, modify_levels_controller)
     play_levels_view = PlayLevelsView(container_frame, play_levels_controller)
     delete_levels_view = DeleteLevelsView(container_frame, delete_levels_controller)
-    config_menu_view = ConfigMenuView(container_frame, config_menu_controller)
+    #config_menu_view = ConfigMenuView(container_frame, config_menu_controller)
     
     # Create the menu view and pass necessary views for navigation
     menu_view = MenuView(
@@ -80,7 +80,7 @@ def main():
         create_levels_view=create_levels_view,
         modify_levels_view=modify_levels_view,
         play_levels_view=play_levels_view,
-        config_menu_view=config_menu_view
+        # config_menu_view=config_menu_view
     )
     
     # Show the menu view initially
