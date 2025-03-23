@@ -8,17 +8,49 @@
 
 An interactive, gamified application designed to make English learning engaging and fun! This quizz based application is designed to help users improve their English vocabulary and grammar skills through a series of questions and answers using both text and audio. The application also includes a custom level creation feature, allowing users to create their own quizzes and share them with others.
 
-### ✨ Features
+## ✨ Features
 
 - 🎮 Engaging Quiz Gameplay
 - 📝 Custom Level Creation
 - 🔊 Audio Support for Questions
 - 🖊️ Question Editor
 
-## 📸 Screenshots
+Based on the screenshots available in the project:
 
-[Placeholder for app screenshots - recommend taking screenshots of main menu, game screen, level creation, etc.]
+### Main Menu
+![Main Menu](./documentation/screenshots/main_menu.PNG)
 
+The application's starting point, providing access to different game modes and options.
+
+### Level Creation
+![Creation of New Level](./documentation/screenshots/creation_of_new_level.PNG)
+
+Interface for educators or content creators to develop new learning levels.
+
+### Question Management
+- **Creating Questions**: 
+  ![Creation of Question](./documentation/screenshots/creation_of_question.PNG)
+  
+- **Editing Questions**: 
+  ![Editing Question](./documentation/screenshots/editing_question.PNG)
+  
+- **Modifying Questions**: 
+  ![Modify Questions](./documentation/screenshots/modify_questions.PNG)
+
+### Gameplay
+- **Loading/Playing Levels**: 
+  ![Load Play Level](./documentation/screenshots/load_play_level.PNG)
+  
+- **Active Gameplay**: 
+  ![Play Level](./documentation/screenshots/play_level.PNG)
+  
+- **Completion Screen**: 
+  ![Complete Screen](./documentation/screenshots/complete_screen.PNG)
+
+### System Notifications
+![Popup for Warning](./documentation/screenshots/popup_for_warning.PNG)
+
+User alerts and warning notifications to guide the user experience.
 
 ## 🛠 Technologies Used
 
