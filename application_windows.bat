@@ -39,4 +39,4 @@ echo Dependencies installed. Starting application...
 
 python ./src/app.py
 echo Application closed.
-pause
+:: pause
