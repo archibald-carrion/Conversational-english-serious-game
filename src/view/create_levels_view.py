@@ -158,12 +158,12 @@ class CreateLevelsView(ctk.CTkFrame):
         correct_answer_label.pack(side="left", padx=5)
         
         # Create string variable for dropdown
-        self.correct_answer_var = ctk.StringVar(value="Answer 1: (empty)")
+        self.correct_answer_var = ctk.StringVar(value="Answer 1")
         
         # Create the dropdown for correct answer selection
         self.correct_answer_dropdown = ctk.CTkOptionMenu(
             correct_answer_frame,
-            values=["Answer 1: (empty)", "Answer 2: (empty)", "Answer 3: (empty)"],
+            values=["Answer 1", "Answer 2", "Answer 3"],
             variable=self.correct_answer_var
         )
         self.correct_answer_dropdown.pack(side="left", padx=10)
@@ -337,7 +337,7 @@ class CreateLevelsView(ctk.CTkFrame):
             entry.delete(0, "end")
         
         # Reset dropdown
-        default_options = ["Answer 1: (empty)", "Answer 2: (empty)", "Answer 3: (empty)"]
+        default_options = ["Answer 1", "Answer 2", "Answer 3"]
         self.correct_answer_dropdown.configure(values=default_options)
         self.correct_answer_dropdown.set(default_options[0])
         
