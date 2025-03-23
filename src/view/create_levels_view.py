@@ -633,8 +633,12 @@ class CreateLevelsView(ctk.CTkFrame):
 
     def back_to_main_menu(self):
         """Go back to the main menu"""
-        # If we have questions, confirm with user
-        if hasattr(self, 'questions') and self.questions:
+        # Check if we're in the completion view (where no confirmation is needed)
+        if hasattr(self, 'completion_frame') and self.completion_frame.winfo_ismapped():
+            # Skip confirmation if we're in the completion view
+            pass
+        # If we have questions in progress, confirm with user
+        elif hasattr(self, 'questions') and self.questions:
             confirm = CTkMessagebox(
                 title="Confirm",
                 message="Going back to menu will discard your current progress. Continue?",
