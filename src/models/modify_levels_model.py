@@ -10,6 +10,10 @@ class ModifyLevelsModel():
         self.json_controller = json_controller.JSONController(json_path="levels.json")
         return None
     
+    def refresh_json(self):
+        self.json_controller = json_controller.JSONController(json_path="levels.json")
+        return None
+    
     def get_available_levels(self):
         # Get available levels from the filesystem
         top_level_key = self.json_controller.get_keys()

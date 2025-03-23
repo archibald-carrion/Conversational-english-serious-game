@@ -723,3 +723,10 @@ class ModifyLevelsView(ctk.CTkFrame):
             if isinstance(child, MenuView):
                 switch_view(self.parent, child)
                 break
+
+    def refresh_view(self):
+        """Refresh the play levels view with the latest data"""
+        # Update the dropdown with the latest levels
+        self.controller.refresh_json()
+        # Update the dropdown with the latest levels
+        self.update_level_dropdown()

@@ -40,3 +40,7 @@ class ModifyLevelsController():
     def get_audio_path(self, index_question):
         self.current_question = index_question
         return self.model.get_audio_path(self.current_level, self.current_question-1)
+    
+    def refresh_json(self):
+        # refresh the json file
+        return self.model.refresh_json()
